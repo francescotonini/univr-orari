@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<!-- Base theme applied no matter what API -->
+	<style name="app_theme_base" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="colorAccent">@color/accent</item>
+	</style>
+	<style name="app_theme" parent="app_theme_base">
+	</style>
+</resources>
