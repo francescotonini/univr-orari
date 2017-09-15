@@ -18,33 +18,36 @@
 
 #region
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using Android.OS;
+using Android.Support.V7.App;
+using univr_orari.Services;
 
 #endregion
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("univr_orari")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("univr-orari")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: ComVisible(false)]
+namespace univr_orari.Activities
+{
+	/// <summary>
+	///     Base activity, Base activity, inherited by every activity
+	/// </summary>
+	public abstract class BaseActivity : AppCompatActivity
+	{
+		public DataHandler DataStore { get; } = new DataHandler();
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+		/// <summary>
+		///     Gets the layout resource.
+		/// </summary>
+		/// <value>The layout resource.</value>
+		protected virtual int LayoutResource { get; }
+
+		/// <summary>
+		///     Initialize the activity
+		/// </summary>
+		/// <param name="savedInstanceState"></param>
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			SetContentView(LayoutResource);
+		}
+	}
+}

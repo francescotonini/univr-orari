@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+	<include
+		android:id="@+id/select_course_activity_toolbar"
+		layout="@layout/toolbar" />
+	<RelativeLayout
+		android:id="@+id/select_course_activity_loading_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/select_course_activity_toolbar">
+		<ProgressBar
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_centerInParent="true"
+			android:id="@+id/select_course_activity_loading_prg" />
+	</RelativeLayout>
+	<RelativeLayout
+		android:id="@+id/select_course_activity_main_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/select_course_activity_toolbar"
+		android:layout_marginTop="@dimen/select_course_activity_main_layout_margin_top"
+		android:layout_marginLeft="@dimen/select_course_activity_main_layout_margin_leftright"
+		android:layout_marginRight="@dimen/select_course_activity_main_layout_margin_leftright"
+		android:visibility="gone">
+		<TextView
+			android:id="@+id/select_course_activity_course_description_txt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/select_course_activity_course_description_txt"
+			style="@style/primary_text_view" />
+		<Spinner
+			android:id="@+id/select_course_activity_course_spinner"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/select_course_activity_course_spinner_margin_top"
+			android:layout_below="@id/select_course_activity_course_description_txt"
+			android:singleLine="false" />
+		<TextView
+			android:id="@+id/select_course_activity_course_year_txt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/select_course_activity_course_year_txt_margin_top"
+			android:layout_below="@id/select_course_activity_course_spinner"
+			android:text="@string/select_course_activity_course_year_txt"
+			style="@style/primary_text_view" />
+		<Spinner
+			android:id="@+id/select_course_activity_course_year_spinner"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/select_course_activity_course_year_spinner_margin_top"
+			android:layout_below="@id/select_course_activity_course_year_txt"
+			android:singleLine="false" />
+		<android.support.v7.widget.AppCompatButton
+			android:id="@+id/select_course_activity_ok_btn"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/select_course_activity_ok_btn_margin_top"
+			android:layout_below="@id/select_course_activity_course_year_spinner"
+			android:text="@string/select_course_activity_ok_btn" />
+	</RelativeLayout>
+</RelativeLayout>

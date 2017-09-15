@@ -1,11 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-	<!-- Base theme applied no matter what API -->
 	<style name="app_theme_base" parent="Theme.AppCompat.Light.NoActionBar">
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/accent</item>
 	</style>
 	<style name="app_theme" parent="app_theme_base">
+		<item name="android:windowLightStatusBar">false</item>
+	</style>
+	<style name="app_theme_bootstrap_activity" parent="app_theme_base">
+		<item name="colorPrimary">@color/accent</item>
+		<item name="colorPrimaryDark">@color/accent</item>
+		<item name="android:navigationBarColor">@color/accent</item>
+		<item name="android:windowBackground">@color/accent</item>
+	</style>
+	<style name="app_theme_toolbar" parent="app_theme">
+		<item name="android:textColorPrimary">@android:color/white</item>
+		<item name="android:textColorSecondary">@android:color/white</item>
+		<item name="actionMenuTextColor">@android:color/black</item>
+	</style>
+	<style name="primary_text_view" parent="android:Widget.TextView">
+		<item name="android:textColor">@color/primary_text</item>
+		<item name="android:textSize">@dimen/primary_text_size</item>
+		<item name="android:textStyle">normal</item>
 	</style>
 </resources>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-  <string name="app_name">UniVR Orario</string>
+	<string name="app_name">UniVR Orario</string>
+	<string name="select_course_activity_title">Seleziona corso e anno</string>
+	<string name="select_course_activity_course_description_txt">Seleziona il corso di studi per permettere all\'app di scaricare gli orari automaticamente</string>
+	<string name="select_course_activity_course_year_txt">Seleziona l\'anno che stai frequentando</string>
+	<string name="select_course_activity_ok_btn">Iniziamo!</string>
 </resources>
