@@ -16,12 +16,23 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#region
+
+using Android.App;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Azure.Mobile.Crashes;
+
+#endregion
+
 namespace univr_orari
 {
-	public static class App
+	public static partial class App
 	{
 		public static void Init()
 		{
+			MobileCenter.Start(MOBILE_CENTER_API,
+				typeof(Analytics), typeof(Crashes));
 		}
 	}
 }

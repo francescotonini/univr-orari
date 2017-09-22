@@ -18,61 +18,46 @@
 
 #region
 
-using System.Collections.Generic;
-using Newtonsoft.Json;
+using Android.App;
+using Android.OS;
+using Android.Support.V7.Widget;
+using Android.Views;
+using univr_orari.Fragments;
 
 #endregion
 
-namespace univr_orari.Models
+namespace univr_orari.Activities
 {
-	public class AcademicYear
+	[Activity(Label = "@string/settings_activity_title", Theme = "@style/app_theme_settings")]
+	public class SettingsActivity : BaseActivity
 	{
-		/// <summary>
-		///     Academic year id
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Id { get; set; }
+		public override bool OnOptionsItemSelected(IMenuItem item)
+		{
+			switch (item.ItemId)
+			{
+				case Android.Resource.Id.Home:
+					OnBackPressed();
+					return true;
+				default:
+					return base.OnOptionsItemSelected(item);
+			}
+		}
 
-		/// <summary>
-		///     Academic year courses
-		/// </summary>
-		[JsonProperty("elenco")]
-		public List<Course> Courses { get; set; }
-	}
+		private Toolbar toolbar;
+		protected override int LayoutResource => Resource.Layout.settings_activity;
 
-	public class Course
-	{
-		/// <summary>
-		///     Course name
-		/// </summary>
-		[JsonProperty("label")]
-		public string Label { get; set; }
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
 
-		/// <summary>
-		///     Course value
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Value { get; set; }
+			toolbar = FindViewById<Toolbar>(Resource.Id.settings_activity_toolbar);
 
-		/// <summary>
-		///     Course years
-		/// </summary>
-		[JsonProperty("elenco_anni")]
-		public List<CourseYear> Years { get; set; }
-	}
+			SetSupportActionBar(toolbar);
+			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+			SupportActionBar.SetDisplayShowHomeEnabled(true);
 
-	public class CourseYear
-	{
-		/// <summary>
-		///     Course name
-		/// </summary>
-		[JsonProperty("label")]
-		public string Label { get; set; }
-
-		/// <summary>
-		///     Course id
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Value { get; set; }
+			SupportFragmentManager.BeginTransaction().Replace(Resource.Id.settings_activity_frame, new SettingsFragment())
+				.Commit();
+		}
 	}
 }

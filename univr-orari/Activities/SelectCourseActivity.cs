@@ -18,20 +18,28 @@
 
 #region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.App;
+using Android.Content;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using Plugin.Connectivity;
+using univr_orari.Helpers;
 using univr_orari.Models;
+using univr_orari.Services;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 #endregion
 
 namespace univr_orari.Activities
 {
-	[Activity(Label = "@string/select_course_activity_title")]
+	[Activity(Label = "@string/select_course_activity_title",
+		NoHistory = true)]
 	public class SelectCourseActivity : BaseActivity
 	{
 		private Toolbar toolbar;
@@ -40,8 +48,11 @@ namespace univr_orari.Activities
 		private Spinner courseSpinner;
 		private Spinner courseYearSpinner;
 		private ProgressBar loadingPrg;
+		private AppCompatButton okBtn;
 		private List<Course> courses;
+		private AcademicYear currentAcademicYear;
 		private Course selectedCourse;
+		private CourseYear selectedCourseYear;
 
 		private void CourseSpinnerOnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
 		{
@@ -51,6 +62,8 @@ namespace univr_orari.Activities
 
 		private void CourseYearSpinnerOnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
 		{
+			selectedCourseYear = selectedCourse.Years[itemSelectedEventArgs.Position];
+			okBtn.Enabled = true;
 		}
 
 		private void SetCourseSpinner()
@@ -69,6 +82,30 @@ namespace univr_orari.Activities
 			courseYearSpinner.Adapter = adapter;
 		}
 
+		private async void OkBtnOnClick(object sender, EventArgs eventArgs)
+		{
+			// Saving course details
+			Settings.AcademicYearId = currentAcademicYear.Id;
+			Settings.CourseId = selectedCourse.Value;
+			Settings.CourseYearId = selectedCourseYear.Value;
+			Settings.IsFirstStartup = false;
+
+			// Collecting statistics
+			Logger.Write("Course selected", new Dictionary<string, string>()
+			{
+				{ "academicYearId", Settings.AcademicYearId },
+				{ "courseId", Settings.CourseId },
+				{"courseYearId", Settings.CourseYearId }
+			});
+
+			// Clear db
+			await this.DataStore.ClearDb();
+
+			// Open a new Activity
+			// BUG: this doesn't clear back stack
+			StartActivity(new Intent(this, typeof(MainActivity)));
+		}
+
 		protected override int LayoutResource => Resource.Layout.select_course_activity;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -81,34 +118,45 @@ namespace univr_orari.Activities
 			loadingPrg = FindViewById<ProgressBar>(Resource.Id.select_course_activity_loading_prg);
 			courseSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_spinner);
 			courseYearSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_year_spinner);
+			okBtn = FindViewById<AppCompatButton>(Resource.Id.select_course_activity_ok_btn);
+
+			courseSpinner.ItemSelected += CourseSpinnerOnItemSelected;
+			courseYearSpinner.ItemSelected += CourseYearSpinnerOnItemSelected;
+			okBtn.Click += OkBtnOnClick;
 
 			SetSupportActionBar(toolbar);
+			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+			SupportActionBar.SetDisplayShowHomeEnabled(true);
 		}
 
 		protected override async void OnResume()
 		{
 			base.OnResume();
 
-			courseSpinner.ItemSelected += CourseSpinnerOnItemSelected;
-			courseYearSpinner.ItemSelected += CourseYearSpinnerOnItemSelected;
+			// Checks for internet connection. Shows a dialog if no connection is currenty available
+			if (!CrossConnectivity.Current.IsConnected)
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.SetTitle(GetString(Resource.String.no_connection_dialog_title));
+				builder.SetMessage(GetString(Resource.String.no_connection_dialog_message));
+				builder.SetPositiveButton(GetString(Resource.String.no_connection_dialog_button_text),
+					(sender, e) => FinishAffinity());
+
+				builder.Create().Show();
+				return;
+			}
 
 			// Load courses
-			courses = await DataStore.GetCourses();
-			if (courses != null)
+			currentAcademicYear = await DataStore.GetCurrentAcademicYear();
+			if (currentAcademicYear?.Courses != null)
 			{
+				courses = currentAcademicYear.Courses;
+
 				loadingLayout.Visibility = ViewStates.Gone;
 				mainLayout.Visibility = ViewStates.Visible;
 
 				SetCourseSpinner();
 			}
-		}
-
-		protected override void OnPause()
-		{
-			base.OnPause();
-
-			courseSpinner.ItemSelected -= CourseSpinnerOnItemSelected;
-			courseYearSpinner.ItemSelected -= CourseYearSpinnerOnItemSelected;
 		}
 	}
 }

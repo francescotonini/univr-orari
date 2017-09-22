@@ -1,4 +1,3 @@
-/*
 // Helpers/Settings.cs This file was automatically added when you installed the Settings Plugin. If you are not using a PCL then comment this file back in to use it.
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
@@ -21,24 +20,80 @@ namespace univr_orari.Helpers
 		}
 
 		#region Setting Constants
+		private const string IsFirstStartupKey = "is_first_startup";
+		private static readonly bool IsFirstStartupDefault = true;
 
-		private const string SettingsKey = "settings_key";
-		private static readonly string SettingsDefault = string.Empty;
+		private const string CourseIdKey = "course_id";
+		private static readonly string CourseIdDefault = string.Empty;
 
+		private const string CourseYearIdKey = "course_year_id";
+		private static readonly string CourseYearIdDefault = string.Empty;
+
+		private const string AcademicYearIdKey = "academic_year_id";
+		private static readonly string AdademicYearIdDefault = string.Empty;
+
+		private const string WeekViewModeKey = "week_view_mode_key";
+		private static readonly int WeekViewModeDefault = 3;
 		#endregion
 
-
-		public static string GeneralSettings
+		public static bool IsFirstStartup
 		{
 			get
 			{
-				return AppSettings.GetValueOrDefault(SettingsKey, SettingsDefault);
+				return AppSettings.GetValueOrDefault(IsFirstStartupKey, IsFirstStartupDefault);
 			}
 			set
 			{
-				AppSettings.AddOrUpdateValue(SettingsKey, value);
+				AppSettings.AddOrUpdateValue(IsFirstStartupKey, value);
 			}
 		}
 
+		public static string CourseId
+		{
+			get
+			{
+				return AppSettings.GetValueOrDefault(CourseIdKey, CourseIdDefault);
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue(CourseIdKey, value);
+			}
+		}
+
+		public static string CourseYearId
+		{
+			get
+			{
+				return AppSettings.GetValueOrDefault(CourseYearIdKey, CourseYearIdDefault);
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue(CourseYearIdKey, value);
+			}
+		}
+
+		public static string AcademicYearId
+		{
+			get
+			{
+				return AppSettings.GetValueOrDefault(AcademicYearIdKey, AdademicYearIdDefault);
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue(AcademicYearIdKey, value);
+			}
+		}
+
+		public static int WeekViewMode
+		{
+			get
+			{
+				return AppSettings.GetValueOrDefault(WeekViewModeKey, WeekViewModeDefault);
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue(WeekViewModeKey, value);
+			}
+		}
 	}
-}*/
+}

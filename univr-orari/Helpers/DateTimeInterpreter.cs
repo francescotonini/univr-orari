@@ -18,61 +18,27 @@
 
 #region
 
-using System.Collections.Generic;
-using Newtonsoft.Json;
+using System;
+using Com.Alamkanak.Weekview;
+using Java.Util;
+using Object = Java.Lang.Object;
 
 #endregion
 
-namespace univr_orari.Models
+namespace univr_orari.Helpers
 {
-	public class AcademicYear
+	public class DateTimeInterpreter : Object, IDateTimeInterpreter
 	{
-		/// <summary>
-		///     Academic year id
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Id { get; set; }
+		public string InterpretDate(Calendar date)
+		{
+			DateTime dt = new DateTime(date.Get(CalendarField.Year), date.Get(CalendarField.Month) + 1,
+				date.Get(CalendarField.DayOfMonth));
+			return dt.ToString("ddd dd/MM").ToUpper();
+		}
 
-		/// <summary>
-		///     Academic year courses
-		/// </summary>
-		[JsonProperty("elenco")]
-		public List<Course> Courses { get; set; }
-	}
-
-	public class Course
-	{
-		/// <summary>
-		///     Course name
-		/// </summary>
-		[JsonProperty("label")]
-		public string Label { get; set; }
-
-		/// <summary>
-		///     Course value
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Value { get; set; }
-
-		/// <summary>
-		///     Course years
-		/// </summary>
-		[JsonProperty("elenco_anni")]
-		public List<CourseYear> Years { get; set; }
-	}
-
-	public class CourseYear
-	{
-		/// <summary>
-		///     Course name
-		/// </summary>
-		[JsonProperty("label")]
-		public string Label { get; set; }
-
-		/// <summary>
-		///     Course id
-		/// </summary>
-		[JsonProperty("valore")]
-		public string Value { get; set; }
+		public string InterpretTime(int hour)
+		{
+			return $"{hour}:00";
+		}
 	}
 }

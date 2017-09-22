@@ -33,3 +33,4 @@ packages/*
 
 # VS stuff
 .vs/*
+univr-orari/App\.private\.cs

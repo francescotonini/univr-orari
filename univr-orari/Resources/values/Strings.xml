@@ -2,8 +2,44 @@
 
 <resources>
 	<string name="app_name">UniVR Orario</string>
+
 	<string name="select_course_activity_title">Seleziona corso e anno</string>
 	<string name="select_course_activity_course_description_txt">Seleziona il corso di studi per permettere all\'app di scaricare gli orari automaticamente</string>
 	<string name="select_course_activity_course_year_txt">Seleziona l\'anno che stai frequentando</string>
 	<string name="select_course_activity_ok_btn">Iniziamo!</string>
+
+	<string name="main_activity_loading">Caricamento orari...</string>
+	<string name="main_activity_loading_btn">Ok</string>
+	<string name="main_activity_update">Aggiornamento orari...</string>
+
+	<string name="settings_activity_title">Impostazioni</string>
+
+	<string name="preferences_clear_db_title">Pulisci cache orari</string>
+	<string name="preferences_clear_db_summary">Se rimuovi i dati in locale l\'app dovrà riscaricare gli orari dal sito dell\'ateneo</string>
+	<string name="preferences_created_by_title">Info</string>
+	<string name="preferences_created_by_summary">UniVR Orari è stata sviluppata da Francesco Tonini. Gli orari vengono scaricati da logistica.univr.it</string>
+	<string name="preferences_leave_feedback_title">Dubbi, domande, angosce?</string>
+	<string name="preferences_leave_feedback_summary">Hai un\'idea per migliorare l\'app? Vuoi segnalare un malfunzionamento! Clicca qui per farmelo sapere ;)</string>
+	<string name="preferences_app_version">Versione app</string>
+	<string name="preferences_easter">KAZOOOO</string>
+
+	<string name="settings_fragment_clear_db">Pulizia effettuata!</string>
+
+	<string name="main_menu_change_course">Modifica orario</string>
+	<string name="main_menu_settings">Impostazioni</string>
+	<string name="main_menu_week_view">Vista settimanale</string>
+	<string name="main_menu_day_view">Vista giornaliera</string>
+
+	<string name="no_connection_dialog_title">Ops!</string>
+	<string name="no_connection_dialog_message">Per poter scaricare gli orari è necessaria una connessione ad internet :(</string>
+	<string name="no_connection_dialog_button_text">Chiudi</string>
+	<string name="no_connection_short_message">Nessuna connessione ad internet :(</string>
+
+	<string name="view_lesson_activity_title">Dettagli lezione</string>
+	<string name="view_lesson_activity_room_txt">Aula</string>
+	<string name="view_lesson_activity_teacher_txt">Docente</string>
+	<string name="view_lesson_activity_date_txt">Orario</string>
+	<string name="view_lesson_activity_lesson_txt">Lezione</string>
+
+	<string name="view_lesson_menu_share">Condividi</string>
 </resources>

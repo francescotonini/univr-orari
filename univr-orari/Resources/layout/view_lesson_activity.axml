@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/main_activity_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<include
+		android:id="@+id/view_lesson_activity_toolbar"
+		layout="@layout/toolbar" />
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/view_lesson_activity_toolbar"
+		android:orientation="vertical">
+
+		<!-- Lesson -->
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/view_lesson_activity_section_height"
+			android:layout_marginLeft="@dimen/view_lesson_activity_section_margin_left"
+			android:layout_marginRight="@dimen/view_lesson_activity_section_margin_right"
+			android:orientation="horizontal">
+			<ImageView
+				android:layout_width="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_height="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_centerVertical="true"
+				android:src="@drawable/lesson_icon" />
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="@dimen/view_lesson_activity_section_txt_margin_left"
+				android:orientation="vertical">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_primary_txt_text_size"
+					android:textColor="@color/primary_text"
+					android:text="@string/view_lesson_activity_lesson_txt" />
+				<TextView
+					android:id="@+id/view_lesson_activity_lesson_txt"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_secondary_txt_text_size"
+					android:textColor="@color/secondary_text"
+					android:text="ND" />
+			</LinearLayout>
+		</RelativeLayout>
+
+		<!-- Teacher -->
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/view_lesson_activity_section_height"
+			android:layout_marginLeft="@dimen/view_lesson_activity_section_margin_left"
+			android:layout_marginRight="@dimen/view_lesson_activity_section_margin_right"
+			android:orientation="horizontal">
+			<ImageView
+				android:layout_width="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_height="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_centerVertical="true"
+				android:src="@drawable/teacher_icon" />
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="@dimen/view_lesson_activity_section_txt_margin_left"
+				android:orientation="vertical">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_primary_txt_text_size"
+					android:textColor="@color/primary_text"
+					android:text="@string/view_lesson_activity_teacher_txt" />
+				<TextView
+					android:id="@+id/view_lesson_activity_teacher_txt"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_secondary_txt_text_size"
+					android:textColor="@color/secondary_text"
+					android:text="ND" />
+			</LinearLayout>
+		</RelativeLayout>
+
+		<!-- Date -->
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/view_lesson_activity_section_height"
+			android:layout_marginLeft="@dimen/view_lesson_activity_section_margin_left"
+			android:layout_marginRight="@dimen/view_lesson_activity_section_margin_right"
+			android:orientation="horizontal">
+			<ImageView
+				android:layout_width="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_height="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_centerVertical="true"
+				android:src="@drawable/date_icon" />
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="@dimen/view_lesson_activity_section_txt_margin_left"
+				android:orientation="vertical">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_primary_txt_text_size"
+					android:textColor="@color/primary_text"
+					android:text="@string/view_lesson_activity_date_txt" />
+				<TextView
+					android:id="@+id/view_lesson_activity_date_txt"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_secondary_txt_text_size"
+					android:textColor="@color/secondary_text"
+					android:text="ND" />
+			</LinearLayout>
+		</RelativeLayout>
+
+		<!-- Room -->
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/view_lesson_activity_section_height"
+			android:layout_marginLeft="@dimen/view_lesson_activity_section_margin_left"
+			android:layout_marginRight="@dimen/view_lesson_activity_section_margin_right"
+			android:orientation="horizontal">
+			<ImageView
+				android:layout_width="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_height="@dimen/view_lesson_activity_section_img_heightwidth"
+				android:layout_centerVertical="true"
+				android:src="@drawable/room_icon" />
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="@dimen/view_lesson_activity_section_txt_margin_left"
+				android:orientation="vertical">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_primary_txt_text_size"
+					android:textColor="@color/primary_text"
+					android:text="@string/view_lesson_activity_room_txt" />
+				<TextView
+					android:id="@+id/view_lesson_activity_room_txt"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/view_lesson_activity_section_secondary_txt_text_size"
+					android:textColor="@color/secondary_text"
+					android:text="ND" />
+			</LinearLayout>
+		</RelativeLayout>
+	</LinearLayout>
+</RelativeLayout>

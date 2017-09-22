@@ -21,6 +21,7 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+using univr_orari.Helpers;
 
 #endregion
 
@@ -36,7 +37,10 @@ namespace univr_orari.Activities
 		{
 			base.OnCreate(savedInstanceState);
 
-			StartActivity(new Intent(this, typeof(SelectCourseActivity)));
+			if (Settings.IsFirstStartup)
+				StartActivity(new Intent(this, typeof(SelectCourseActivity)));
+			else
+				StartActivity(new Intent(this, typeof(MainActivity)));
 		}
 	}
 }
