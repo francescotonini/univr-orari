@@ -2555,26 +2555,26 @@ namespace univr_orari
 			// aapt resource value: 0x7f020053
 			public const int avd_hide_password = 2130837587;
 			
-			// aapt resource value: 0x7f020070
-			public const int avd_hide_password_1 = 2130837616;
-			
 			// aapt resource value: 0x7f020071
-			public const int avd_hide_password_2 = 2130837617;
+			public const int avd_hide_password_1 = 2130837617;
 			
 			// aapt resource value: 0x7f020072
-			public const int avd_hide_password_3 = 2130837618;
+			public const int avd_hide_password_2 = 2130837618;
+			
+			// aapt resource value: 0x7f020073
+			public const int avd_hide_password_3 = 2130837619;
 			
 			// aapt resource value: 0x7f020054
 			public const int avd_show_password = 2130837588;
 			
-			// aapt resource value: 0x7f020073
-			public const int avd_show_password_1 = 2130837619;
-			
 			// aapt resource value: 0x7f020074
-			public const int avd_show_password_2 = 2130837620;
+			public const int avd_show_password_1 = 2130837620;
 			
 			// aapt resource value: 0x7f020075
-			public const int avd_show_password_3 = 2130837621;
+			public const int avd_show_password_2 = 2130837621;
+			
+			// aapt resource value: 0x7f020076
+			public const int avd_show_password_3 = 2130837622;
 			
 			// aapt resource value: 0x7f020055
 			public const int date_icon = 2130837589;
@@ -2630,11 +2630,11 @@ namespace univr_orari
 			// aapt resource value: 0x7f020066
 			public const int notification_icon_background = 2130837606;
 			
-			// aapt resource value: 0x7f02006e
-			public const int notification_template_icon_bg = 2130837614;
-			
 			// aapt resource value: 0x7f02006f
-			public const int notification_template_icon_low_bg = 2130837615;
+			public const int notification_template_icon_bg = 2130837615;
+			
+			// aapt resource value: 0x7f020070
+			public const int notification_template_icon_low_bg = 2130837616;
 			
 			// aapt resource value: 0x7f020067
 			public const int notification_tile_bg = 2130837607;
@@ -2646,16 +2646,19 @@ namespace univr_orari
 			public const int preference_list_divider_material = 2130837609;
 			
 			// aapt resource value: 0x7f02006a
-			public const int room_icon = 2130837610;
+			public const int refresh_icon = 2130837610;
 			
 			// aapt resource value: 0x7f02006b
-			public const int share_icon = 2130837611;
+			public const int room_icon = 2130837611;
 			
 			// aapt resource value: 0x7f02006c
-			public const int teacher_icon = 2130837612;
+			public const int share_icon = 2130837612;
 			
 			// aapt resource value: 0x7f02006d
-			public const int week_icon = 2130837613;
+			public const int teacher_icon = 2130837613;
+			
+			// aapt resource value: 0x7f02006e
+			public const int week_icon = 2130837614;
 			
 			static Drawable()
 			{
@@ -2922,14 +2925,17 @@ namespace univr_orari
 			// aapt resource value: 0x7f08008c
 			public const int main_activity_week_view = 2131230860;
 			
-			// aapt resource value: 0x7f0800bf
-			public const int main_menu_change_course = 2131230911;
+			// aapt resource value: 0x7f0800c0
+			public const int main_menu_change_course = 2131230912;
 			
 			// aapt resource value: 0x7f0800bd
 			public const int main_menu_day_view = 2131230909;
 			
-			// aapt resource value: 0x7f0800c0
-			public const int main_menu_settings = 2131230912;
+			// aapt resource value: 0x7f0800bf
+			public const int main_menu_refresh = 2131230911;
+			
+			// aapt resource value: 0x7f0800c1
+			public const int main_menu_settings = 2131230913;
 			
 			// aapt resource value: 0x7f0800be
 			public const int main_menu_week_view = 2131230910;
@@ -3234,8 +3240,8 @@ namespace univr_orari
 			// aapt resource value: 0x7f0800b6
 			public const int view_lesson_activity_toolbar = 2131230902;
 			
-			// aapt resource value: 0x7f0800c1
-			public const int view_lesson_menu_share = 2131230913;
+			// aapt resource value: 0x7f0800c2
+			public const int view_lesson_menu_share = 2131230914;
 			
 			// aapt resource value: 0x7f08000e
 			public const int view_offset_helper = 2131230734;
@@ -3700,23 +3706,26 @@ namespace univr_orari
 			// aapt resource value: 0x7f0a0041
 			public const int main_menu_day_view = 2131361857;
 			
+			// aapt resource value: 0x7f0a0042
+			public const int main_menu_refresh = 2131361858;
+			
 			// aapt resource value: 0x7f0a003f
 			public const int main_menu_settings = 2131361855;
 			
 			// aapt resource value: 0x7f0a0040
 			public const int main_menu_week_view = 2131361856;
 			
+			// aapt resource value: 0x7f0a0045
+			public const int no_connection_dialog_button_text = 2131361861;
+			
 			// aapt resource value: 0x7f0a0044
-			public const int no_connection_dialog_button_text = 2131361860;
+			public const int no_connection_dialog_message = 2131361860;
 			
 			// aapt resource value: 0x7f0a0043
-			public const int no_connection_dialog_message = 2131361859;
+			public const int no_connection_dialog_title = 2131361859;
 			
-			// aapt resource value: 0x7f0a0042
-			public const int no_connection_dialog_title = 2131361858;
-			
-			// aapt resource value: 0x7f0a0045
-			public const int no_connection_short_message = 2131361861;
+			// aapt resource value: 0x7f0a0046
+			public const int no_connection_short_message = 2131361862;
 			
 			// aapt resource value: 0x7f0a0026
 			public const int password_toggle_content_description = 2131361830;
@@ -3781,29 +3790,32 @@ namespace univr_orari
 			// aapt resource value: 0x7f0a0016
 			public const int status_bar_notification_info_overflow = 2131361814;
 			
+			// aapt resource value: 0x7f0a0047
+			public const int unknown_error_message = 2131361863;
+			
 			// aapt resource value: 0x7f0a0000
 			public const int v7_preference_off = 2131361792;
 			
 			// aapt resource value: 0x7f0a0001
 			public const int v7_preference_on = 2131361793;
 			
+			// aapt resource value: 0x7f0a004b
+			public const int view_lesson_activity_date_txt = 2131361867;
+			
+			// aapt resource value: 0x7f0a004c
+			public const int view_lesson_activity_lesson_txt = 2131361868;
+			
 			// aapt resource value: 0x7f0a0049
-			public const int view_lesson_activity_date_txt = 2131361865;
+			public const int view_lesson_activity_room_txt = 2131361865;
 			
 			// aapt resource value: 0x7f0a004a
-			public const int view_lesson_activity_lesson_txt = 2131361866;
-			
-			// aapt resource value: 0x7f0a0047
-			public const int view_lesson_activity_room_txt = 2131361863;
+			public const int view_lesson_activity_teacher_txt = 2131361866;
 			
 			// aapt resource value: 0x7f0a0048
-			public const int view_lesson_activity_teacher_txt = 2131361864;
+			public const int view_lesson_activity_title = 2131361864;
 			
-			// aapt resource value: 0x7f0a0046
-			public const int view_lesson_activity_title = 2131361862;
-			
-			// aapt resource value: 0x7f0a004b
-			public const int view_lesson_menu_share = 2131361867;
+			// aapt resource value: 0x7f0a004d
+			public const int view_lesson_menu_share = 2131361869;
 			
 			static String()
 			{

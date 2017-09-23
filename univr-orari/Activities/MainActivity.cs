@@ -63,7 +63,7 @@ namespace univr_orari.Activities
 		public IList<WeekViewEvent> OnMonthChange(int newYear, int newMonth)
 		{
 			List<WeekViewEvent> events = new List<WeekViewEvent>();
-			
+
 			// Check if this request has been made already
 			if (!lessons.ContainsKey($"{newYear}-{newMonth}"))
 				LoadLessons(newYear, newMonth);
@@ -118,6 +118,10 @@ namespace univr_orari.Activities
 				case Resource.Id.main_menu_day_view:
 					ChangeWeekViewMode(1);
 					return true;
+				case Resource.Id.main_menu_refresh:
+					this.lessons.Clear();
+					this.weekView.NotifyDatasetChanged();
+					return true;
 				case Resource.Id.main_menu_change_course:
 					StartActivity(new Intent(this, typeof(SelectCourseActivity)));
 					return true;
@@ -139,17 +143,22 @@ namespace univr_orari.Activities
 
 		private async void LoadLessons(int year, int month)
 		{
-			this.lessons.Add($"{year}-{month}", new List<Lesson>());
+			lessons.Add($"{year}-{month}", new List<Lesson>());
 
-			if (!CrossConnectivity.Current.IsConnected)
+			SnackbarHelper.Show(layout,
+				!CrossConnectivity.Current.IsConnected
+					? Resource.String.no_connection_short_message
+					: Resource.String.main_activity_loading, Resource.String.main_activity_loading_btn);
+
+			// Get data
+			List<Lesson> l = await DataStore.GetLessons(year, month, true);
+			if (l == null)
 			{
-				SnackbarHelper.Show(layout, Resource.String.no_connection_short_message, Resource.String.main_activity_loading_btn);
+				SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
 				return;
 			}
 
-			// Get data
-			SnackbarHelper.Show(layout, Resource.String.main_activity_loading, Resource.String.main_activity_loading_btn);
-			this.lessons[$"{year}-{month}"].AddRange(await DataStore.GetLessons(year, month, true));
+			lessons[$"{year}-{month}"].AddRange(l);
 			weekView.NotifyDatasetChanged();
 		}
 
@@ -164,9 +173,9 @@ namespace univr_orari.Activities
 		private void ChangeWeekViewMode(int mode)
 		{
 			// Collecting statistics
-			Logger.Write("Week view mode changed", new Dictionary<string, string>()
+			Logger.Write("Week view mode changed", new Dictionary<string, string>
 			{
-				{ "value", mode.ToString() }
+				{"value", mode.ToString()}
 			});
 
 			Settings.WeekViewMode = mode;

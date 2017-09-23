@@ -119,7 +119,7 @@ namespace univr_orari.Models
 		public int Year { get; set; }
 		public string Room { get; set; }
 		public string Teacher { get; set; }
-		public DateTimeOffset LastUpdateDateTimeOffset => DateTimeOffset.UtcNow;
+		public DateTimeOffset LastUpdateDateTimeOffset { get; set; }
 
 		public override string ToString()
 		{

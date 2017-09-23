@@ -30,7 +30,6 @@ using Android.Widget;
 using Plugin.Connectivity;
 using univr_orari.Helpers;
 using univr_orari.Models;
-using univr_orari.Services;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -42,6 +41,18 @@ namespace univr_orari.Activities
 		NoHistory = true)]
 	public class SelectCourseActivity : BaseActivity
 	{
+		public override bool OnOptionsItemSelected(IMenuItem item)
+		{
+			switch (item.ItemId)
+			{
+				case Android.Resource.Id.Home:
+					OnBackPressed();
+					return true;
+				default:
+					return base.OnOptionsItemSelected(item);
+			}
+		}
+
 		private Toolbar toolbar;
 		private RelativeLayout loadingLayout;
 		private RelativeLayout mainLayout;
@@ -82,7 +93,7 @@ namespace univr_orari.Activities
 			courseYearSpinner.Adapter = adapter;
 		}
 
-		private async void OkBtnOnClick(object sender, EventArgs eventArgs)
+		private void OkBtnOnClick(object sender, EventArgs eventArgs)
 		{
 			// Saving course details
 			Settings.AcademicYearId = currentAcademicYear.Id;
@@ -91,15 +102,15 @@ namespace univr_orari.Activities
 			Settings.IsFirstStartup = false;
 
 			// Collecting statistics
-			Logger.Write("Course selected", new Dictionary<string, string>()
+			Logger.Write("Course selected", new Dictionary<string, string>
 			{
-				{ "academicYearId", Settings.AcademicYearId },
-				{ "courseId", Settings.CourseId },
-				{"courseYearId", Settings.CourseYearId }
+				{"academicYearId", Settings.AcademicYearId},
+				{"courseId", Settings.CourseId},
+				{"courseYearId", Settings.CourseYearId}
 			});
 
 			// Clear db
-			await this.DataStore.ClearDb();
+			DataStore.ClearDb();
 
 			// Open a new Activity
 			// BUG: this doesn't clear back stack
@@ -140,7 +151,7 @@ namespace univr_orari.Activities
 				builder.SetTitle(GetString(Resource.String.no_connection_dialog_title));
 				builder.SetMessage(GetString(Resource.String.no_connection_dialog_message));
 				builder.SetPositiveButton(GetString(Resource.String.no_connection_dialog_button_text),
-					(sender, e) => FinishAffinity());
+					(sender, e) => OnBackPressed());
 
 				builder.Create().Show();
 				return;
@@ -156,6 +167,16 @@ namespace univr_orari.Activities
 				mainLayout.Visibility = ViewStates.Visible;
 
 				SetCourseSpinner();
+			}
+			else
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.SetTitle(GetString(Resource.String.no_connection_dialog_title));
+				builder.SetMessage(GetString(Resource.String.unknown_error_message));
+				builder.SetPositiveButton(GetString(Resource.String.no_connection_dialog_button_text),
+					(sender, e) => OnBackPressed());
+
+				builder.Create().Show();
 			}
 		}
 	}

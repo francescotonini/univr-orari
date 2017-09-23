@@ -51,7 +51,7 @@ namespace univr_orari.Activities
 					Intent sendIntent = new Intent();
 					sendIntent.SetAction(Intent.ActionSend);
 					sendIntent.PutExtra(Intent.ExtraText,
-						$"{lesson.Name}\n{lesson.Teacher}\n{lesson.Room}\n{lesson.StartDateTimeOffset.LocalDateTime:dd/mm HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}");
+						$"{lesson.Name}\n{lesson.Teacher}\n{lesson.Room}\n{lesson.StartDateTimeOffset.LocalDateTime:dd/MM HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}");
 					sendIntent.SetType("text/plain");
 					StartActivity(sendIntent);
 					return true;
@@ -96,7 +96,7 @@ namespace univr_orari.Activities
 			roomTextView.Text = lesson.Room;
 			teacherTextView.Text = lesson.Teacher;
 			dateTextView.Text =
-				$"{lesson.StartDateTimeOffset.LocalDateTime:dd/mm HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}";
+				$"{lesson.StartDateTimeOffset.LocalDateTime:dd/MM HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}";
 		}
 	}
 }

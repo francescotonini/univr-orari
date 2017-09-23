@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-	<string name="app_name">UniVR Orario</string>
+	<string name="app_name">UniVR Orari</string>
 
 	<string name="select_course_activity_title">Seleziona corso e anno</string>
 	<string name="select_course_activity_course_description_txt">Seleziona il corso di studi per permettere all\'app di scaricare gli orari automaticamente</string>
@@ -29,11 +29,14 @@
 	<string name="main_menu_settings">Impostazioni</string>
 	<string name="main_menu_week_view">Vista settimanale</string>
 	<string name="main_menu_day_view">Vista giornaliera</string>
+	<string name="main_menu_refresh">Ricarica orari</string>
 
 	<string name="no_connection_dialog_title">Ops!</string>
 	<string name="no_connection_dialog_message">Per poter scaricare gli orari è necessaria una connessione ad internet :(</string>
 	<string name="no_connection_dialog_button_text">Chiudi</string>
 	<string name="no_connection_short_message">Nessuna connessione ad internet :(</string>
+
+	<string name="unknown_error_message">Errore durante il download degli orari</string>
 
 	<string name="view_lesson_activity_title">Dettagli lezione</string>
 	<string name="view_lesson_activity_room_txt">Aula</string>

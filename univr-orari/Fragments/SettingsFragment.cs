@@ -18,14 +18,12 @@
 
 #region
 
-using System;
 using Android.Content;
+using Android.Net;
 using Android.OS;
-using Android.Support.Design.Widget;
 using Android.Support.V7.Preferences;
 using univr_orari.Helpers;
 using univr_orari.Services;
-using Uri = Android.Net.Uri;
 
 #endregion
 
@@ -53,11 +51,6 @@ namespace univr_orari.Fragments
 			appVersion.Summary = Context.PackageManager.GetPackageInfo(Context.PackageName, 0).VersionName;
 		}
 
-		private void AppVersionOnPreferenceClick(object sender, Preference.PreferenceClickEventArgs preferenceClickEventArgs)
-		{
-			SnackbarHelper.Show(View, Resource.String.preferences_easter);
-		}
-
 		public override void OnPause()
 		{
 			base.OnPause();
@@ -81,11 +74,16 @@ namespace univr_orari.Fragments
 		private Preference leaveFeedback;
 		private Preference appVersion;
 
-		private async void ClearDbOnPreferenceClick(object sender,
+		private void AppVersionOnPreferenceClick(object sender, Preference.PreferenceClickEventArgs preferenceClickEventArgs)
+		{
+			SnackbarHelper.Show(View, Resource.String.preferences_easter);
+		}
+
+		private void ClearDbOnPreferenceClick(object sender,
 			Preference.PreferenceClickEventArgs preferenceClickEventArgs)
 		{
 			DataHandler dh = new DataHandler();
-			await dh.ClearDb();
+			dh.ClearDb();
 
 			SnackbarHelper.Show(View, Resource.String.settings_fragment_clear_db, Resource.String.main_activity_loading_btn);
 		}

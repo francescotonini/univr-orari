@@ -45,13 +45,13 @@ namespace univr_orari.Services
 		public DataHandler()
 		{
 			// Configuring local client
-			this.localClientConfiguration = RealmConfiguration.DefaultConfiguration;
-			this.localClientConfiguration.SchemaVersion = 1;
+			localClientConfiguration = RealmConfiguration.DefaultConfiguration;
+			localClientConfiguration.SchemaVersion = 1;
 #if DEBUG
-			this.localClientConfiguration.ShouldDeleteIfMigrationNeeded = true;
+			localClientConfiguration.ShouldDeleteIfMigrationNeeded = true;
 #endif
-			this.localClientConfiguration.MigrationCallback += LocalClient_MigrationCallBack;
-			LocalClient = Realm.GetInstance(this.localClientConfiguration);
+			localClientConfiguration.MigrationCallback += LocalClient_MigrationCallBack;
+			LocalClient = Realm.GetInstance(localClientConfiguration);
 
 			// Configuring remote client
 			RemoteClient = new HttpClient(new NativeMessageHandler());
@@ -73,21 +73,22 @@ namespace univr_orari.Services
 		/// <returns></returns>
 		public async Task<AcademicYear> GetCurrentAcademicYear()
 		{
-			// Get the stuff
-			HttpResponseMessage response = await RemoteClient.GetAsync(GET_ACADEMIC_YEAR_ENDPOINT);
-			if (!response.IsSuccessStatusCode)
-				return null;
-
-			// Process response
-			string rawResponse = await response.Content.ReadAsStringAsync();
-			Regex regex = new Regex("var elenco_corsi = (\\[{.+}\\])");
-			Match match = regex.Match(rawResponse);
-			if (!match.Success)
-				return null;
-
-			// Try to serialize
 			try
 			{
+				// Get the stuff
+				HttpResponseMessage response = await RemoteClient.GetAsync(GET_ACADEMIC_YEAR_ENDPOINT);
+				if (!response.IsSuccessStatusCode)
+					return null;
+
+				// Process response
+				string rawResponse = await response.Content.ReadAsStringAsync();
+				Regex regex = new Regex("var elenco_corsi = (\\[{.+}\\])");
+				Match match = regex.Match(rawResponse);
+				if (!match.Success)
+					return null;
+
+
+				// Try to serialize
 				List<AcademicYear> academicYears = JsonConvert.DeserializeObject<List<AcademicYear>>(match.Groups[1].Value);
 				if (academicYears == null)
 					return null;
@@ -102,8 +103,13 @@ namespace univr_orari.Services
 				// Return the first element
 				return academicYears[0];
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				Logger.Write("Exception on GetCurrentAcademicYear", new Dictionary<string, string>
+				{
+					{"Message", e.Message}
+				});
+
 				return null;
 			}
 		}
@@ -119,10 +125,9 @@ namespace univr_orari.Services
 				if (preferCache)
 				{
 					IQueryable<Lesson> currentLessonStored = LocalClient.All<Lesson>().Where(x => x.Month == month && x.Year == year);
-					if (currentLessonStored?.ToList().Find(x => DateTime.Now.DayOfYear - x.LastUpdateDateTimeOffset.DayOfYear > 7) == null || !CrossConnectivity.Current.IsConnected)
-					{
+					if (!CrossConnectivity.Current.IsConnected || currentLessonStored.Count() != 0 && currentLessonStored?.ToList()
+						    .FindAll(x => (DateTimeOffset.UtcNow - x.LastUpdateDateTimeOffset).Days > 7).Count == 0)
 						return currentLessonStored.ToList();
-					}
 				}
 
 				List<Lesson> lessons = new List<Lesson>();
@@ -165,7 +170,8 @@ namespace univr_orari.Services
 							EndDateTimeOffset = endDateTime,
 							Room = e.Room,
 							Month = month,
-							Year = year
+							Year = year,
+							LastUpdateDateTimeOffset = DateTimeOffset.UtcNow
 						});
 				}
 
@@ -184,7 +190,12 @@ namespace univr_orari.Services
 			}
 			catch (Exception e)
 			{
-				return new List<Lesson>();
+				Logger.Write("Exception on GetLessons", new Dictionary<string, string>
+				{
+					{"Message", e.Message}
+				});
+
+				return null;
 			}
 		}
 
@@ -223,13 +234,24 @@ namespace univr_orari.Services
 			}
 			catch (Exception e)
 			{
+				Logger.Write("Exception on GetWeeklyTimetable", new Dictionary<string, string>
+				{
+					{"Message", e.Message}
+				});
+
 				return null;
 			}
 		}
 
-		public async Task ClearDb()
+		public void ClearDb()
 		{
-			await LocalClient.WriteAsync(asyncRealm => { LocalClient.RemoveAll<Lesson>(); });
+			using (Transaction transaction = LocalClient.BeginWrite())
+			{
+				IQueryable<Lesson> currentLessonStored = LocalClient.All<Lesson>();
+				LocalClient.RemoveRange(currentLessonStored);
+
+				transaction.Commit();
+			}
 		}
 
 		private const string GET_ACADEMIC_YEAR_ENDPOINT = "https://logistica.univr.it/aule/Orario/combo_call.php";
@@ -239,9 +261,9 @@ namespace univr_orari.Services
 
 		private void LocalClient_MigrationCallBack(Migration migration, ulong oldSchemaVersion)
 		{
-			Logger.Write("Migration callback triggered", new Dictionary<string, string>()
+			Logger.Write("Migration callback triggered", new Dictionary<string, string>
 			{
-				{ "oldSchemaVersion", oldSchemaVersion.ToString() }
+				{"oldSchemaVersion", oldSchemaVersion.ToString()}
 			});
 		}
 	}
