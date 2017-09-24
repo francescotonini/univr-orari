@@ -10,10 +10,10 @@
 		<item name="android:windowLightStatusBar">false</item>
 	</style>
 	<style name="app_theme_bootstrap_activity" parent="app_theme_base">
-		<item name="colorPrimary">@color/accent</item>
-		<item name="colorPrimaryDark">@color/accent</item>
-		<item name="android:navigationBarColor">@color/accent</item>
-		<item name="android:windowBackground">@color/accent</item>
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary</item>
+		<item name="android:navigationBarColor">@color/primary</item>
+		<item name="android:windowBackground">@color/primary</item>
 	</style>
 	<style name="app_theme_toolbar" parent="app_theme">
 		<item name="android:textColorPrimary">@android:color/white</item>
