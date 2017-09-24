@@ -18,17 +18,16 @@
 
 #region
 
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
-using Realms;
 
 #endregion
 
 namespace univr_orari.Models
 {
+	/// <summary>
+	/// Weekly timetable.
+	/// </summary>
 	public class WeeklyTimetable
 	{
 		/// <summary>
@@ -56,6 +55,9 @@ namespace univr_orari.Models
 		public List<string> Colors { get; set; }
 	}
 
+	/// <summary>
+	/// Day (inner element of WeeklyTimetable)
+	/// </summary>
 	public class Day
 	{
 		/// <summary>
@@ -71,6 +73,9 @@ namespace univr_orari.Models
 		public string Value { get; set; }
 	}
 
+	/// <summary>
+	/// Event. (inner element of WeeklyTimetable)
+	/// </summary>
 	public class Event
 	{
 		/// <summary>
@@ -108,53 +113,5 @@ namespace univr_orari.Models
 		/// </summary>
 		[JsonProperty("ora_fine")]
 		public string End { get; set; }
-	}
-
-	public class Lesson : RealmObject
-	{
-		public string Name { get; set; }
-		public DateTimeOffset StartDateTimeOffset { get; set; }
-		public DateTimeOffset EndDateTimeOffset { get; set; }
-		public int Month { get; set; }
-		public int Year { get; set; }
-		public string Room { get; set; }
-		public string Teacher { get; set; }
-		public DateTimeOffset LastUpdateDateTimeOffset { get; set; }
-
-		public override string ToString()
-		{
-			JObject obj = new JObject
-			{
-				{nameof(Name), Name},
-				{nameof(StartDateTimeOffset), StartDateTimeOffset.ToString()},
-				{nameof(EndDateTimeOffset), EndDateTimeOffset.ToString()},
-				{nameof(Month), Month},
-				{nameof(Year), Year},
-				{nameof(Room), Room},
-				{nameof(Teacher), Teacher},
-				{nameof(LastUpdateDateTimeOffset), LastUpdateDateTimeOffset.ToString()}
-			};
-
-			return obj.ToString();
-		}
-
-		public static Lesson Parse(string json)
-		{
-			return JsonConvert.DeserializeObject<Lesson>(json, new IsoDateTimeConverter());
-		}
-
-		public static bool TryParse(string json, out Lesson lesson)
-		{
-			try
-			{
-				lesson = Parse(json);
-				return true;
-			}
-			catch (Exception)
-			{
-				lesson = null;
-				return false;
-			}
-		}
 	}
 }
