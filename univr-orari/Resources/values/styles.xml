@@ -28,4 +28,8 @@
 		<item name="android:textSize">@dimen/primary_text_size</item>
 		<item name="android:textStyle">normal</item>
 	</style>
+	<style name="primary_button" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:textColor">@color/white</item>
+		<item name="colorButtonNormal">@color/primary</item>
+	</style>
 </resources>

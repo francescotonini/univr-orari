@@ -59,10 +59,11 @@
 		<android.support.v7.widget.AppCompatButton
 			android:id="@+id/select_course_activity_ok_btn"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/select_course_activity_ok_btn_margin_top"
-			android:layout_below="@id/select_course_activity_course_year_spinner"
+			android:layout_height="@dimen/select_course_activity_ok_btn_height"
+			android:layout_alignParentBottom="true"
+			android:layout_marginBottom="@dimen/select_course_activity_ok_btn_margin_bottom"
 			android:enabled="false"
-			android:text="@string/select_course_activity_ok_btn" />
+			android:text="@string/select_course_activity_ok_btn"
+			style="@style/primary_button"/>
 	</RelativeLayout>
 </RelativeLayout>
