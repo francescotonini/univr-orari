@@ -91,8 +91,8 @@ namespace univr_orari.Fragments
 		private void LeaveFeedbackOnPreferenceClick(object sender,
 			Preference.PreferenceClickEventArgs preferenceClickEventArgs)
 		{
-			Intent emailIntent = new Intent(Intent.ActionSend);
-			emailIntent.SetData(Uri.Parse("mailto:francescoantoniotonini@gmail.com&subject=UniVR Orari"));
+			Intent emailIntent = new Intent(Intent.ActionSendto, Uri.Parse("mailto:francescoantoniotonini@gmail.com"));
+			emailIntent.PutExtra(Intent.ExtraSubject, "UniVR Orari - Feedback");
 			StartActivity(emailIntent);
 		}
 	}

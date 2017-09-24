@@ -119,8 +119,8 @@ namespace univr_orari.Activities
 					ChangeWeekViewMode(1);
 					return true;
 				case Resource.Id.main_menu_refresh:
-					this.lessons.Clear();
-					this.weekView.NotifyDatasetChanged();
+					lessons.Clear();
+					weekView.NotifyDatasetChanged();
 					return true;
 				case Resource.Id.main_menu_change_course:
 					StartActivity(new Intent(this, typeof(SelectCourseActivity)));
@@ -214,6 +214,10 @@ namespace univr_orari.Activities
 
 			weekView.GoToHour(DateTime.Now.Hour);
 			weekView.DateTimeInterpreter = new DateTimeInterpreter();
+
+			// Keeps the app updated
+			lessons.Clear();
+			weekView.NotifyDatasetChanged();
 		}
 	}
 }
