@@ -1,5 +1,7 @@
 ## UniVR Orari
 
+![Logo](https://github.com/francescotonini/univr-orari/blob/master/univr-orari/Resources/drawable-xxhdpi/app_icon.png?raw=true)
+
 ### Ma che è sta roba?
 UniVR Orari è un'applicazione che ti permette di accedere agli orari dei corsi erogati dall'Università di Verona in modo facile e veloce. Dì addio a siti poco fruibili da smartphone! L'applicazione ti permettere di scorrere l'orario del tuo corso e avere informazioni dettagliate sulle lezioni, velocemente e offline (nel caso tu abbia finito i giga :D)
 
