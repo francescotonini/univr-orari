@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 namespace univr_orari.Models
 {
 	/// <summary>
-	/// Academic year.
+	///     Academic year.
 	/// </summary>
 	public class AcademicYear
 	{
@@ -44,7 +44,7 @@ namespace univr_orari.Models
 	}
 
 	/// <summary>
-	/// Course. (inner element of AcademicYear)
+	///     Course. (inner element of AcademicYear)
 	/// </summary>
 	public class Course
 	{
@@ -68,7 +68,7 @@ namespace univr_orari.Models
 	}
 
 	/// <summary>
-	/// Course year. (inner element of AcademicYear)
+	///     Course year. (inner element of AcademicYear)
 	/// </summary>
 	public class CourseYear
 	{
