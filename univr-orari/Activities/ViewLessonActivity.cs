@@ -24,6 +24,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using univr_orari.Helpers;
+using univr_orari.Models;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 #endregion

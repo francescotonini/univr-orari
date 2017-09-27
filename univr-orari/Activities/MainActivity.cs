@@ -31,6 +31,7 @@ using Com.Alamkanak.Weekview;
 using Java.Util;
 using Plugin.Connectivity;
 using univr_orari.Helpers;
+using univr_orari.Models;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 #endregion
