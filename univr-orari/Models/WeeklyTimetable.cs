@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 namespace univr_orari.Models
 {
 	/// <summary>
-	/// Weekly timetable.
+	///     Weekly timetable.
 	/// </summary>
 	public class WeeklyTimetable
 	{
@@ -56,7 +56,7 @@ namespace univr_orari.Models
 	}
 
 	/// <summary>
-	/// Day (inner element of WeeklyTimetable)
+	///     Day (inner element of WeeklyTimetable)
 	/// </summary>
 	public class Day
 	{
@@ -74,7 +74,7 @@ namespace univr_orari.Models
 	}
 
 	/// <summary>
-	/// Event. (inner element of WeeklyTimetable)
+	///     Event. (inner element of WeeklyTimetable)
 	/// </summary>
 	public class Event
 	{
