@@ -30,8 +30,11 @@ namespace univr_orari
 	{
 		public static void Init()
 		{
-			MobileCenter.Start(MOBILE_CENTER_API,
-				typeof(Analytics), typeof(Crashes));
+			if (!string.IsNullOrWhiteSpace(MOBILE_CENTER_API))
+			{
+				MobileCenter.Start(MOBILE_CENTER_API,
+					typeof(Analytics), typeof(Crashes));
+			}
 		}
 	}
 }
