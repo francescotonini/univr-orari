@@ -48,12 +48,13 @@ namespace univr_orari.Activities
 			int month = p0.StartTime.Get(CalendarField.Month) + 1;
 
 			Lesson selectedLesson = lessons[$"{year}-{month}"]
-				.Find(x => x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
-				           x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
-				           x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
-				           x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
-				           x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
-				           x.Name == p0.Name && x.Room == p0.Location);
+				.Find(x =>  x.StartDateTimeOffset != null &&
+							x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
+							x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
+							x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
+							x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
+							x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
+							x.Name == p0.Name && x.Room == p0.Location);
 
 			Intent viewLessonIntent = new Intent(this, typeof(ViewLessonActivity));
 			viewLessonIntent.PutExtra("data", selectedLesson.ToString());
@@ -71,25 +72,39 @@ namespace univr_orari.Activities
 			// Display lessons
 			foreach (Lesson lesson in lessons[$"{newYear}-{newMonth}"])
 			{
-				Calendar startTimeCalendar = Calendar.Instance;
-				startTimeCalendar.Set(CalendarField.Year, lesson.StartDateTimeOffset.LocalDateTime.Year);
-				startTimeCalendar.Set(CalendarField.Month, lesson.StartDateTimeOffset.LocalDateTime.Month - 1);
-				startTimeCalendar.Set(CalendarField.DayOfMonth, lesson.StartDateTimeOffset.LocalDateTime.Day);
-				startTimeCalendar.Set(CalendarField.HourOfDay, lesson.StartDateTimeOffset.LocalDateTime.Hour);
-				startTimeCalendar.Set(CalendarField.Minute, lesson.StartDateTimeOffset.LocalDateTime.Minute);
-
-				Calendar endTimeCalendar = Calendar.Instance;
-				endTimeCalendar.Set(CalendarField.Year, lesson.EndDateTimeOffset.LocalDateTime.Year);
-				endTimeCalendar.Set(CalendarField.Month, lesson.EndDateTimeOffset.LocalDateTime.Month - 1);
-				endTimeCalendar.Set(CalendarField.DayOfMonth, lesson.EndDateTimeOffset.LocalDateTime.Day);
-				endTimeCalendar.Set(CalendarField.HourOfDay, lesson.EndDateTimeOffset.LocalDateTime.Hour);
-				endTimeCalendar.Set(CalendarField.Minute, lesson.EndDateTimeOffset.LocalDateTime.Minute - 1);
-
-				events.Add(new WeekViewEvent(startTimeCalendar.TimeInMillis, lesson.Name, lesson.Room, startTimeCalendar,
-					endTimeCalendar)
+				try
 				{
-					Color = ContextCompat.GetColor(this, GetCellColor(lesson.Name))
-				});
+					Calendar startTimeCalendar = Calendar.Instance;
+					startTimeCalendar.Set(CalendarField.Year, lesson.StartDateTimeOffset.LocalDateTime.Year);
+					startTimeCalendar.Set(CalendarField.Month, lesson.StartDateTimeOffset.LocalDateTime.Month - 1);
+					startTimeCalendar.Set(CalendarField.DayOfMonth, lesson.StartDateTimeOffset.LocalDateTime.Day);
+					startTimeCalendar.Set(CalendarField.HourOfDay, lesson.StartDateTimeOffset.LocalDateTime.Hour);
+					startTimeCalendar.Set(CalendarField.Minute, lesson.StartDateTimeOffset.LocalDateTime.Minute);
+
+					Calendar endTimeCalendar = Calendar.Instance;
+					endTimeCalendar.Set(CalendarField.Year, lesson.EndDateTimeOffset.LocalDateTime.Year);
+					endTimeCalendar.Set(CalendarField.Month, lesson.EndDateTimeOffset.LocalDateTime.Month - 1);
+					endTimeCalendar.Set(CalendarField.DayOfMonth, lesson.EndDateTimeOffset.LocalDateTime.Day);
+					endTimeCalendar.Set(CalendarField.HourOfDay, lesson.EndDateTimeOffset.LocalDateTime.Hour);
+					endTimeCalendar.Set(CalendarField.Minute, lesson.EndDateTimeOffset.LocalDateTime.Minute - 1);
+
+					events.Add(new WeekViewEvent(startTimeCalendar.TimeInMillis, lesson.Name, lesson.Room, startTimeCalendar,
+						endTimeCalendar)
+					{
+						Color = ContextCompat.GetColor(this, GetCellColor(lesson.Name))
+					});
+				}
+				catch(Exception e)
+				{
+					Logger.Write("Error on OnMonthChange", new Dictionary<string, string>()
+					{
+						{"exception", e.Message},
+						{"academicYearId", Settings.AcademicYearId},
+						{"courseId", Settings.CourseId},
+						{"courseYearId", Settings.CourseYearId},
+						{"lessonName", lesson.Name}
+					});
+				}
 			}
 
 			return events;
