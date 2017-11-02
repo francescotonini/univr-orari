@@ -227,7 +227,7 @@ namespace univr_orari.Activities
 		{
 			base.OnResume();
 
-			weekView.GoToHour(DateTime.Now.Hour);
+			weekView.GoToHour(8);
 			weekView.DateTimeInterpreter = new DateTimeInterpreter();
 
 			// Keeps the app updated
