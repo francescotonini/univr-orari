@@ -1380,44 +1380,44 @@ namespace univr_orari
 		public partial class Color
 		{
 			
+			// aapt resource value: 0x7f0c0069
+			public const int abc_background_cache_hint_selector_material_dark = 2131492969;
+			
+			// aapt resource value: 0x7f0c006a
+			public const int abc_background_cache_hint_selector_material_light = 2131492970;
+			
+			// aapt resource value: 0x7f0c006b
+			public const int abc_btn_colored_borderless_text_material = 2131492971;
+			
+			// aapt resource value: 0x7f0c006c
+			public const int abc_btn_colored_text_material = 2131492972;
+			
+			// aapt resource value: 0x7f0c006d
+			public const int abc_color_highlight_material = 2131492973;
+			
+			// aapt resource value: 0x7f0c006e
+			public const int abc_hint_foreground_material_dark = 2131492974;
+			
 			// aapt resource value: 0x7f0c006f
-			public const int abc_background_cache_hint_selector_material_dark = 2131492975;
-			
-			// aapt resource value: 0x7f0c0070
-			public const int abc_background_cache_hint_selector_material_light = 2131492976;
-			
-			// aapt resource value: 0x7f0c0071
-			public const int abc_btn_colored_borderless_text_material = 2131492977;
-			
-			// aapt resource value: 0x7f0c0072
-			public const int abc_btn_colored_text_material = 2131492978;
-			
-			// aapt resource value: 0x7f0c0073
-			public const int abc_color_highlight_material = 2131492979;
-			
-			// aapt resource value: 0x7f0c0074
-			public const int abc_hint_foreground_material_dark = 2131492980;
-			
-			// aapt resource value: 0x7f0c0075
-			public const int abc_hint_foreground_material_light = 2131492981;
+			public const int abc_hint_foreground_material_light = 2131492975;
 			
 			// aapt resource value: 0x7f0c0001
 			public const int abc_input_method_navigation_guard = 2131492865;
 			
-			// aapt resource value: 0x7f0c0076
-			public const int abc_primary_text_disable_only_material_dark = 2131492982;
+			// aapt resource value: 0x7f0c0070
+			public const int abc_primary_text_disable_only_material_dark = 2131492976;
 			
-			// aapt resource value: 0x7f0c0077
-			public const int abc_primary_text_disable_only_material_light = 2131492983;
+			// aapt resource value: 0x7f0c0071
+			public const int abc_primary_text_disable_only_material_light = 2131492977;
 			
-			// aapt resource value: 0x7f0c0078
-			public const int abc_primary_text_material_dark = 2131492984;
+			// aapt resource value: 0x7f0c0072
+			public const int abc_primary_text_material_dark = 2131492978;
 			
-			// aapt resource value: 0x7f0c0079
-			public const int abc_primary_text_material_light = 2131492985;
+			// aapt resource value: 0x7f0c0073
+			public const int abc_primary_text_material_light = 2131492979;
 			
-			// aapt resource value: 0x7f0c007a
-			public const int abc_search_url_text = 2131492986;
+			// aapt resource value: 0x7f0c0074
+			public const int abc_search_url_text = 2131492980;
 			
 			// aapt resource value: 0x7f0c0002
 			public const int abc_search_url_text_normal = 2131492866;
@@ -1428,32 +1428,32 @@ namespace univr_orari
 			// aapt resource value: 0x7f0c0004
 			public const int abc_search_url_text_selected = 2131492868;
 			
+			// aapt resource value: 0x7f0c0075
+			public const int abc_secondary_text_material_dark = 2131492981;
+			
+			// aapt resource value: 0x7f0c0076
+			public const int abc_secondary_text_material_light = 2131492982;
+			
+			// aapt resource value: 0x7f0c0077
+			public const int abc_tint_btn_checkable = 2131492983;
+			
+			// aapt resource value: 0x7f0c0078
+			public const int abc_tint_default = 2131492984;
+			
+			// aapt resource value: 0x7f0c0079
+			public const int abc_tint_edittext = 2131492985;
+			
+			// aapt resource value: 0x7f0c007a
+			public const int abc_tint_seek_thumb = 2131492986;
+			
 			// aapt resource value: 0x7f0c007b
-			public const int abc_secondary_text_material_dark = 2131492987;
+			public const int abc_tint_spinner = 2131492987;
 			
 			// aapt resource value: 0x7f0c007c
-			public const int abc_secondary_text_material_light = 2131492988;
+			public const int abc_tint_switch_thumb = 2131492988;
 			
 			// aapt resource value: 0x7f0c007d
-			public const int abc_tint_btn_checkable = 2131492989;
-			
-			// aapt resource value: 0x7f0c007e
-			public const int abc_tint_default = 2131492990;
-			
-			// aapt resource value: 0x7f0c007f
-			public const int abc_tint_edittext = 2131492991;
-			
-			// aapt resource value: 0x7f0c0080
-			public const int abc_tint_seek_thumb = 2131492992;
-			
-			// aapt resource value: 0x7f0c0081
-			public const int abc_tint_spinner = 2131492993;
-			
-			// aapt resource value: 0x7f0c0082
-			public const int abc_tint_switch_thumb = 2131492994;
-			
-			// aapt resource value: 0x7f0c0083
-			public const int abc_tint_switch_track = 2131492995;
+			public const int abc_tint_switch_track = 2131492989;
 			
 			// aapt resource value: 0x7f0c0049
 			public const int accent = 2131492937;
@@ -1560,26 +1560,8 @@ namespace univr_orari
 			// aapt resource value: 0x7f0c0068
 			public const int cell_24 = 2131492968;
 			
-			// aapt resource value: 0x7f0c0069
-			public const int cell_25 = 2131492969;
-			
-			// aapt resource value: 0x7f0c006a
-			public const int cell_26 = 2131492970;
-			
-			// aapt resource value: 0x7f0c006b
-			public const int cell_27 = 2131492971;
-			
-			// aapt resource value: 0x7f0c006c
-			public const int cell_28 = 2131492972;
-			
-			// aapt resource value: 0x7f0c006d
-			public const int cell_29 = 2131492973;
-			
 			// aapt resource value: 0x7f0c0053
 			public const int cell_3 = 2131492947;
-			
-			// aapt resource value: 0x7f0c006e
-			public const int cell_30 = 2131492974;
 			
 			// aapt resource value: 0x7f0c0054
 			public const int cell_4 = 2131492948;
@@ -1602,8 +1584,8 @@ namespace univr_orari
 			// aapt resource value: 0x7f0c003c
 			public const int design_bottom_navigation_shadow_color = 2131492924;
 			
-			// aapt resource value: 0x7f0c0084
-			public const int design_error = 2131492996;
+			// aapt resource value: 0x7f0c007e
+			public const int design_error = 2131492990;
 			
 			// aapt resource value: 0x7f0c003d
 			public const int design_fab_shadow_end_color = 2131492925;
@@ -1635,8 +1617,8 @@ namespace univr_orari
 			// aapt resource value: 0x7f0c0046
 			public const int design_textinput_error_color_light = 2131492934;
 			
-			// aapt resource value: 0x7f0c0085
-			public const int design_tint_password_toggle = 2131492997;
+			// aapt resource value: 0x7f0c007f
+			public const int design_tint_password_toggle = 2131492991;
 			
 			// aapt resource value: 0x7f0c0013
 			public const int dim_foreground_disabled_material_dark = 2131492883;
@@ -1773,11 +1755,11 @@ namespace univr_orari
 			// aapt resource value: 0x7f0c0038
 			public const int switch_thumb_disabled_material_light = 2131492920;
 			
-			// aapt resource value: 0x7f0c0086
-			public const int switch_thumb_material_dark = 2131492998;
+			// aapt resource value: 0x7f0c0080
+			public const int switch_thumb_material_dark = 2131492992;
 			
-			// aapt resource value: 0x7f0c0087
-			public const int switch_thumb_material_light = 2131492999;
+			// aapt resource value: 0x7f0c0081
+			public const int switch_thumb_material_light = 2131492993;
 			
 			// aapt resource value: 0x7f0c0039
 			public const int switch_thumb_normal_material_dark = 2131492921;

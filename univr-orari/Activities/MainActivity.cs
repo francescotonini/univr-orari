@@ -38,201 +38,209 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace univr_orari.Activities
 {
-	[Activity(Label = "@string/app_name")]
-	public class MainActivity : BaseActivity,
-		WeekView.IEventClickListener, MonthLoader.IMonthChangeListener
-	{
-		public void OnEventClick(WeekViewEvent p0, RectF p1)
-		{
-			int year = p0.StartTime.Get(CalendarField.Year);
-			int month = p0.StartTime.Get(CalendarField.Month) + 1;
+    [Activity(Label = "@string/app_name")]
+    public class MainActivity : BaseActivity,
+        WeekView.IEventClickListener, MonthLoader.IMonthChangeListener
+    {
+        public void OnEventClick(WeekViewEvent p0, RectF p1)
+        {
+            int year = p0.StartTime.Get(CalendarField.Year);
+            int month = p0.StartTime.Get(CalendarField.Month) + 1;
 
-			Lesson selectedLesson = lessons[$"{year}-{month}"]
-				.Find(x =>  x.StartDateTimeOffset != null &&
-							x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
-							x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
-							x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
-							x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
-							x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
-							x.Name == p0.Name && x.Room == p0.Location);
+            List<Lesson> selectedLessons = lessons[$"{year}-{month}"];
 
-			Intent viewLessonIntent = new Intent(this, typeof(ViewLessonActivity));
-			viewLessonIntent.PutExtra("data", selectedLesson.ToString());
-			StartActivity(viewLessonIntent);
-		}
+            // Checks whether this event belongs to a week where fist day of the week is not in this month
+            if (p0.StartTime.Get(CalendarField.DayOfMonth) - p0.StartTime.Get(CalendarField.DayOfWeek) < 0)
+            {
+                selectedLessons = lessons[$"{year}-{month - 1}"];
+            }
 
-		public IList<WeekViewEvent> OnMonthChange(int newYear, int newMonth)
-		{
-			List<WeekViewEvent> events = new List<WeekViewEvent>();
+            Lesson selectedLesson = selectedLessons
+                .Find(x => x.StartDateTimeOffset != null &&
+                            x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
+                            x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
+                            x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
+                            x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
+                            x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
+                            x.Name == p0.Name && x.Room == p0.Location);
 
-			// Check if this request has been made already
-			if (!lessons.ContainsKey($"{newYear}-{newMonth}"))
-				LoadLessons(newYear, newMonth);
+            Intent viewLessonIntent = new Intent(this, typeof(ViewLessonActivity));
+            viewLessonIntent.PutExtra("data", selectedLesson.ToString());
+            StartActivity(viewLessonIntent);
+        }
 
-			// Display lessons
-			foreach (Lesson lesson in lessons[$"{newYear}-{newMonth}"])
-			{
-				try
-				{
-					Calendar startTimeCalendar = Calendar.Instance;
-					startTimeCalendar.Set(CalendarField.Year, lesson.StartDateTimeOffset.LocalDateTime.Year);
-					startTimeCalendar.Set(CalendarField.Month, lesson.StartDateTimeOffset.LocalDateTime.Month - 1);
-					startTimeCalendar.Set(CalendarField.DayOfMonth, lesson.StartDateTimeOffset.LocalDateTime.Day);
-					startTimeCalendar.Set(CalendarField.HourOfDay, lesson.StartDateTimeOffset.LocalDateTime.Hour);
-					startTimeCalendar.Set(CalendarField.Minute, lesson.StartDateTimeOffset.LocalDateTime.Minute);
+        public IList<WeekViewEvent> OnMonthChange(int newYear, int newMonth)
+        {
+            List<WeekViewEvent> events = new List<WeekViewEvent>();
 
-					Calendar endTimeCalendar = Calendar.Instance;
-					endTimeCalendar.Set(CalendarField.Year, lesson.EndDateTimeOffset.LocalDateTime.Year);
-					endTimeCalendar.Set(CalendarField.Month, lesson.EndDateTimeOffset.LocalDateTime.Month - 1);
-					endTimeCalendar.Set(CalendarField.DayOfMonth, lesson.EndDateTimeOffset.LocalDateTime.Day);
-					endTimeCalendar.Set(CalendarField.HourOfDay, lesson.EndDateTimeOffset.LocalDateTime.Hour);
-					endTimeCalendar.Set(CalendarField.Minute, lesson.EndDateTimeOffset.LocalDateTime.Minute - 1);
+            // Check if this request has been made already
+            if (!lessons.ContainsKey($"{newYear}-{newMonth}"))
+                LoadLessons(newYear, newMonth);
 
-					events.Add(new WeekViewEvent(startTimeCalendar.TimeInMillis, lesson.Name, lesson.Room, startTimeCalendar,
-						endTimeCalendar)
-					{
-						Color = ContextCompat.GetColor(this, GetCellColor(lesson.Name))
-					});
-				}
-				catch(Exception e)
-				{
-					Logger.Write("Error on OnMonthChange", new Dictionary<string, string>()
-					{
-						{"exception", e.Message},
-						{"academicYearId", Settings.AcademicYearId},
-						{"courseId", Settings.CourseId},
-						{"courseYearId", Settings.CourseYearId},
-						{"lessonName", lesson.Name}
-					});
-				}
-			}
+            // Display lessons
+            foreach (Lesson lesson in lessons[$"{newYear}-{newMonth}"])
+            {
+                try
+                {
+                    Calendar startTimeCalendar = Calendar.Instance;
+                    startTimeCalendar.Set(CalendarField.Year, lesson.StartDateTimeOffset.LocalDateTime.Year);
+                    startTimeCalendar.Set(CalendarField.Month, lesson.StartDateTimeOffset.LocalDateTime.Month - 1);
+                    startTimeCalendar.Set(CalendarField.DayOfMonth, lesson.StartDateTimeOffset.LocalDateTime.Day);
+                    startTimeCalendar.Set(CalendarField.HourOfDay, lesson.StartDateTimeOffset.LocalDateTime.Hour);
+                    startTimeCalendar.Set(CalendarField.Minute, lesson.StartDateTimeOffset.LocalDateTime.Minute);
 
-			return events;
-		}
+                    Calendar endTimeCalendar = Calendar.Instance;
+                    endTimeCalendar.Set(CalendarField.Year, lesson.EndDateTimeOffset.LocalDateTime.Year);
+                    endTimeCalendar.Set(CalendarField.Month, lesson.EndDateTimeOffset.LocalDateTime.Month - 1);
+                    endTimeCalendar.Set(CalendarField.DayOfMonth, lesson.EndDateTimeOffset.LocalDateTime.Day);
+                    endTimeCalendar.Set(CalendarField.HourOfDay, lesson.EndDateTimeOffset.LocalDateTime.Hour);
+                    endTimeCalendar.Set(CalendarField.Minute, lesson.EndDateTimeOffset.LocalDateTime.Minute - 1);
 
-		public override bool OnCreateOptionsMenu(IMenu menu)
-		{
-			MenuInflater.Inflate(Resource.Menu.main_menu, menu);
-			dayViewMenuItem = menu.FindItem(Resource.Id.main_menu_day_view);
-			weekViewMenuItem = menu.FindItem(Resource.Id.main_menu_week_view);
+                    events.Add(new WeekViewEvent(startTimeCalendar.TimeInMillis, lesson.Name, lesson.Room, startTimeCalendar,
+                        endTimeCalendar)
+                    {
+                        Color = ContextCompat.GetColor(this, GetCellColor(lesson.Name))
+                    });
+                }
+                catch (Exception e)
+                {
+                    Logger.Write("Error on OnMonthChange", new Dictionary<string, string>()
+                    {
+                        {"exception", e.Message},
+                        {"academicYearId", Settings.AcademicYearId},
+                        {"courseId", Settings.CourseId},
+                        {"courseYearId", Settings.CourseYearId},
+                        {"lessonName", lesson.Name}
+                    });
+                }
+            }
 
-			// Update UI
-			weekViewMenuItem.SetVisible(Settings.WeekViewMode == 1);
-			dayViewMenuItem.SetVisible(Settings.WeekViewMode != 1);
+            return events;
+        }
 
-			return true;
-		}
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main_menu, menu);
+            dayViewMenuItem = menu.FindItem(Resource.Id.main_menu_day_view);
+            weekViewMenuItem = menu.FindItem(Resource.Id.main_menu_week_view);
 
-		public override bool OnOptionsItemSelected(IMenuItem item)
-		{
-			switch (item.ItemId)
-			{
-				case Resource.Id.main_menu_week_view:
-					ChangeWeekViewMode(3);
-					return true;
-				case Resource.Id.main_menu_day_view:
-					ChangeWeekViewMode(1);
-					return true;
-				case Resource.Id.main_menu_refresh:
-					lessons.Clear();
-					weekView.NotifyDatasetChanged();
-					return true;
-				case Resource.Id.main_menu_change_course:
-					StartActivity(new Intent(this, typeof(SelectCourseActivity)));
-					return true;
-				case Resource.Id.main_menu_settings:
-					StartActivity(new Intent(this, typeof(SettingsActivity)));
-					return true;
-				default:
-					return base.OnOptionsItemSelected(item);
-			}
-		}
+            // Update UI
+            weekViewMenuItem.SetVisible(Settings.WeekViewMode == 1);
+            dayViewMenuItem.SetVisible(Settings.WeekViewMode != 1);
 
-		private RelativeLayout layout;
-		private Toolbar toolbar;
-		private WeekView weekView;
-		private Dictionary<string, List<Lesson>> lessons;
-		private Dictionary<string, int> lessonColors;
-		private IMenuItem dayViewMenuItem;
-		private IMenuItem weekViewMenuItem;
+            return true;
+        }
 
-		private async void LoadLessons(int year, int month)
-		{
-			lessons.Add($"{year}-{month}", new List<Lesson>());
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.main_menu_week_view:
+                    ChangeWeekViewMode(3);
+                    return true;
+                case Resource.Id.main_menu_day_view:
+                    ChangeWeekViewMode(1);
+                    return true;
+                case Resource.Id.main_menu_refresh:
+                    lessons.Clear();
+                    weekView.NotifyDatasetChanged();
+                    return true;
+                case Resource.Id.main_menu_change_course:
+                    StartActivity(new Intent(this, typeof(SelectCourseActivity)));
+                    return true;
+                case Resource.Id.main_menu_settings:
+                    StartActivity(new Intent(this, typeof(SettingsActivity)));
+                    return true;
+                default:
+                    return base.OnOptionsItemSelected(item);
+            }
+        }
 
-			SnackbarHelper.Show(layout,
-				!CrossConnectivity.Current.IsConnected
-					? Resource.String.no_connection_short_message
-					: Resource.String.main_activity_loading, Resource.String.main_activity_loading_btn);
+        private RelativeLayout layout;
+        private Toolbar toolbar;
+        private WeekView weekView;
+        private Dictionary<string, List<Lesson>> lessons;
+        private Dictionary<string, int> lessonColors;
+        private IMenuItem dayViewMenuItem;
+        private IMenuItem weekViewMenuItem;
 
-			// Get data
-			List<Lesson> l = await DataStore.GetLessons(year, month, true);
-			if (l == null)
-			{
-				SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
-				return;
-			}
+        private async void LoadLessons(int year, int month)
+        {
+            lessons.Add($"{year}-{month}", new List<Lesson>());
 
-			lessons[$"{year}-{month}"].AddRange(l);
-			weekView.NotifyDatasetChanged();
-		}
+            SnackbarHelper.Show(layout,
+                !CrossConnectivity.Current.IsConnected
+                    ? Resource.String.no_connection_short_message
+                    : Resource.String.main_activity_loading, Resource.String.main_activity_loading_btn);
 
-		private int GetCellColor(string id)
-		{
-			if (!lessonColors.ContainsKey(id))
-				lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count));
+            // Get data
+            List<Lesson> l = await DataStore.GetLessons(year, month, true);
+            if (l == null)
+            {
+                SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
+                return;
+            }
 
-			return lessonColors[id];
-		}
+            lessons[$"{year}-{month}"].AddRange(l);
+            weekView.NotifyDatasetChanged();
+        }
 
-		private void ChangeWeekViewMode(int mode)
-		{
-			// Collecting statistics
-			Logger.Write("Week view mode changed", new Dictionary<string, string>
-			{
-				{"value", mode.ToString()}
-			});
+        private int GetCellColor(string id)
+        {
+            if (!lessonColors.ContainsKey(id))
+                lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count));
 
-			Settings.WeekViewMode = mode;
-			weekView.NumberOfVisibleDays = Settings.WeekViewMode;
-			weekViewMenuItem.SetVisible(mode == 1);
-			dayViewMenuItem.SetVisible(mode != 1);
-			weekView.GoToHour(DateTime.Now.Hour);
-		}
+            return lessonColors[id];
+        }
 
-		protected override int LayoutResource => Resource.Layout.main_activity;
+        private void ChangeWeekViewMode(int mode)
+        {
+            // Collecting statistics
+            Logger.Write("Week view mode changed", new Dictionary<string, string>
+            {
+                {"value", mode.ToString()}
+            });
 
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
+            Settings.WeekViewMode = mode;
+            weekView.NumberOfVisibleDays = Settings.WeekViewMode;
+            weekViewMenuItem.SetVisible(mode == 1);
+            dayViewMenuItem.SetVisible(mode != 1);
+            weekView.GoToHour(DateTime.Now.Hour);
+        }
 
-			// Init
-			App.Init();
+        protected override int LayoutResource => Resource.Layout.main_activity;
 
-			// Bind UI
-			layout = FindViewById<RelativeLayout>(Resource.Id.main_activity_layout);
-			toolbar = FindViewById<Toolbar>(Resource.Id.main_activity_toolbar);
-			weekView = FindViewById<WeekView>(Resource.Id.main_activity_week_view);
-			lessonColors = new Dictionary<string, int>();
-			lessons = new Dictionary<string, List<Lesson>>();
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
 
-			// Prepare UI
-			weekView.NumberOfVisibleDays = Settings.WeekViewMode;
-			weekView.SetOnEventClickListener(this);
-			weekView.MonthChangeListener = this;
-			SetSupportActionBar(toolbar);
-		}
+            // Init
+            App.Init();
 
-		protected override void OnResume()
-		{
-			base.OnResume();
+            // Bind UI
+            layout = FindViewById<RelativeLayout>(Resource.Id.main_activity_layout);
+            toolbar = FindViewById<Toolbar>(Resource.Id.main_activity_toolbar);
+            weekView = FindViewById<WeekView>(Resource.Id.main_activity_week_view);
+            lessonColors = new Dictionary<string, int>();
+            lessons = new Dictionary<string, List<Lesson>>();
 
-			weekView.GoToHour(DateTime.Now.Hour);
-			weekView.DateTimeInterpreter = new DateTimeInterpreter();
+            // Prepare UI
+            weekView.NumberOfVisibleDays = Settings.WeekViewMode;
+            weekView.SetOnEventClickListener(this);
+            weekView.MonthChangeListener = this;
+            SetSupportActionBar(toolbar);
+        }
 
-			// Keeps the app updated
-			lessons.Clear();
-			weekView.NotifyDatasetChanged();
-		}
-	}
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            weekView.GoToHour(8);
+            weekView.DateTimeInterpreter = new DateTimeInterpreter();
+
+            // Keeps the app updated
+            lessons.Clear();
+            weekView.NotifyDatasetChanged();
+        }
+    }
 }
