@@ -47,7 +47,15 @@ namespace univr_orari.Activities
 			int year = p0.StartTime.Get(CalendarField.Year);
 			int month = p0.StartTime.Get(CalendarField.Month) + 1;
 
-			Lesson selectedLesson = lessons[$"{year}-{month}"]
+            List<Lesson> selectedLessons = lessons[$"{year}-{month}"];
+            
+            // Checks whether this event belongs to a week where fist day of the week is not in this month
+            if (p0.StartTime.Get(CalendarField.DayOfMonth) - p0.StartTime.Get(CalendarField.DayOfWeek) < 0)
+            {
+                selectedLessons = lessons[$"{year}-{month - 1}"];
+            }
+
+			Lesson selectedLesson = selectedLessons
 				.Find(x =>  x.StartDateTimeOffset != null &&
 							x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
 							x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
