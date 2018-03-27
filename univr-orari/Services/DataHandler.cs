@@ -152,7 +152,7 @@ namespace univr_orari.Services
 					if (weeklyTimetable.Events == null)
 						continue;
 
-					lessons.AddRange(from e in weeklyTimetable.Events
+					lessons.AddRange(from e in weeklyTimetable.Events.Where(e => e.Name != null && e.Room != null && e.Teacher != null)
 						let day = new List<Day>(weeklyTimetable.Days).Find(x => x.Value == e.Day)
 						let startDateTime = DateTime
 							.ParseExact($"{weeklyTimetable.FirstDayOfWeek} {e.Start}", "dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture,
