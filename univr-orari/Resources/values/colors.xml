@@ -1,24 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-	<color name="primary">#0099DD</color>
-	<color name="primary_dark">#0181B9</color>
-	<color name="accent">#FF5252</color>
-	<color name="accent_light">#26FF5252</color>
-	<color name="background">#F5F5F5</color>
-	<color name="primary_text">#212121</color>
-	<color name="secondary_text">#757575</color>
-
+  <color name="primary_dark">#252741</color>
+  <color name="primary">#313357</color>
+  <color name="accent">#FF5252</color>
+  <color name="accent_light">#26FF5252</color>
+  <color name="divider">#E6E6E6</color>
+  <color name="background">#F5F5F5</color>
+  <color name="primary_text">#212121</color>
+  <color name="secondary_text">#757575</color>
 	<color name="white">#FFFFFF</color>
-
 	<color name="main_activity_week_view_day_background">#05000000</color>
 
 	<!-- Cells colors -->
 	<color name="cell_0">#B9F4FF</color>
-	<color name="cell_1">#F3BAF5</color>
+	<color name="cell_1">#E59B24</color>
 	<color name="cell_2">#F1D0D0</color>
 	<color name="cell_3">#D5FFA4</color>
-	<color name="cell_4">#FDCBFE</color>
+	<color name="cell_4">#3799CE</color>
 	<color name="cell_5">#A0F3A2</color>
 	<color name="cell_6">#EEC0C0</color>
 	<color name="cell_7">#A7C7D3</color>
