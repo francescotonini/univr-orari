@@ -207,7 +207,7 @@ namespace univr_orari.Services
 			List<KeyValuePair<string, string>> body = new List<KeyValuePair<string, string>>
 			{
 				new KeyValuePair<string, string>("_lang", "it"),
-				new KeyValuePair<string, string>("aa", "2017"),
+				new KeyValuePair<string, string>("aa", "2018"),
 				new KeyValuePair<string, string>("all_events", "0"),
 				new KeyValuePair<string, string>("anno", academicYearId),
 				new KeyValuePair<string, string>("anno2", courseYear),

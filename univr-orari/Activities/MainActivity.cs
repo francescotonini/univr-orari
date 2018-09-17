@@ -1,4 +1,4 @@
-﻿// The MIT License (MIT)
+// The MIT License (MIT)
 // 
 // Copyright (c) 2017-2017 Francesco Tonini <francescoantoniotonini@gmail.com>
 // 
@@ -47,14 +47,20 @@ namespace univr_orari.Activities
             int year = p0.StartTime.Get(CalendarField.Year);
             int month = p0.StartTime.Get(CalendarField.Month) + 1;
 
-            List<Lesson> selectedLessons = lessons[$"{year}-{month}"];
-
-            // Checks whether this event belongs to a week where fist day of the week is not in this month
-            if (p0.StartTime.Get(CalendarField.DayOfMonth) - p0.StartTime.Get(CalendarField.DayOfWeek) < 0)
+            if (!lessons.ContainsKey($"{year}-{month}"))
             {
-                selectedLessons = lessons[$"{year}-{month - 1}"];
+                Logger.Write("Error on OnEventClick. Element selected on a missing month", new Dictionary<string, string>()
+                {
+                    {"year", year.ToString()},
+                    {"month", month.ToString()},
+                    {"academicYearId", Settings.AcademicYearId},
+                    {"courseId", Settings.CourseId},
+                    {"courseYearId", Settings.CourseYearId}
+                });
+                return;
             }
 
+            List<Lesson> selectedLessons = lessons[$"{year}-{month}"];
             Lesson selectedLesson = selectedLessons
                 .Find(x => x.StartDateTimeOffset != null &&
                             x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
@@ -63,6 +69,18 @@ namespace univr_orari.Activities
                             x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
                             x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
                             x.Name == p0.Name && x.Room == p0.Location);
+
+            if (selectedLesson == null)
+            {
+                Logger.Write("Error on OnEventClick. Clicked element is NULL", new Dictionary<string, string>()
+                    {
+                        {"year", year.ToString()},
+                        {"month", month.ToString()},
+                        {"academicYearId", Settings.AcademicYearId},
+                        {"courseId", Settings.CourseId},
+                        {"courseYearId", Settings.CourseYearId}
+                    });
+            }
 
             Intent viewLessonIntent = new Intent(this, typeof(ViewLessonActivity));
             viewLessonIntent.PutExtra("data", selectedLesson.ToString());
@@ -188,7 +206,8 @@ namespace univr_orari.Activities
         private int GetCellColor(string id)
         {
             if (!lessonColors.ContainsKey(id))
-                lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count));
+                // 23 is the number of colors available
+                lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count % 23));
 
             return lessonColors[id];
         }

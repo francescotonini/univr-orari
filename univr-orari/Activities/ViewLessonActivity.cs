@@ -92,9 +92,9 @@ namespace univr_orari.Activities
 			Logger.Write("ViewLessonActivity opened", null);
 
 			if (lesson == null) return;
-			lessonTextView.Text = lesson.Name;
-			roomTextView.Text = lesson.Room;
-			teacherTextView.Text = lesson.Teacher;
+			lessonTextView.Text = lesson.Name.OrDefault("-");
+			roomTextView.Text = lesson.Room.OrDefault("-");
+			teacherTextView.Text = lesson.Teacher.OrDefault("-");
 			dateTextView.Text =
 				$"{lesson.StartDateTimeOffset.LocalDateTime:dd/MM HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}";
 		}

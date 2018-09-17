@@ -16,8 +16,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -177,6 +176,7 @@
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\SnackbarHelper.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\WeeklyTimetable.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -210,7 +210,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\values\colors.xml">
       <SubType>Designer</SubType>
