@@ -19,7 +19,6 @@
 #region
 
 using System.Collections.Generic;
-using Microsoft.Azure.Mobile.Analytics;
 
 #endregion
 
@@ -34,7 +33,12 @@ namespace univr_orari.Helpers
 		/// <param name="details"></param>
 		public static void Write(string title, Dictionary<string, string> details)
 		{
-			Analytics.TrackEvent(title, details);
+            string text = $"{title} ";
+            foreach (string detail in details.Values)
+            {
+                text += "${detail} ";
+            }
+            Android.Util.Log.Info("it.francescotonini.univrorari", text);
 		}
 	}
 }
