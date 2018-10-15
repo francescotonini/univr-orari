@@ -18,8 +18,6 @@
 
 #region
 
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -33,8 +31,6 @@ using Plugin.Connectivity;
 using Realms;
 using univr_orari.Helpers;
 using univr_orari.Models;
-
-#endregion
 
 #endregion
 
