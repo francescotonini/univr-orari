@@ -19,11 +19,9 @@
 #region
 
 using System;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using Realms;
 
 #endregion
 
@@ -32,7 +30,7 @@ namespace univr_orari.Models
 	/// <summary>
 	/// Lesson.
 	/// </summary>
-	public class Lesson : RealmObject
+	public class Lesson
 	{
 		public string Name { get; set; }
 		public DateTimeOffset StartDateTimeOffset { get; set; }

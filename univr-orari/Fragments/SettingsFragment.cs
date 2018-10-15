@@ -82,8 +82,7 @@ namespace univr_orari.Fragments
 		private void ClearDbOnPreferenceClick(object sender,
 			Preference.PreferenceClickEventArgs preferenceClickEventArgs)
 		{
-			DataHandler dh = new DataHandler();
-			dh.ClearDb();
+            // TODO: clear cache
 
 			SnackbarHelper.Show(View, Resource.String.settings_fragment_clear_db, Resource.String.main_activity_loading_btn);
 		}

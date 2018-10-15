@@ -27,8 +27,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ModernHttpClient;
 using Newtonsoft.Json;
-using Plugin.Connectivity;
-using Realms;
 using univr_orari.Helpers;
 using univr_orari.Models;
 
@@ -40,15 +38,6 @@ namespace univr_orari.Services
 	{
 		public DataHandler()
 		{
-			// Configuring local client
-			localClientConfiguration = RealmConfiguration.DefaultConfiguration;
-			localClientConfiguration.SchemaVersion = 1;
-#if DEBUG
-			localClientConfiguration.ShouldDeleteIfMigrationNeeded = true;
-#endif
-			localClientConfiguration.MigrationCallback += LocalClient_MigrationCallBack;
-			LocalClient = Realm.GetInstance(localClientConfiguration);
-
 			// Configuring remote client
 			RemoteClient = new HttpClient(new NativeMessageHandler());
 		}
@@ -57,11 +46,6 @@ namespace univr_orari.Services
 		///     Remote client
 		/// </summary>
 		public HttpClient RemoteClient { get; }
-
-		/// <summary>
-		///     Local client
-		/// </summary>
-		public Realm LocalClient { get; }
 
 		/// <summary>
 		///     Get courses
@@ -110,7 +94,7 @@ namespace univr_orari.Services
 			}
 		}
 
-		public async Task<List<Lesson>> GetLessons(int year, int month, bool preferCache = false)
+		public async Task<List<Lesson>> GetLessons(int year, int month)
 		{
 			try
 			{
@@ -118,14 +102,6 @@ namespace univr_orari.Services
 				// into a list of "lessons" which is more usable
 				// Since the source of these data is not reliable, 
 				// I decided to add a try-catch statement
-				if (preferCache)
-				{
-					IQueryable<Lesson> currentLessonStored = LocalClient.All<Lesson>().Where(x => x.Month == month && x.Year == year);
-					if (!CrossConnectivity.Current.IsConnected || currentLessonStored.Count() != 0 && currentLessonStored?.ToList()
-						    .FindAll(x => (DateTimeOffset.UtcNow - x.LastUpdateDateTimeOffset).Days > 7).Count == 0)
-						return currentLessonStored.ToList();
-				}
-
 				List<Lesson> lessons = new List<Lesson>();
 				List<WeeklyTimetable> thisMonthTimetables = new List<WeeklyTimetable>();
 
@@ -169,17 +145,6 @@ namespace univr_orari.Services
 							Year = year,
 							LastUpdateDateTimeOffset = DateTimeOffset.UtcNow
 						});
-				}
-
-				// Save to db updated lessons
-				using (Transaction transaction = LocalClient.BeginWrite())
-				{
-					IQueryable<Lesson> currentLessonStored = LocalClient.All<Lesson>().Where(x => x.Month == month && x.Year == year);
-					LocalClient.RemoveRange(currentLessonStored);
-					foreach (Lesson l in lessons)
-						LocalClient.Add(l);
-
-					transaction.Commit();
 				}
 
 				return lessons;
@@ -238,29 +203,8 @@ namespace univr_orari.Services
 				return null;
 			}
 		}
-
-		public void ClearDb()
-		{
-			using (Transaction transaction = LocalClient.BeginWrite())
-			{
-				IQueryable<Lesson> currentLessonStored = LocalClient.All<Lesson>();
-				LocalClient.RemoveRange(currentLessonStored);
-
-				transaction.Commit();
-			}
-		}
-
+        
 		private const string GET_ACADEMIC_YEAR_ENDPOINT = "https://logistica.univr.it/aule/Orario/combo_call.php";
 		private const string POST_COURSE_TIMETABLE_ENDPOINT = "https://logistica.univr.it/aule/Orario/grid_call.php";
-		private const string POST_ROOMS_ENDPOINT = "";
-		private readonly RealmConfiguration localClientConfiguration;
-
-		private void LocalClient_MigrationCallBack(Migration migration, ulong oldSchemaVersion)
-		{
-			Logger.Write("Migration callback triggered", new Dictionary<string, string>
-			{
-				{"oldSchemaVersion", oldSchemaVersion.ToString()}
-			});
-		}
 	}
 }

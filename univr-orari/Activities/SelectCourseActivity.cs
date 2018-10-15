@@ -109,9 +109,6 @@ namespace univr_orari.Activities
 				{"courseYearId", Settings.CourseYearId}
 			});
 
-			// Clear db
-			DataStore.ClearDb();
-
 			// Open a new Activity
 			// BUG: this doesn't clear back stack
 			StartActivity(new Intent(this, typeof(MainActivity)));
