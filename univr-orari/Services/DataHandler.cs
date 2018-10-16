@@ -43,12 +43,12 @@ namespace univr_orari.Services
 		}
 
 		/// <summary>
-		///     Remote client
+		/// Remote client
 		/// </summary>
 		public HttpClient RemoteClient { get; }
 
 		/// <summary>
-		///     Get courses
+		/// Get courses
 		/// </summary>
 		/// <returns></returns>
 		public async Task<AcademicYear> GetCurrentAcademicYear()
@@ -85,10 +85,7 @@ namespace univr_orari.Services
 			}
 			catch (Exception e)
 			{
-				Logger.Write("Exception on GetCurrentAcademicYear", new Dictionary<string, string>
-				{
-					{"Message", e.Message}
-				});
+				Logger.Write("Exception on GetCurrentAcademicYear", e.Message);
 
 				return null;
 			}
@@ -151,10 +148,7 @@ namespace univr_orari.Services
 			}
 			catch (Exception e)
 			{
-				Logger.Write("Exception on GetLessons", new Dictionary<string, string>
-				{
-					{"Message", e.Message}
-				});
+				Logger.Write("Exception on GetLessons", e.Message);
 
 				return null;
 			}
@@ -195,10 +189,7 @@ namespace univr_orari.Services
 			}
 			catch (Exception e)
 			{
-				Logger.Write("Exception on GetWeeklyTimetable", new Dictionary<string, string>
-				{
-					{"Message", e.Message}
-				});
+				Logger.Write("Exception on GetWeeklyTimetable", e.Message);
 
 				return null;
 			}

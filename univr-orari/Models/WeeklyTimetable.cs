@@ -26,90 +26,90 @@ using Newtonsoft.Json;
 namespace univr_orari.Models
 {
 	/// <summary>
-	///     Weekly timetable.
+	/// Weekly timetable.
 	/// </summary>
 	public class WeeklyTimetable
 	{
 		/// <summary>
-		///     WeeklyTimetable events
+		/// WeeklyTimetable events
 		/// </summary>
 		[JsonProperty("celle")]
 		public List<Event> Events { get; set; }
 
 		/// <summary>
-		///     WeeklyTimetable days
+		/// WeeklyTimetable days
 		/// </summary>
 		[JsonProperty("giorni")]
 		public List<Day> Days { get; set; }
 
 		/// <summary>
-		///     WeeklyTimetable first day of the week
+		/// WeeklyTimetable first day of the week
 		/// </summary>
 		[JsonProperty("first_day")]
 		public string FirstDayOfWeek { get; set; }
 
 		/// <summary>
-		///     WeeklyTimetable colors
+		/// WeeklyTimetable colors
 		/// </summary>
 		[JsonProperty("colori")]
 		public List<string> Colors { get; set; }
 	}
 
 	/// <summary>
-	///     Day (inner element of WeeklyTimetable)
+	/// Day (inner element of WeeklyTimetable)
 	/// </summary>
 	public class Day
 	{
 		/// <summary>
-		///     Day label
+		/// Day label
 		/// </summary>
 		[JsonProperty("label")]
 		public string Label { get; set; }
 
 		/// <summary>
-		///     Day value
+		/// Day value
 		/// </summary>
 		[JsonProperty("valore")]
 		public string Value { get; set; }
 	}
 
 	/// <summary>
-	///     Event. (inner element of WeeklyTimetable)
+	/// Event. (inner element of WeeklyTimetable)
 	/// </summary>
 	public class Event
 	{
 		/// <summary>
-		///     Event room
+		/// Event room
 		/// </summary>
 		[JsonProperty("aula")]
 		public string Room { get; set; }
 
 		/// <summary>
-		///     Event teacher
+		/// Event teacher
 		/// </summary>
 		[JsonProperty("docente")]
 		public string Teacher { get; set; }
 
 		/// <summary>
-		///     Event name
+		/// Event name
 		/// </summary>
 		[JsonProperty("titolo_lezione")]
 		public string Name { get; set; }
 
 		/// <summary>
-		///     Event day
+		/// Event day
 		/// </summary>
 		[JsonProperty("giorno")]
 		public string Day { get; set; }
 
 		/// <summary>
-		///     Event start time
+		/// Event start time
 		/// </summary>
 		[JsonProperty("ora_inizio")]
 		public string Start { get; set; }
 
 		/// <summary>
-		///     Event end time
+		/// Event end time
 		/// </summary>
 		[JsonProperty("ora_fine")]
 		public string End { get; set; }

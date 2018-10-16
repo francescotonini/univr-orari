@@ -27,10 +27,10 @@ namespace univr_orari.Helpers
 	public static class Logger
 	{
 		/// <summary>
-		///     Send anonymous statistics to Mobile Center
+		/// Writes to Info log
 		/// </summary>
-		/// <param name="title"></param>
-		/// <param name="details"></param>
+		/// <param name="title">title</param>
+		/// <param name="details">Dictionary to write</param>
 		public static void Write(string title, Dictionary<string, string> details)
 		{
             string text = $"{title} ";
@@ -40,5 +40,16 @@ namespace univr_orari.Helpers
             }
             Android.Util.Log.Info("it.francescotonini.univrorari", text);
 		}
-	}
+
+        /// <summary>
+		/// Writes to Info log
+		/// </summary>
+		/// <param name="title">title</param>
+		/// <param name="message">message</param>
+		public static void Write(string title, string message)
+        {
+            string text = $"{title}: {message}";
+            Android.Util.Log.Info("it.francescotonini.univrorari", text);
+        }
+    }
 }

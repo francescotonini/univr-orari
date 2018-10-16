@@ -34,7 +34,37 @@ namespace univr_orari.Activities
 	[Activity(Label = "@string/view_lesson_activity_title")]
 	public class ViewLessonActivity : BaseActivity
 	{
-		public override bool OnCreateOptionsMenu(IMenu menu)
+        protected override int LayoutResource => Resource.Layout.view_lesson_activity;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            toolbar = FindViewById<Toolbar>(Resource.Id.view_lesson_activity_toolbar);
+            lessonTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_lesson_txt);
+            dateTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_date_txt);
+            teacherTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_teacher_txt);
+            roomTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_room_txt);
+
+            Lesson.TryParse(Intent.GetStringExtra("data"), out lesson);
+
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            
+            lessonTextView.Text = lesson?.Name.OrDefault("-");
+            roomTextView.Text = lesson?.Room.OrDefault("-");
+            teacherTextView.Text = lesson?.Teacher.OrDefault("-");
+            dateTextView.Text =
+                $"{lesson?.StartDateTimeOffset.LocalDateTime:dd/MM HH:mm} - {lesson?.EndDateTimeOffset.LocalDateTime:HH:mm}";
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
 		{
 			MenuInflater.Inflate(Resource.Menu.view_lesson_menu, menu);
 			return true;
@@ -66,37 +96,5 @@ namespace univr_orari.Activities
 		private TextView roomTextView;
 		private TextView teacherTextView;
 		private TextView dateTextView;
-		protected override int LayoutResource => Resource.Layout.view_lesson_activity;
-
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-
-			toolbar = FindViewById<Toolbar>(Resource.Id.view_lesson_activity_toolbar);
-			lessonTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_lesson_txt);
-			dateTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_date_txt);
-			teacherTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_teacher_txt);
-			roomTextView = FindViewById<TextView>(Resource.Id.view_lesson_activity_room_txt);
-
-			Lesson.TryParse(Intent.GetStringExtra("data"), out lesson);
-
-			SetSupportActionBar(toolbar);
-			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-			SupportActionBar.SetDisplayShowHomeEnabled(true);
-		}
-
-		protected override void OnResume()
-		{
-			base.OnResume();
-
-			Logger.Write("ViewLessonActivity opened", null);
-
-			if (lesson == null) return;
-			lessonTextView.Text = lesson.Name.OrDefault("-");
-			roomTextView.Text = lesson.Room.OrDefault("-");
-			teacherTextView.Text = lesson.Teacher.OrDefault("-");
-			dateTextView.Text =
-				$"{lesson.StartDateTimeOffset.LocalDateTime:dd/MM HH:mm} - {lesson.EndDateTimeOffset.LocalDateTime:HH:mm}";
-		}
 	}
 }

@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.Content;
@@ -38,9 +39,9 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace univr_orari.Activities
 {
-    [Activity(Label = "@string/app_name")]
+    [Activity(Label = "@string/app_name", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class MainActivity : BaseActivity,
-        WeekView.IEventClickListener, MonthLoader.IMonthChangeListener
+        WeekView.IEventClickListener, MonthLoader.IMonthChangeListener, IDialogInterfaceOnClickListener
     {
         protected override int LayoutResource => Resource.Layout.main_activity;
 
@@ -69,35 +70,44 @@ namespace univr_orari.Activities
         {
             base.OnResume();
 
+            // Update weekview
             weekView.GoToHour(8);
             weekView.DateTimeInterpreter = new DateTimeInterpreter();
+
+            // Check for network connectivity
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.no_connection_dialog_message, this);
+                return;
+            }
 
             // Keeps the app updated
             lessons.Clear();
             weekView.NotifyDatasetChanged();
         }
 
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            if (newConfig.Orientation == Android.Content.Res.Orientation.Landscape)
+            {
+                ChangeWeekViewMode(5);
+            }
+            else
+            {
+                ChangeWeekViewMode(Settings.WeekViewMode);
+            }
+
+        }
+
         public void OnEventClick(WeekViewEvent p0, RectF p1)
         {
             int year = p0.StartTime.Get(CalendarField.Year);
             int month = p0.StartTime.Get(CalendarField.Month) + 1;
-
-            if (!lessons.ContainsKey($"{year}-{month}"))
-            {
-                Logger.Write("Error on OnEventClick. Element selected on a missing month", new Dictionary<string, string>()
-                {
-                    {"year", year.ToString()},
-                    {"month", month.ToString()},
-                    {"academicYearId", Settings.AcademicYearId},
-                    {"courseId", Settings.CourseId},
-                    {"courseYearId", Settings.CourseYearId}
-                });
-                return;
-            }
-
-            List<Lesson> selectedLessons = lessons[$"{year}-{month}"];
-            Lesson selectedLesson = selectedLessons
-                .Find(x => x.StartDateTimeOffset != null &&
+            string key = $"{year}-{month}";
+            
+            Lesson selectedLesson = lessons[key]?.Find(x => x.StartDateTimeOffset != null &&
                             x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
                             x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
                             x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
@@ -107,14 +117,8 @@ namespace univr_orari.Activities
 
             if (selectedLesson == null)
             {
-                Logger.Write("Error on OnEventClick. Clicked element is NULL", new Dictionary<string, string>()
-                    {
-                        {"year", year.ToString()},
-                        {"month", month.ToString()},
-                        {"academicYearId", Settings.AcademicYearId},
-                        {"courseId", Settings.CourseId},
-                        {"courseYearId", Settings.CourseYearId}
-                    });
+                // That's weird
+                return;
             }
 
             Intent viewLessonIntent = new Intent(this, typeof(ViewLessonActivity));
@@ -128,7 +132,10 @@ namespace univr_orari.Activities
 
             // Check if this request has been made already
             if (!lessons.ContainsKey($"{year}-{month}"))
+            {
                 LoadLessons(year, month);
+                return events;
+            }
 
             // Display lessons
             foreach (Lesson lesson in lessons[$"{year}-{month}"])
@@ -157,14 +164,7 @@ namespace univr_orari.Activities
                 }
                 catch (Exception e)
                 {
-                    Logger.Write("Error on OnMonthChange", new Dictionary<string, string>()
-                    {
-                        {"exception", e.Message},
-                        {"academicYearId", Settings.AcademicYearId},
-                        {"courseId", Settings.CourseId},
-                        {"courseYearId", Settings.CourseYearId},
-                        {"lessonName", lesson.Name}
-                    });
+                    Logger.Write("Error on OnMonthChange", e.Message);
                 }
             }
 
@@ -209,46 +209,46 @@ namespace univr_orari.Activities
             }
         }
 
+        public void OnClick(IDialogInterface dialog, int which)
+        {
+            ;
+        }
+
         private async void LoadLessons(int year, int month)
         {
-            lessons.Add($"{year}-{month}", new List<Lesson>());
-
-            SnackbarHelper.Show(layout,
-                !CrossConnectivity.Current.IsConnected
-                    ? Resource.String.no_connection_short_message
-                    : Resource.String.main_activity_loading, Resource.String.main_activity_loading_btn);
-
-            // Get data
-            List<Lesson> l = await DataStore.GetLessons(year, month);
-            if (l == null)
+            string key = $"{year}-{month}";
+            this.lessons.Add(key, new List<Lesson>());
+            
+            List<Lesson> lessons = await DataStore.GetLessons(year, month);
+            if (lessons == null)
             {
                 SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
                 return;
             }
 
-            lessons[$"{year}-{month}"].AddRange(l);
+            this.lessons[key].AddRange(lessons);
             weekView.NotifyDatasetChanged();
         }
 
         private int GetCellColor(string id)
         {
             if (!lessonColors.ContainsKey(id))
+            {
                 // 23 is the number of colors available
                 lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count % 23));
+            }
 
             return lessonColors[id];
         }
 
         private void ChangeWeekViewMode(int mode)
         {
-            // Collecting statistics
-            Logger.Write("Week view mode changed", new Dictionary<string, string>
+            if (mode == 1 || mode == 3)
             {
-                {"value", mode.ToString()}
-            });
-
-            Settings.WeekViewMode = mode;
-            weekView.NumberOfVisibleDays = Settings.WeekViewMode;
+                Settings.WeekViewMode = mode;
+                weekView.NumberOfVisibleDays = Settings.WeekViewMode;
+            }
+            weekView.NumberOfVisibleDays = mode;
             weekViewMenuItem.SetVisible(mode == 1);
             dayViewMenuItem.SetVisible(mode != 1);
             weekView.GoToHour(DateTime.Now.Hour);

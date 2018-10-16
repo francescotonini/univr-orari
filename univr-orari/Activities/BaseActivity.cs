@@ -27,20 +27,20 @@ using univr_orari.Services;
 namespace univr_orari.Activities
 {
 	/// <summary>
-	///     Base activity, Base activity, inherited by every activity
+	/// Base activity, inherited by every activity
 	/// </summary>
 	public abstract class BaseActivity : AppCompatActivity
 	{
 		public DataHandler DataStore { get; } = new DataHandler();
 
 		/// <summary>
-		///     Gets the layout resource.
+		/// Gets the layout resource.
 		/// </summary>
 		/// <value>The layout resource.</value>
 		protected virtual int LayoutResource { get; }
 
 		/// <summary>
-		///     Initialize the activity
+		/// Initialize the activity
 		/// </summary>
 		/// <param name="savedInstanceState"></param>
 		protected override void OnCreate(Bundle savedInstanceState)

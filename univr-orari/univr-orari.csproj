@@ -54,6 +54,7 @@
     <Reference Include="BindingsWeekView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Itium.WeekView.1.0.0\lib\BindingsWeekView.dll</HintPath>
     </Reference>
+    <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ModernHttpClient, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\modernhttpclient.2.4.2\lib\MonoAndroid\ModernHttpClient.dll</HintPath>
@@ -152,6 +153,7 @@
     <Compile Include="Activities\ViewLessonActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Fragments\SettingsFragment.cs" />
+    <Compile Include="Helpers\AlertDialogHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\DateTimeInterpreter.cs" />
     <Compile Include="Helpers\Logger.cs" />

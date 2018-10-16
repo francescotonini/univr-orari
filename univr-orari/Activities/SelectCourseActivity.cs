@@ -30,7 +30,6 @@ using Android.Widget;
 using Plugin.Connectivity;
 using univr_orari.Helpers;
 using univr_orari.Models;
-using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 #endregion
@@ -39,9 +38,69 @@ namespace univr_orari.Activities
 {
 	[Activity(Label = "@string/select_course_activity_title",
 		NoHistory = true)]
-	public class SelectCourseActivity : BaseActivity
+	public class SelectCourseActivity : BaseActivity, IDialogInterfaceOnClickListener
 	{
-		public override bool OnOptionsItemSelected(IMenuItem item)
+        protected override int LayoutResource => Resource.Layout.select_course_activity;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            toolbar = FindViewById<Toolbar>(Resource.Id.select_course_activity_toolbar);
+            loadingLayout = FindViewById<RelativeLayout>(Resource.Id.select_course_activity_loading_layout);
+            mainLayout = FindViewById<RelativeLayout>(Resource.Id.select_course_activity_main_layout);
+            loadingPrg = FindViewById<ProgressBar>(Resource.Id.select_course_activity_loading_prg);
+            courseSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_spinner);
+            courseYearSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_year_spinner);
+            okBtn = FindViewById<AppCompatButton>(Resource.Id.select_course_activity_ok_btn);
+
+            courseSpinner.ItemSelected += CourseSpinnerOnItemSelected;
+            courseYearSpinner.ItemSelected += CourseYearSpinnerOnItemSelected;
+            okBtn.Click += OkBtnOnClick;
+
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
+
+            // Show info message
+            AlertDialogHelper.Show(this, Resource.String.select_course_activity_info_title, Resource.String.select_course_activity_info_message, null);
+        }
+
+        protected override async void OnResume()
+        {
+            base.OnResume();
+
+            // Checks for internet connection. Shows a dialog if no connection is currenty available
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.no_connection_dialog_message, this);
+                return;
+            }
+
+            // Load courses
+            currentAcademicYear = await DataStore.GetCurrentAcademicYear();
+            if (currentAcademicYear?.Courses != null)
+            {
+                courses = currentAcademicYear.Courses;
+
+                loadingLayout.Visibility = ViewStates.Gone;
+                mainLayout.Visibility = ViewStates.Visible;
+
+                SetCourseSpinner();
+            }
+            else
+            {
+                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.unknown_error_message, this);
+                return;
+            }
+        }
+
+        public void OnClick(IDialogInterface dialog, int which)
+        {
+            OnBackPressed();
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
 		{
 			switch (item.ItemId)
 			{
@@ -52,18 +111,6 @@ namespace univr_orari.Activities
 					return base.OnOptionsItemSelected(item);
 			}
 		}
-
-		private Toolbar toolbar;
-		private RelativeLayout loadingLayout;
-		private RelativeLayout mainLayout;
-		private Spinner courseSpinner;
-		private Spinner courseYearSpinner;
-		private ProgressBar loadingPrg;
-		private AppCompatButton okBtn;
-		private List<Course> courses;
-		private AcademicYear currentAcademicYear;
-		private Course selectedCourse;
-		private CourseYear selectedCourseYear;
 
 		private void CourseSpinnerOnItemSelected(object sender, AdapterView.ItemSelectedEventArgs itemSelectedEventArgs)
 		{
@@ -100,81 +147,23 @@ namespace univr_orari.Activities
 			Settings.CourseId = selectedCourse.Value;
 			Settings.CourseYearId = selectedCourseYear.Value;
 			Settings.IsFirstStartup = false;
-
-			// Collecting statistics
-			Logger.Write("Course selected", new Dictionary<string, string>
-			{
-				{"academicYearId", Settings.AcademicYearId},
-				{"courseId", Settings.CourseId},
-				{"courseYearId", Settings.CourseYearId}
-			});
-
-			// Open a new Activity
-			// BUG: this doesn't clear back stack
-			StartActivity(new Intent(this, typeof(MainActivity)));
+            
+            // Go to main activity
+            Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
+            mainActivityIntent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.ClearTask | ActivityFlags.NewTask);
+            StartActivity(mainActivityIntent);
 		}
 
-		protected override int LayoutResource => Resource.Layout.select_course_activity;
-
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-
-			toolbar = FindViewById<Toolbar>(Resource.Id.select_course_activity_toolbar);
-			loadingLayout = FindViewById<RelativeLayout>(Resource.Id.select_course_activity_loading_layout);
-			mainLayout = FindViewById<RelativeLayout>(Resource.Id.select_course_activity_main_layout);
-			loadingPrg = FindViewById<ProgressBar>(Resource.Id.select_course_activity_loading_prg);
-			courseSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_spinner);
-			courseYearSpinner = FindViewById<Spinner>(Resource.Id.select_course_activity_course_year_spinner);
-			okBtn = FindViewById<AppCompatButton>(Resource.Id.select_course_activity_ok_btn);
-
-			courseSpinner.ItemSelected += CourseSpinnerOnItemSelected;
-			courseYearSpinner.ItemSelected += CourseYearSpinnerOnItemSelected;
-			okBtn.Click += OkBtnOnClick;
-
-			SetSupportActionBar(toolbar);
-			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-			SupportActionBar.SetDisplayShowHomeEnabled(true);
-		}
-
-		protected override async void OnResume()
-		{
-			base.OnResume();
-
-			// Checks for internet connection. Shows a dialog if no connection is currenty available
-			if (!CrossConnectivity.Current.IsConnected)
-			{
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.SetTitle(GetString(Resource.String.no_connection_dialog_title));
-				builder.SetMessage(GetString(Resource.String.no_connection_dialog_message));
-				builder.SetPositiveButton(GetString(Resource.String.no_connection_dialog_button_text),
-					(sender, e) => OnBackPressed());
-
-				builder.Create().Show();
-				return;
-			}
-
-			// Load courses
-			currentAcademicYear = await DataStore.GetCurrentAcademicYear();
-			if (currentAcademicYear?.Courses != null)
-			{
-				courses = currentAcademicYear.Courses;
-
-				loadingLayout.Visibility = ViewStates.Gone;
-				mainLayout.Visibility = ViewStates.Visible;
-
-				SetCourseSpinner();
-			}
-			else
-			{
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.SetTitle(GetString(Resource.String.no_connection_dialog_title));
-				builder.SetMessage(GetString(Resource.String.unknown_error_message));
-				builder.SetPositiveButton(GetString(Resource.String.no_connection_dialog_button_text),
-					(sender, e) => OnBackPressed());
-
-				builder.Create().Show();
-			}
-		}
-	}
+        private Toolbar toolbar;
+        private RelativeLayout loadingLayout;
+        private RelativeLayout mainLayout;
+        private Spinner courseSpinner;
+        private Spinner courseYearSpinner;
+        private ProgressBar loadingPrg;
+        private AppCompatButton okBtn;
+        private List<Course> courses;
+        private AcademicYear currentAcademicYear;
+        private Course selectedCourse;
+        private CourseYear selectedCourseYear;
+    }
 }

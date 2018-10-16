@@ -22,6 +22,7 @@ namespace univr_orari.Helpers
 	{
 		public static int GetColor(int index)
 		{
+            // When I wrote this section I wasn't aware of array of resources. Will change it later.
             switch (index)
             {
                 case 0:

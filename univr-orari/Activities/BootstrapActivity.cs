@@ -37,10 +37,14 @@ namespace univr_orari.Activities
 		{
 			base.OnCreate(savedInstanceState);
 
-			if (Settings.IsFirstStartup)
-				StartActivity(new Intent(this, typeof(SelectCourseActivity)));
-			else
-				StartActivity(new Intent(this, typeof(MainActivity)));
+            if (Settings.IsFirstStartup)
+            {
+                StartActivity(new Intent(this, typeof(SelectCourseActivity)));
+            }
+            else
+            {
+                StartActivity(new Intent(this, typeof(MainActivity)));
+            }
 		}
 	}
 }

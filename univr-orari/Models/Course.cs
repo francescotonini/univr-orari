@@ -26,60 +26,60 @@ using Newtonsoft.Json;
 namespace univr_orari.Models
 {
 	/// <summary>
-	///     Academic year.
+	/// Academic year
 	/// </summary>
 	public class AcademicYear
 	{
 		/// <summary>
-		///     Academic year id
+		/// Academic year id
 		/// </summary>
 		[JsonProperty("valore")]
 		public string Id { get; set; }
 
 		/// <summary>
-		///     Academic year courses
+		/// Academic year courses
 		/// </summary>
 		[JsonProperty("elenco")]
 		public List<Course> Courses { get; set; }
 	}
 
 	/// <summary>
-	///     Course. (inner element of AcademicYear)
+	/// Course. (inner element of AcademicYear)
 	/// </summary>
 	public class Course
 	{
 		/// <summary>
-		///     Course name
+		/// Course name
 		/// </summary>
 		[JsonProperty("label")]
 		public string Label { get; set; }
 
 		/// <summary>
-		///     Course value
+		/// Course value
 		/// </summary>
 		[JsonProperty("valore")]
 		public string Value { get; set; }
 
 		/// <summary>
-		///     Course years
+		/// Course years
 		/// </summary>
 		[JsonProperty("elenco_anni")]
 		public List<CourseYear> Years { get; set; }
 	}
 
 	/// <summary>
-	///     Course year. (inner element of AcademicYear)
+	/// Course year. (inner element of AcademicYear)
 	/// </summary>
 	public class CourseYear
 	{
 		/// <summary>
-		///     Course name
+		/// Course name
 		/// </summary>
 		[JsonProperty("label")]
 		public string Label { get; set; }
 
 		/// <summary>
-		///     Course id
+		/// Course id
 		/// </summary>
 		[JsonProperty("valore")]
 		public string Value { get; set; }

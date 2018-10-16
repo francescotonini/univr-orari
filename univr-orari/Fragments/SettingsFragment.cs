@@ -23,7 +23,6 @@ using Android.Net;
 using Android.OS;
 using Android.Support.V7.Preferences;
 using univr_orari.Helpers;
-using univr_orari.Services;
 
 #endregion
 
@@ -34,8 +33,7 @@ namespace univr_orari.Fragments
 		public override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
-			clearDb = FindPreference("clear_db");
+            
 			leaveFeedback = FindPreference("leave_feedback");
 			appVersion = FindPreference("app_version");
 		}
@@ -45,7 +43,6 @@ namespace univr_orari.Fragments
 			base.OnResume();
 
 			PreferenceManager.SharedPreferences.RegisterOnSharedPreferenceChangeListener(this);
-			clearDb.PreferenceClick += ClearDbOnPreferenceClick;
 			leaveFeedback.PreferenceClick += LeaveFeedbackOnPreferenceClick;
 			appVersion.PreferenceClick += AppVersionOnPreferenceClick;
 			appVersion.Summary = Context.PackageManager.GetPackageInfo(Context.PackageName, 0).VersionName;
@@ -56,7 +53,6 @@ namespace univr_orari.Fragments
 			base.OnPause();
 
 			PreferenceManager.SharedPreferences.UnregisterOnSharedPreferenceChangeListener(this);
-			clearDb.PreferenceClick -= ClearDbOnPreferenceClick;
 			leaveFeedback.PreferenceClick -= LeaveFeedbackOnPreferenceClick;
 		}
 
@@ -70,21 +66,9 @@ namespace univr_orari.Fragments
 			AddPreferencesFromResource(Resource.Xml.preferences);
 		}
 
-		private Preference clearDb;
-		private Preference leaveFeedback;
-		private Preference appVersion;
-
 		private void AppVersionOnPreferenceClick(object sender, Preference.PreferenceClickEventArgs preferenceClickEventArgs)
 		{
 			SnackbarHelper.Show(View, Resource.String.preferences_easter);
-		}
-
-		private void ClearDbOnPreferenceClick(object sender,
-			Preference.PreferenceClickEventArgs preferenceClickEventArgs)
-		{
-            // TODO: clear cache
-
-			SnackbarHelper.Show(View, Resource.String.settings_fragment_clear_db, Resource.String.main_activity_loading_btn);
 		}
 
 		private void LeaveFeedbackOnPreferenceClick(object sender,
@@ -94,5 +78,8 @@ namespace univr_orari.Fragments
 			emailIntent.PutExtra(Intent.ExtraSubject, "UniVR Orari - Feedback");
 			StartActivity(emailIntent);
 		}
-	}
+        
+        private Preference leaveFeedback;
+        private Preference appVersion;
+    }
 }

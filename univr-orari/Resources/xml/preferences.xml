@@ -2,11 +2,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
-		android:key="clear_db"
-		android:title="@string/preferences_clear_db_title"
-		android:summary="@string/preferences_clear_db_summary" />
-
-	<Preference
 		android:key="leave_feedback"
 		android:title="@string/preferences_leave_feedback_title"
 		android:summary="@string/preferences_leave_feedback_summary">

@@ -31,7 +31,23 @@ namespace univr_orari.Activities
 	[Activity(Label = "@string/settings_activity_title", Theme = "@style/app_theme_settings")]
 	public class SettingsActivity : BaseActivity
 	{
-		public override bool OnOptionsItemSelected(IMenuItem item)
+        protected override int LayoutResource => Resource.Layout.settings_activity;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            toolbar = FindViewById<Toolbar>(Resource.Id.settings_activity_toolbar);
+
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
+
+            SupportFragmentManager.BeginTransaction().Replace(Resource.Id.settings_activity_frame, new SettingsFragment())
+                .Commit();
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
 		{
 			switch (item.ItemId)
 			{
@@ -44,20 +60,5 @@ namespace univr_orari.Activities
 		}
 
 		private Toolbar toolbar;
-		protected override int LayoutResource => Resource.Layout.settings_activity;
-
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-
-			toolbar = FindViewById<Toolbar>(Resource.Id.settings_activity_toolbar);
-
-			SetSupportActionBar(toolbar);
-			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-			SupportActionBar.SetDisplayShowHomeEnabled(true);
-
-			SupportFragmentManager.BeginTransaction().Replace(Resource.Id.settings_activity_frame, new SettingsFragment())
-				.Commit();
-		}
 	}
 }
