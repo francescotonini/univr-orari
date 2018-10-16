@@ -87,16 +87,16 @@ namespace univr_orari.Activities
             StartActivity(viewLessonIntent);
         }
 
-        public IList<WeekViewEvent> OnMonthChange(int newYear, int newMonth)
+        public IList<WeekViewEvent> OnMonthChange(int year, int month)
         {
             List<WeekViewEvent> events = new List<WeekViewEvent>();
 
             // Check if this request has been made already
-            if (!lessons.ContainsKey($"{newYear}-{newMonth}"))
-                LoadLessons(newYear, newMonth);
+            if (!lessons.ContainsKey($"{year}-{month}"))
+                LoadLessons(year, month);
 
             // Display lessons
-            foreach (Lesson lesson in lessons[$"{newYear}-{newMonth}"])
+            foreach (Lesson lesson in lessons[$"{year}-{month}"])
             {
                 try
                 {
