@@ -42,6 +42,41 @@ namespace univr_orari.Activities
     public class MainActivity : BaseActivity,
         WeekView.IEventClickListener, MonthLoader.IMonthChangeListener
     {
+        protected override int LayoutResource => Resource.Layout.main_activity;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            // Init
+            App.Init();
+
+            // Bind UI
+            layout = FindViewById<RelativeLayout>(Resource.Id.main_activity_layout);
+            toolbar = FindViewById<Toolbar>(Resource.Id.main_activity_toolbar);
+            weekView = FindViewById<WeekView>(Resource.Id.main_activity_week_view);
+            lessonColors = new Dictionary<string, int>();
+            lessons = new Dictionary<string, List<Lesson>>();
+
+            // Prepare UI
+            weekView.NumberOfVisibleDays = Settings.WeekViewMode;
+            weekView.SetOnEventClickListener(this);
+            weekView.MonthChangeListener = this;
+            SetSupportActionBar(toolbar);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            weekView.GoToHour(8);
+            weekView.DateTimeInterpreter = new DateTimeInterpreter();
+
+            // Keeps the app updated
+            lessons.Clear();
+            weekView.NotifyDatasetChanged();
+        }
+
         public void OnEventClick(WeekViewEvent p0, RectF p1)
         {
             int year = p0.StartTime.Get(CalendarField.Year);
@@ -174,14 +209,6 @@ namespace univr_orari.Activities
             }
         }
 
-        private RelativeLayout layout;
-        private Toolbar toolbar;
-        private WeekView weekView;
-        private Dictionary<string, List<Lesson>> lessons;
-        private Dictionary<string, int> lessonColors;
-        private IMenuItem dayViewMenuItem;
-        private IMenuItem weekViewMenuItem;
-
         private async void LoadLessons(int year, int month)
         {
             lessons.Add($"{year}-{month}", new List<Lesson>());
@@ -227,39 +254,12 @@ namespace univr_orari.Activities
             weekView.GoToHour(DateTime.Now.Hour);
         }
 
-        protected override int LayoutResource => Resource.Layout.main_activity;
-
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            // Init
-            App.Init();
-
-            // Bind UI
-            layout = FindViewById<RelativeLayout>(Resource.Id.main_activity_layout);
-            toolbar = FindViewById<Toolbar>(Resource.Id.main_activity_toolbar);
-            weekView = FindViewById<WeekView>(Resource.Id.main_activity_week_view);
-            lessonColors = new Dictionary<string, int>();
-            lessons = new Dictionary<string, List<Lesson>>();
-
-            // Prepare UI
-            weekView.NumberOfVisibleDays = Settings.WeekViewMode;
-            weekView.SetOnEventClickListener(this);
-            weekView.MonthChangeListener = this;
-            SetSupportActionBar(toolbar);
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-
-            weekView.GoToHour(8);
-            weekView.DateTimeInterpreter = new DateTimeInterpreter();
-
-            // Keeps the app updated
-            lessons.Clear();
-            weekView.NotifyDatasetChanged();
-        }
+        private RelativeLayout layout;
+        private Toolbar toolbar;
+        private WeekView weekView;
+        private Dictionary<string, List<Lesson>> lessons;
+        private Dictionary<string, int> lessonColors;
+        private IMenuItem dayViewMenuItem;
+        private IMenuItem weekViewMenuItem;
     }
 }
