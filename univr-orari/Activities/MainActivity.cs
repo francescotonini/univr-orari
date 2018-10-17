@@ -108,12 +108,12 @@ namespace univr_orari.Activities
             string key = $"{year}-{month}";
             
             Lesson selectedLesson = lessons[key]?.Find(x => x.StartDateTimeOffset != null &&
-                            x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
-                            x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
-                            x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
-                            x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
-                            x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
-                            x.Name == p0.Name && x.Room == p0.Location);
+                x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
+                x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
+                x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
+                x.StartDateTimeOffset.LocalDateTime.Minute == p0.StartTime.Get(CalendarField.Minute) &&
+                x.StartDateTimeOffset.LocalDateTime.Year == p0.StartTime.Get(CalendarField.Year) &&
+                x.Name == p0.Name && x.Room == p0.Location);
 
             if (selectedLesson == null)
             {
