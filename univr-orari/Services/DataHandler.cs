@@ -51,7 +51,7 @@ namespace univr_orari.Services
 		/// Get courses
 		/// </summary>
 		/// <returns></returns>
-		public async Task<AcademicYear> GetCurrentAcademicYear()
+		public async Task<AcademicYear> GetCourses()
 		{
 			try
 			{
@@ -66,8 +66,7 @@ namespace univr_orari.Services
 				Match match = regex.Match(rawResponse);
 				if (!match.Success)
 					return null;
-
-
+                
 				// Try to serialize
 				List<AcademicYear> academicYears = JsonConvert.DeserializeObject<List<AcademicYear>>(match.Groups[1].Value);
 				if (academicYears == null)

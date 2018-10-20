@@ -78,7 +78,7 @@ namespace univr_orari.Activities
             }
 
             // Load courses
-            currentAcademicYear = await DataStore.GetCurrentAcademicYear();
+            currentAcademicYear = await DataStore.GetCourses();
             if (currentAcademicYear?.Courses != null)
             {
                 courses = currentAcademicYear.Courses;
