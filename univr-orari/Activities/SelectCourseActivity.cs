@@ -73,30 +73,27 @@ namespace univr_orari.Activities
             // Checks for internet connection. Shows a dialog if no connection is currenty available
             if (!CrossConnectivity.Current.IsConnected)
             {
-                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.no_connection_dialog_message, this);
+                AlertDialogHelper.Show(this, Resource.String.no_connection_title, Resource.String.no_connection_message, this);
                 return;
             }
 
-            // Load courses
+            // Load courses and populate UI
             currentAcademicYear = await DataStore.GetCourses();
-            if (currentAcademicYear?.Courses != null)
+            if (currentAcademicYear?.Courses == null)
             {
-                courses = currentAcademicYear.Courses;
-
-                loadingLayout.Visibility = ViewStates.Gone;
-                mainLayout.Visibility = ViewStates.Visible;
-
-                SetCourseSpinner();
-            }
-            else
-            {
-                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.unknown_error_message, this);
+                AlertDialogHelper.Show(this, Resource.String.no_connection_title, Resource.String.unknown_error_message, this);
                 return;
             }
+
+            loadingLayout.Visibility = ViewStates.Gone;
+            mainLayout.Visibility = ViewStates.Visible;
+            courses = currentAcademicYear.Courses;
+            SetCourseSpinner();
         }
 
         public void OnClick(IDialogInterface dialog, int which)
         {
+            // This is the click event of the AlertDialogHelper
             OnBackPressed();
         }
 

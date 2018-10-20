@@ -26,6 +26,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ModernHttpClient;
+using MonkeyCache.FileStore;
 using Newtonsoft.Json;
 using univr_orari.Helpers;
 using univr_orari.Models;
@@ -90,7 +91,22 @@ namespace univr_orari.Services
 			}
 		}
 
-		public async Task<List<Lesson>> GetLessonsFromNetwork(int year, int month)
+        /// <summary>
+        /// Gets a list of lessons from the local cache
+        /// </summary>
+        /// <param name="year">lesson's year</param>
+        /// <param name="month">lesson's month</param>
+        /// <returns></returns>
+        public List<Lesson> GetLessonsFromCache(int year, int month) =>
+            Barrel.Current.Get<List<Lesson>>($"{Settings.CourseId}-{Settings.CourseYearId}-{Settings.AcademicYearId}:{month}-{year}");
+
+        /// <summary>
+        /// Gets a list of lessons from the network
+        /// </summary>
+        /// <param name="year">lesson's year</param>
+        /// <param name="month">lesson's month</param>
+        /// <returns></returns>
+        public async Task<List<Lesson>> GetLessonsFromNetwork(int year, int month)
 		{
 			try
 			{
@@ -143,7 +159,10 @@ namespace univr_orari.Services
 						});
 				}
 
-				return lessons;
+                // Update the local cache
+                Barrel.Current.Add($"{Settings.CourseId}-{Settings.CourseYearId}-{Settings.AcademicYearId}:{month}-{year}", lessons, TimeSpan.FromDays(5));
+
+                return lessons;
 			}
 			catch (Exception e)
 			{
@@ -153,7 +172,15 @@ namespace univr_orari.Services
 			}
 		}
 
-		public async Task<WeeklyTimetable> GetWeeklyTimetable(string firstDayOfWeek, string academicYearId, string course,
+        /// <summary>
+        /// Deletes the local cache
+        /// </summary>
+        public void ClearCache()
+        {
+            Barrel.Current.EmptyAll();
+        }
+
+		private async Task<WeeklyTimetable> GetWeeklyTimetable(string firstDayOfWeek, string academicYearId, string course,
 			string courseYear)
 		{
 			// Prepare request

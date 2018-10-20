@@ -56,8 +56,8 @@ namespace univr_orari.Activities
             layout = FindViewById<RelativeLayout>(Resource.Id.main_activity_layout);
             toolbar = FindViewById<Toolbar>(Resource.Id.main_activity_toolbar);
             weekView = FindViewById<WeekView>(Resource.Id.main_activity_week_view);
-            lessonColors = new Dictionary<string, int>();
-            lessons = new Dictionary<string, List<Lesson>>();
+            lessonBackgroundColors = new Dictionary<string, int>();
+            lessonsAlreadyDownloaded = new Dictionary<string, bool>();
 
             // Prepare UI
             weekView.NumberOfVisibleDays = Settings.WeekViewMode;
@@ -73,13 +73,6 @@ namespace univr_orari.Activities
             // Update weekview
             weekView.GoToHour(8);
             weekView.DateTimeInterpreter = new DateTimeInterpreter();
-
-            // Check for network connectivity
-            if (!CrossConnectivity.Current.IsConnected)
-            {
-                AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.no_connection_dialog_message, this);
-                return;
-            }
         }
 
         public override void OnConfigurationChanged(Configuration newConfig)
@@ -101,9 +94,8 @@ namespace univr_orari.Activities
         {
             int year = p0.StartTime.Get(CalendarField.Year);
             int month = p0.StartTime.Get(CalendarField.Month) + 1;
-            string key = $"{year}-{month}";
             
-            Lesson selectedLesson = lessons[key]?.Find(x => x.StartDateTimeOffset != null &&
+            Lesson selectedLesson = DataStore.GetLessonsFromCache(year, month)?.Find(x => x.StartDateTimeOffset != null &&
                 x.StartDateTimeOffset.LocalDateTime.Day == p0.StartTime.Get(CalendarField.DayOfMonth) &&
                 x.StartDateTimeOffset.LocalDateTime.Month == p0.StartTime.Get(CalendarField.Month) + 1 &&
                 x.StartDateTimeOffset.LocalDateTime.Hour == p0.StartTime.Get(CalendarField.HourOfDay) &&
@@ -124,17 +116,21 @@ namespace univr_orari.Activities
 
         public IList<WeekViewEvent> OnMonthChange(int year, int month)
         {
+            // This list represents the events we are going to show on the app
             List<WeekViewEvent> events = new List<WeekViewEvent>();
+            
+            // Get lessons already on cache...
+            List<Lesson> lessons = DataStore.GetLessonsFromCache(year, month);
+            // ... meanwhile load updated lessons from network (async)
+            LoadLessonsIfApplicable(year, month);
 
-            // Check if this request has been made already
-            if (!lessons.ContainsKey($"{year}-{month}"))
+            if (lessons == null)
             {
-                LoadLessons(year, month);
                 return events;
             }
 
             // Display lessons
-            foreach (Lesson lesson in lessons[$"{year}-{month}"])
+            foreach (Lesson lesson in lessons)
             {
                 try
                 {
@@ -173,7 +169,6 @@ namespace univr_orari.Activities
             dayViewMenuItem = menu.FindItem(Resource.Id.main_menu_day_view);
             weekViewMenuItem = menu.FindItem(Resource.Id.main_menu_week_view);
 
-            // Update UI
             weekViewMenuItem.SetVisible(Settings.WeekViewMode == 1);
             dayViewMenuItem.SetVisible(Settings.WeekViewMode != 1);
 
@@ -191,7 +186,15 @@ namespace univr_orari.Activities
                     ChangeWeekViewMode(1);
                     return true;
                 case Resource.Id.main_menu_refresh:
-                    lessons.Clear();
+                    if (!CrossConnectivity.Current.IsConnected)
+                    {
+                        AlertDialogHelper.Show(this, Resource.String.no_connection_title, Resource.String.no_connection_message, this);
+                        return true;
+                    }
+
+                    lessonBackgroundColors.Clear();
+                    lessonsAlreadyDownloaded.Clear();
+                    DataStore.ClearCache();
                     weekView.NotifyDatasetChanged();
                     return true;
                 case Resource.Id.main_menu_change_course:
@@ -210,33 +213,40 @@ namespace univr_orari.Activities
             ;
         }
 
-        private async void LoadLessons(int year, int month)
+        private async void LoadLessonsIfApplicable(int year, int month)
         {
+            // The key represents the "transaction"
             string key = $"{year}-{month}";
-            this.lessons.Add(key, new List<Lesson>());
 
-            SnackbarHelper.Show(layout, Resource.String.main_activity_loading);
-
-            List<Lesson> lessons = await DataStore.GetLessonsFromNetwork(year, month);
-            if (lessons == null)
+            // If we already started a transaction, stop here
+            if (!CrossConnectivity.Current.IsConnected || lessonsAlreadyDownloaded.ContainsKey(key))
             {
-                SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
                 return;
             }
+            else
+            {
+                lessonsAlreadyDownloaded.Add(key, true);
+            }
 
-            this.lessons[key].AddRange(lessons);
+            // Show loading bar
+            SnackbarHelper.Show(layout, Resource.String.main_activity_loading);
+
+            // Get newer lessons
+            await DataStore.GetLessonsFromNetwork(year, month);
+
+            // Update weekview
             weekView.NotifyDatasetChanged();
         }
 
         private int GetCellColor(string id)
         {
-            if (!lessonColors.ContainsKey(id))
+            if (!lessonBackgroundColors.ContainsKey(id))
             {
                 // 23 is the number of colors available
-                lessonColors.Add(id, ColorHelper.GetColor(lessonColors.Count % 23));
+                lessonBackgroundColors.Add(id, ColorHelper.GetColor(lessonBackgroundColors.Count % 23));
             }
 
-            return lessonColors[id];
+            return lessonBackgroundColors[id];
         }
 
         private void ChangeWeekViewMode(int mode)
@@ -255,9 +265,9 @@ namespace univr_orari.Activities
         private RelativeLayout layout;
         private Toolbar toolbar;
         private WeekView weekView;
-        private Dictionary<string, List<Lesson>> lessons;
-        private Dictionary<string, int> lessonColors;
         private IMenuItem dayViewMenuItem;
         private IMenuItem weekViewMenuItem;
+        private Dictionary<string, bool> lessonsAlreadyDownloaded;
+        private Dictionary<string, int> lessonBackgroundColors;
     }
 }
