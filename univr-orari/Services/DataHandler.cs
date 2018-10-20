@@ -90,7 +90,7 @@ namespace univr_orari.Services
 			}
 		}
 
-		public async Task<List<Lesson>> GetLessons(int year, int month)
+		public async Task<List<Lesson>> GetLessonsFromNetwork(int year, int month)
 		{
 			try
 			{

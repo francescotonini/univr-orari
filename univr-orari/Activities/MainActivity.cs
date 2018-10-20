@@ -217,7 +217,7 @@ namespace univr_orari.Activities
 
             SnackbarHelper.Show(layout, Resource.String.main_activity_loading);
 
-            List<Lesson> lessons = await DataStore.GetLessons(year, month);
+            List<Lesson> lessons = await DataStore.GetLessonsFromNetwork(year, month);
             if (lessons == null)
             {
                 SnackbarHelper.Show(layout, Resource.String.unknown_error_message, 0);
