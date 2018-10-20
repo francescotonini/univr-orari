@@ -80,10 +80,6 @@ namespace univr_orari.Activities
                 AlertDialogHelper.Show(this, Resource.String.no_connection_dialog_title, Resource.String.no_connection_dialog_message, this);
                 return;
             }
-
-            // Keeps the app updated
-            lessons.Clear();
-            weekView.NotifyDatasetChanged();
         }
 
         public override void OnConfigurationChanged(Configuration newConfig)
@@ -218,7 +214,9 @@ namespace univr_orari.Activities
         {
             string key = $"{year}-{month}";
             this.lessons.Add(key, new List<Lesson>());
-            
+
+            SnackbarHelper.Show(layout, Resource.String.main_activity_loading);
+
             List<Lesson> lessons = await DataStore.GetLessons(year, month);
             if (lessons == null)
             {
