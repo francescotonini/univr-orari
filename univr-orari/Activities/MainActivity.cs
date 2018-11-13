@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Content.Res;
 using Android.Graphics;
 using Android.OS;
@@ -39,7 +40,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace univr_orari.Activities
 {
-    [Activity(Label = "@string/app_name", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
+    [Activity(Label = "@string/app_name", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden)]
     public class MainActivity : BaseActivity,
         WeekView.IEventClickListener, MonthLoader.IMonthChangeListener, IDialogInterfaceOnClickListener
     {
@@ -77,8 +78,6 @@ namespace univr_orari.Activities
 
         public override void OnConfigurationChanged(Configuration newConfig)
         {
-            base.OnConfigurationChanged(newConfig);
-
             if (newConfig.Orientation == Android.Content.Res.Orientation.Landscape)
             {
                 ChangeWeekViewMode(5);
@@ -88,6 +87,7 @@ namespace univr_orari.Activities
                 ChangeWeekViewMode(Settings.WeekViewMode);
             }
 
+            base.OnConfigurationChanged(newConfig);
         }
 
         public void OnEventClick(WeekViewEvent p0, RectF p1)
