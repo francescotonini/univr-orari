@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_dark">#252741</color>
+    <color name="primary">#313357</color>
+    <color name="accent">#64f2a3</color>
+    <color name="accent_light">#2664f2a3</color>
+    <color name="divider">#E6E6E6</color>
+    <color name="background">#F5F5F5</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+
+    <color name="white_70">#B3FFFFFF</color>
+
+    <array name="cell_colors">
+        <item>#B9F4FF</item>
+        <item>#F3BAF5</item>
+        <item>#F1D0D0</item>
+        <item>#D5FFA4</item>
+        <item>#FDCBFE</item>
+        <item>#A0F3A2</item>
+        <item>#EEC0C0</item>
+        <item>#A7C7D3</item>
+        <item>#80D886</item>
+        <item>#A6E2FF</item>
+        <item>#E9AF5D</item>
+        <item>#DDFF75</item>
+        <item>#8CB1FF</item>
+        <item>#FEE080</item>
+        <item>#DC8080</item>
+        <item>#FEE080</item>
+        <item>#DC8080</item>
+        <item>#A9F580</item>
+        <item>#A6F9A2</item>
+        <item>#C6DBE1</item>
+        <item>#C5C6FC</item>
+        <item>#FDC100</item>
+        <item>#56C878</item>
+        <item>#E9D6B2</item>
+    </array>
+</resources>

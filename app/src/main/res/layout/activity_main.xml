@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+        <com.alamkanak.weekview.WeekView
+            android:id="@+id/activity_main_weekview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/activity_main_bottomnavigationview"
+            android:background="@color/background"
+            app:eventTextColor="@color/primary_text"
+            app:textSize="@dimen/primary_text_size"
+            app:eventTextSize="@dimen/primary_text_size"
+            app:hourHeight="@dimen/spacing_extra_extra_huge"
+            app:columnGap="@dimen/spacing_medium"
+            app:noOfVisibleDays="3"
+            app:headerColumnPadding="@dimen/spacing_medium"
+            app:headerColumnTextColor="@color/primary_text"
+            app:headerRowPadding="@dimen/spacing_extra_extra_medium"
+            app:headerRowBackgroundColor="@android:color/white"
+            app:dayBackgroundColor="@color/white_70"
+            app:todayBackgroundColor="@color/accent_light"
+            app:todayHeaderTextColor="@color/accent" />
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/activity_main_bottomnavigationview"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/menu_main_bottom_bar" />
+    </RelativeLayout>
+</layout>

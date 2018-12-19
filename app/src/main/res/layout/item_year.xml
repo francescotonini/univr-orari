@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/spacing_extra_large"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/item_year_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_extra_huge"
+            android:layout_marginRight="@dimen/spacing_large"
+            android:layout_centerVertical="true"
+            tools:text="Year"
+            style="@style/primary_text_view"/>
+    </RelativeLayout>
+</layout>
