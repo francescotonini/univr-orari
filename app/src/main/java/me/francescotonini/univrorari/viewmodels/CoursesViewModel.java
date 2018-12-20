@@ -1,8 +1,8 @@
 package me.francescotonini.univrorari.viewmodels;
 
-
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import me.francescotonini.univrorari.models.Course;
 import me.francescotonini.univrorari.repositories.CoursesRepository;
 
 /**
- * Represents the logic behind an activity that handles courses
+ * Represents the logic behind an activity that handles mediator
  */
 public class CoursesViewModel extends BaseViewModel {
     /**
@@ -22,7 +22,20 @@ public class CoursesViewModel extends BaseViewModel {
     public CoursesViewModel(@NonNull Application application, CoursesRepository coursesRepository) {
         super(application);
 
-        this.coursesRepository = coursesRepository;
+        repository = coursesRepository;
+        mediator = new MediatorLiveData<>();
+
+        // Why do I use a mediator? The repository sends a list of courses.
+        // The mediator intercepts that request and send a ViewModelEvent if something went wrong, otherwise
+        // sends the list
+        mediator.addSource(repository.getCourses(), courses -> {
+            if (courses == null) {
+                setEvent(ViewModelEvent.NETWORK_ERROR);
+            }
+            else {
+                mediator.setValue(courses);
+            }
+        });
     }
 
     /**
@@ -30,7 +43,7 @@ public class CoursesViewModel extends BaseViewModel {
      * @return if the observed value is NULL then something went wrong, otherwise the value is a list
      */
     public LiveData<List<Course>> getCourses() {
-        return coursesRepository.getCourses();
+        return mediator;
     }
 
     /**
@@ -40,7 +53,7 @@ public class CoursesViewModel extends BaseViewModel {
      * @param courseId unique id of the course selected
      */
     public void setCourse(String academicYearId, String yearId, String courseId) {
-        coursesRepository.setCourse(academicYearId, yearId, courseId);
+        repository.setCourse(academicYearId, yearId, courseId);
     }
 
     /**
@@ -50,7 +63,7 @@ public class CoursesViewModel extends BaseViewModel {
         /**
          * Initializes a Factory for this viewmodel
          *
-         * @param application
+         * @param application application
          */
         public Factory(@NonNull Application application, CoursesRepository coursesRepository) {
             this.application = application;
@@ -61,7 +74,7 @@ public class CoursesViewModel extends BaseViewModel {
          * Gets the actual viewmodel
          *
          * @param modelClass model of the... Viewmodel
-         * @param <T>        type of the viewmodel
+         * @param <T> type of the viewmodel
          * @return the viewmodel
          */
         @Override
@@ -75,6 +88,7 @@ public class CoursesViewModel extends BaseViewModel {
         private final CoursesRepository coursesRepository;
     }
 
-    private final CoursesRepository coursesRepository;
+    private final MediatorLiveData<List<Course>> mediator;
+    private final CoursesRepository repository;
 }
 

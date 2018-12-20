@@ -4,19 +4,16 @@
     <item
         android:id="@+id/menu_main_day_view"
         android:icon="@drawable/menu_main_top_bar_day"
-        android:visible="false"
         app:showAsAction="always"
         android:title="@string/menu_main_top_bar_day" />
     <item
         android:id="@+id/menu_main_week_view"
         android:icon="@drawable/menu_main_top_bar_week"
-        android:visible="false"
         app:showAsAction="always"
         android:title="@string/menu_main_top_bar_week" />
     <item
         android:id="@+id/menu_main_refresh"
         android:icon="@drawable/menu_main_top_bar_refresh"
-        android:visible="true"
         app:showAsAction="ifRoom"
         android:title="@string/menu_main_top_bar_refresh" />
     <item

@@ -63,8 +63,7 @@ public class LessonsRepository extends BaseRepository {
             public void onResponse(Call<List<Lesson>> call, Response<List<Lesson>> response) {
                 if (!response.isSuccessful()) {
                     Logger.e(LessonsRepository.class.getSimpleName(), String.format("Unable to get lessons for key %s because error code is %s", calculateKey(month, year), response.code()));
-                    // TODO: send error
-                    // lessonsMap.get(calculateKey(month, year)).setValue(null);
+                    ((MutableLiveData<List<Lesson>>)lessonsMap.get(calculateKey(month, year))).setValue(null);
                     return;
                 }
 
@@ -75,15 +74,13 @@ public class LessonsRepository extends BaseRepository {
             @Override
             public void onFailure(Call<List<Lesson>> call, Throwable t) {
                 Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get lessons: " + t.getMessage());
-                // TODO: send error
-                // lessonsMap.get(calculateKey(month, year)).setValue(null);
+                ((MutableLiveData<List<Lesson>>)lessonsMap.get(calculateKey(month, year))).setValue(null);
             }
         }));
     }
 
     /**
      * Removes every observable connected before
-     * TODO: that's not true actually
      */
     public void clear() {
         lessonsMap.clear();

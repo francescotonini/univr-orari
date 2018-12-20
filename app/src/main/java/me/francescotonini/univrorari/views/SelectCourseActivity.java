@@ -14,6 +14,7 @@ import me.francescotonini.univrorari.databinding.ActivitySelectCourseBinding;
 import me.francescotonini.univrorari.helpers.SnackBarHelper;
 import me.francescotonini.univrorari.models.Course;
 import me.francescotonini.univrorari.models.Year;
+import me.francescotonini.univrorari.viewmodels.BaseViewModel;
 import me.francescotonini.univrorari.viewmodels.CoursesViewModel;
 
 /**
@@ -50,17 +51,18 @@ public class SelectCourseActivity extends BaseActivity implements CoursesAdapter
         super.onCreate(savedInstanceState);
 
         binding.activitySelectCoursesRefreshlayout.setRefreshing(true);
+
+        getViewModel().getEvent().observe(this, event -> {
+            if (event == BaseViewModel.ViewModelEvent.NETWORK_ERROR) {
+                Logger.e(SelectCourseActivity.class.getSimpleName(), "Received " + event.name());
+
+                binding.activitySelectCoursesRefreshlayout.setRefreshing(false);
+            }
+        });
+
         getViewModel().getCourses().observe(this, (courses -> {
             if (courses == null) {
                 Logger.e(SelectCourseActivity.class.getSimpleName(), "Got a NULL object");
-
-                SnackBarHelper.show(binding.activitySelectCoursesRecyclerview, R.string.error_generic_message);
-
-                return;
-            }
-            else if (courses.size() == 0) {
-                Logger.w(SelectCourseActivity.class.getSimpleName(), "Got an empy list, is it correct?");
-
                 return;
             }
 
@@ -69,6 +71,8 @@ public class SelectCourseActivity extends BaseActivity implements CoursesAdapter
             // TODO: this workaround is to prevent data incosistency
             // https://github.com/thoughtbot/expandable-recycler-view/issues/147
             binding.activitySelectCoursesRecyclerview.setAdapter(new CoursesAdapter(courses, this));
+
+            // Stop the loading animations
             binding.activitySelectCoursesRefreshlayout.setEnabled(false);
             binding.activitySelectCoursesRefreshlayout.setRefreshing(false);
         }));

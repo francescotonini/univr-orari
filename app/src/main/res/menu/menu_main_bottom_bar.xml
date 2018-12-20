@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_bottom_bar_lessons"
+        android:id="@+id/menu_main_bottom_bar_timetable"
         android:enabled="true"
         android:icon="@drawable/menu_main_bottom_bar_lessons"
         android:title="@string/menu_main_bottom_bar_timetable"

@@ -2,6 +2,7 @@ package me.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.util.ArrayMap;
@@ -27,8 +28,8 @@ public class LessonsViewModel extends BaseViewModel {
     public LessonsViewModel(Application application, LessonsRepository lessonsRepository) {
         super(application);
 
-        this.lessonsRepository = lessonsRepository;
-        lessonColors = new ArrayMap<>();
+        repository = lessonsRepository;
+        colors = new ArrayMap<>();
     }
 
     /**
@@ -38,7 +39,7 @@ public class LessonsViewModel extends BaseViewModel {
      * @return if the observed value is NULL then something went wrong, otherwise the value is a list
      */
     public LiveData<List<Lesson>> getLessons(final int month, final int year) {
-        return lessonsRepository.getLessons(month, year);
+        return repository.getLessons(month, year);
     }
 
     /**
@@ -53,7 +54,7 @@ public class LessonsViewModel extends BaseViewModel {
         int year = startTime.get(Calendar.YEAR);
         int month = startTime.get(Calendar.MONTH) + 1;
 
-        List<Lesson> lessons = lessonsRepository.getLessons(month, year).getValue();
+        List<Lesson> lessons = repository.getLessons(month, year).getValue();
         if (lessons == null || lessons.size() == 0) {
             Logger.e(LessonsViewModel.class.getSimpleName(), "No lessons found");
             return lesson;
@@ -80,18 +81,18 @@ public class LessonsViewModel extends BaseViewModel {
      */
     public int getLessonColor(String id)
     {
-        if (!lessonColors.containsKey(id)) {
-            lessonColors.put(id, getApplication().getResources().getIntArray(R.array.cell_colors)[lessonColors.size()]);
+        if (!colors.containsKey(id)) {
+            colors.put(id, getApplication().getResources().getIntArray(R.array.cell_colors)[colors.size()]);
         }
 
-        return lessonColors.get(id);
+        return colors.get(id);
     }
 
     /**
      * Removes every observable connected before
      */
     public void clear() {
-        lessonsRepository.clear();
+        repository.clear();
     }
 
     /**
@@ -113,7 +114,7 @@ public class LessonsViewModel extends BaseViewModel {
          * Gets the actual viewmodel
          *
          * @param modelClass model of the... Viewmodel
-         * @param <T>        type of the viewmodel
+         * @param <T> type of the viewmodel
          * @return the viewmodel
          */
         @Override public <T extends ViewModel> T create(Class<T> modelClass) {
@@ -125,7 +126,7 @@ public class LessonsViewModel extends BaseViewModel {
         private final LessonsRepository lessonsRepository;
     }
 
-    private final LessonsRepository lessonsRepository;
-    private final Map<String, Integer> lessonColors;
+    private final LessonsRepository repository;
+    private final Map<String, Integer> colors;
 }
 
