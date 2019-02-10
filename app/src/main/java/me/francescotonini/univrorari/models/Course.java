@@ -1,8 +1,10 @@
 package me.francescotonini.univrorari.models;
 
-
 import java.util.List;
 
+/**
+ * Represents a university course (e.g. "Computer Science")
+ */
 public class Course {
     /**
      * Gets the name of this {@link Course}

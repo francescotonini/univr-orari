@@ -5,16 +5,17 @@ import android.content.ContextWrapper;
 import com.pixplicity.easyprefs.library.Prefs;
 
 /**
- * Android Application class. Used for accessing singletons.
+ * Main class. Let's you access to singletons
  */
 public class UniVROrariApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
 
+        // This is a class with different thread pools
         appExecutors = new AppExecutors();
 
-        // Builds preferences
+        // Build preferences
         new Prefs.Builder()
             .setContext(this)
             .setMode(ContextWrapper.MODE_PRIVATE)
@@ -32,7 +33,7 @@ public class UniVROrariApp extends Application {
     }
 
     /**
-     * Get an instance of {@link AppExecutors}
+     * Gets an instance of {@link AppExecutors}
      * @return an instance of {@link AppExecutors}
      */
     public AppExecutors getAppExecutors() {

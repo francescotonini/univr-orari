@@ -23,10 +23,9 @@ import me.francescotonini.univrorari.models.Year;
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 /**
- * {@link ExpandableRecyclerViewAdapter} that can display a list of {@link Course} and {@link Year}
+ * {@link ExpandableRecyclerViewAdapter} that can display a list of {@link Course} and nested {@link Year}
  */
-public class CoursesAdapter extends
-        ExpandableRecyclerViewAdapter<CoursesAdapter.CourseViewHolder, CoursesAdapter.YearViewHolder> {
+public class CoursesAdapter extends ExpandableRecyclerViewAdapter<CoursesAdapter.CourseViewHolder, CoursesAdapter.YearViewHolder> {
     /**
      * Initializes a new instance of {@link CoursesAdapter}
      * @param courses a list of courses

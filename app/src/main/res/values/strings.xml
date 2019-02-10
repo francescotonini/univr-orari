@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">UniVR Orari</string>
+
+    <string name="error_network_title">Errore di rete</string>
+    <string name="error_network_message">"Qualcosa non ha funzionato mentre scaricavo i dati da internet. Assicurati di avere una connessione ad internet o riprova più tardi. "</string>
+    <string name="error_network_button_message">Ok</string>
+
+    <string name="error_generic_title">Ops! Qualcosa è andato storto</string>
     <string name="error_generic_message">Ops! Qualcosa è andato storto</string>
+    <string name="error_generic_close_button">Ops! Qualcosa è andato storto</string>
     <string name="loading">Caricamento...</string>
 
     <!-- Main menu -->
@@ -15,6 +22,19 @@
     <!-- Select course -->
     <string name="activity_select_course_title">Seleziona il tuo corso</string>
 
+    <!-- Select offices -->
+    <string name="activity_select_offices_title">Seleziona sedi</string>
+    <string name="activity_select_offices_loading">Sto caricando i dati, abbi qualche secondo di pazienza :)</string>
+    <string name="activity_select_offices_loading_error">Uhm, qualcosa non ha funzionato. Scusa :(</string>
+
+    <!-- Fragment rooms -->
+    <string name="fragment_rooms_sunday">Oggi è domenica ;)</string>
+
+    <string name="item_room_available_for">libera per</string>
+    <string name="item_room_busy_from">occupata dalle</string>
+    <string name="item_room_busy_for">libera tra</string>
+    <string name="item_room_available_from">libera dalle</string>
+
     <!-- Lesson details -->
     <string name="activity_lesson_details">Dettagli lezione</string>
     <string name="activity_lesson_details_lesson">Lezione</string>
@@ -24,5 +44,10 @@
 
     <!-- Menu lesson details -->
     <string name="menu_lesson_details_share">Condividi</string>
+
+    <!-- Menu rooms -->
+    <string name="menu_rooms_search">Cerca</string>
+    <string name="menu_rooms_change_offices">Modifica sede</string>
+
 </resources>
 

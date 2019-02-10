@@ -10,11 +10,13 @@ public class PreferenceHelper {
      * Storable keys
      */
     public enum Keys {
-        ACADEMIC_YEAR,
-        COURSE,
-        COURSE_YEAR,
-        DID_FIRST_BOOT,
-        DAYS_TO_SHOW
+        TIMETABLE_ACADEMIC_YEAR,
+        TIMETABLE_COURSE,
+        TIMETABLE_COURSE_YEAR,
+        TIMETABLE_DAYS_TO_SHOW,
+        TIMETABLE_DID_FIRST_START,
+        ROOMS_DID_FIRST_START,
+        ROOMS_OFFICES
     }
 
     /**
@@ -47,6 +49,16 @@ public class PreferenceHelper {
     /**
      * Gets the string under the key provided. If no value is available, returns NULL
      * @param key key
+     * @param defaultValue default value if none is available
+     * @return the string under the key provided. If no value is available, returns NULL
+     */
+    public static String getString(Keys key, String defaultValue) {
+        return Prefs.getString(keyToString(key), defaultValue);
+    }
+
+    /**
+     * Gets the string under the key provided. If no value is available, returns NULL
+     * @param key key
      * @return the string under the key provided. If no value is available, returns NULL
      */
     public static String getString(Keys key) {
@@ -60,6 +72,16 @@ public class PreferenceHelper {
      */
     public static int getInt(Keys key) {
         return Prefs.getInt(keyToString(key), 0);
+    }
+
+    /**
+     * Gets the int under the key provided. If no value is available, returns 0
+     * @param key key
+     * @param defaultValue default value if none is available
+     * @return the int under the key provided. If no value is available, returns 0
+     */
+    public static int getInt(Keys key, int defaultValue) {
+        return Prefs.getInt(keyToString(key), defaultValue);
     }
 
     /**

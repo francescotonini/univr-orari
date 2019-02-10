@@ -1,9 +1,14 @@
 package me.francescotonini.univrorari.models;
 
+import com.alamkanak.weekview.WeekViewDisplayable;
+import com.alamkanak.weekview.WeekViewEvent;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 /**
- * Implementation of {@link Lesson} for db purposes
+ * Represents a lesson of a university course
  */
-public class Lesson {
+public class Lesson implements WeekViewDisplayable<Lesson> {
     /**
      * Gets the name of this {@link Lesson}
      * @return name of this {@link Lesson}
@@ -82,6 +87,16 @@ public class Lesson {
      */
     public void setEndTimestamp(long endTimestamp) {
         this.endTimestamp = endTimestamp;
+    }
+
+    @Override public WeekViewEvent<Lesson> toWeekViewEvent() {
+        Calendar startTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
+        startTime.setTimeInMillis(startTimestamp);
+        Calendar endTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
+        endTime.setTimeInMillis(endTimestamp);
+        endTime.set(Calendar.MINUTE, endTime.get(Calendar.MINUTE) - 1);
+
+        return new WeekViewEvent<>(startTimestamp, name, startTime, endTime, room, 0, false, this);
     }
 
     private String name;

@@ -4,12 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Implementation of {@link Year} for api purposes
+ * Represents a year of a university {@link Course} (e.g. third year)
  */
 public class Year implements Parcelable {
     // Why this class implements Parcelable? ExpandableRecyclerViewAdapter (see CoursesAdapter)
     // requires that child class must inherit Parcelable
-
     protected Year(Parcel in) {
         name = in.readString();
         id = in.readString();

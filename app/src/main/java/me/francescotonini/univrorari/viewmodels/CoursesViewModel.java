@@ -2,11 +2,12 @@ package me.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 import java.util.List;
+
+import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Course;
 import me.francescotonini.univrorari.repositories.CoursesRepository;
 
@@ -23,27 +24,14 @@ public class CoursesViewModel extends BaseViewModel {
         super(application);
 
         repository = coursesRepository;
-        mediator = new MediatorLiveData<>();
-
-        // Why do I use a mediator? The repository sends a list of courses.
-        // The mediator intercepts that request and send a ViewModelEvent if something went wrong, otherwise
-        // sends the list
-        mediator.addSource(repository.getCourses(), courses -> {
-            if (courses == null) {
-                setEvent(ViewModelEvent.NETWORK_ERROR);
-            }
-            else {
-                mediator.setValue(courses);
-            }
-        });
     }
 
     /**
      * Gets an observable of a list of {@link Course}
      * @return if the observed value is NULL then something went wrong, otherwise the value is a list
      */
-    public LiveData<List<Course>> getCourses() {
-        return mediator;
+    public LiveData<ApiResponse<List<Course>>> getCourses() {
+        return repository.getCourses();
     }
 
     /**
@@ -88,7 +76,6 @@ public class CoursesViewModel extends BaseViewModel {
         private final CoursesRepository coursesRepository;
     }
 
-    private final MediatorLiveData<List<Course>> mediator;
     private final CoursesRepository repository;
 }
 

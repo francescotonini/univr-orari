@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-    </data>
+    <data/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -10,11 +9,11 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
         <com.alamkanak.weekview.WeekView
-            android:id="@+id/activity_main_weekview"
+            android:id="@+id/activity_room_details_weekview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
-            android:background="@color/background"
+            android:layout_marginRight="@dimen/spacing_medium"
             app:todayHeaderTextColor="@color/accent"
             app:headerRowPadding="@dimen/spacing_extra_extra_medium"
             app:headerRowBackgroundColor="@android:color/white"
@@ -22,6 +21,7 @@
             app:eventCornerRadius="@dimen/spacing_xsmall"
             app:eventTextSize="@dimen/tertiary_text_size"
             app:hourHeight="@dimen/spacing_bit_more_huge"
-            app:numberOfVisibleDays="3" />
+            app:numberOfVisibleDays="1"
+            app:xScrollingSpeed="0.0" />
     </RelativeLayout>
 </layout>

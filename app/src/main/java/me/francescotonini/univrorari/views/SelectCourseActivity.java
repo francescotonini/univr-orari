@@ -1,37 +1,30 @@
 package me.francescotonini.univrorari.views;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import java.util.List;
 import me.francescotonini.univrorari.Logger;
 import me.francescotonini.univrorari.R;
 import me.francescotonini.univrorari.UniVROrariApp;
 import me.francescotonini.univrorari.adapters.CoursesAdapter;
 import me.francescotonini.univrorari.databinding.ActivitySelectCourseBinding;
-import me.francescotonini.univrorari.helpers.SnackBarHelper;
+import me.francescotonini.univrorari.helpers.DialogHelper;
+import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Course;
 import me.francescotonini.univrorari.models.Year;
-import me.francescotonini.univrorari.viewmodels.BaseViewModel;
 import me.francescotonini.univrorari.viewmodels.CoursesViewModel;
 
 /**
  * Activity for R.layout.activity_select_course
  */
-public class SelectCourseActivity extends BaseActivity implements CoursesAdapter.OnItemClickListener {
+public class SelectCourseActivity extends BaseActivity implements CoursesAdapter.OnItemClickListener, Observer<ApiResponse<List<Course>>> {
     @Override protected int getLayoutId() {
         return R.layout.activity_select_course;
-    }
-
-    @Override protected void setToolbar() {
-        setSupportActionBar((Toolbar)binding.toolbar);
-
-        // Show back button if required
-        if (getIntent().getBooleanExtra("showBackButton", false)) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override protected CoursesViewModel getViewModel() {
@@ -43,46 +36,27 @@ public class SelectCourseActivity extends BaseActivity implements CoursesAdapter
         return viewModel;
     }
 
-    @Override protected void setBinding() {
-        binding = DataBindingUtil.setContentView(this, getLayoutId());
-    }
-
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Setup binding
+        binding = DataBindingUtil.setContentView(this, getLayoutId());
+
+        // Setup toolbar and back button
+        setSupportActionBar((Toolbar)binding.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Start loading animation
         binding.activitySelectCoursesRefreshlayout.setRefreshing(true);
 
-        getViewModel().getEvent().observe(this, event -> {
-            if (event == BaseViewModel.ViewModelEvent.NETWORK_ERROR) {
-                Logger.e(SelectCourseActivity.class.getSimpleName(), "Received " + event.name());
-
-                binding.activitySelectCoursesRefreshlayout.setRefreshing(false);
-            }
-        });
-
-        getViewModel().getCourses().observe(this, (courses -> {
-            if (courses == null) {
-                Logger.e(SelectCourseActivity.class.getSimpleName(), "Got a NULL object");
-                return;
-            }
-
-            Logger.i(SelectCourseActivity.class.getSimpleName(), String.format("Got %s courses", courses.size()));
-
-            // TODO: this workaround is to prevent data incosistency
-            // https://github.com/thoughtbot/expandable-recycler-view/issues/147
-            binding.activitySelectCoursesRecyclerview.setAdapter(new CoursesAdapter(courses, this));
-
-            // Stop the loading animations
-            binding.activitySelectCoursesRefreshlayout.setEnabled(false);
-            binding.activitySelectCoursesRefreshlayout.setRefreshing(false);
-        }));
+        getViewModel().getCourses().observe(this, this);
     }
 
     @Override public void onItemClick(Course course, Year year) {
         getViewModel().setCourse(course.getAcademicYearId(), year.getId(), course.getId());
 
-        // Navigate to main (not the ideal solution)
-        startActivity(new Intent(this, MainActivity.class));
+        // Go back to main
+        onBackPressed();
     }
 
     @Override public boolean onContextItemSelected(MenuItem item) {
@@ -93,6 +67,23 @@ public class SelectCourseActivity extends BaseActivity implements CoursesAdapter
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    @Override public void onChanged(@Nullable ApiResponse<List<Course>> response) {
+        if (response == null || !response.isSuccessful()) {
+            Logger.e(SelectCourseActivity.class.getSimpleName(), "Error on getCourses() response");
+
+            DialogHelper.show(this, R.string.error_generic_title, R.string.error_generic_message, R.string.error_generic_close_button);
+        }
+        else {
+            // This workaround prevents data incosistency
+            // https://github.com/thoughtbot/expandable-recycler-view/issues/147
+            binding.activitySelectCoursesRecyclerview.setAdapter(new CoursesAdapter(response.getData(), this));
+        }
+
+        // Stop the loading animations
+        binding.activitySelectCoursesRefreshlayout.setEnabled(false);
+        binding.activitySelectCoursesRefreshlayout.setRefreshing(false);
     }
 
     private ActivitySelectCourseBinding binding;

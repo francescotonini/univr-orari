@@ -3,6 +3,8 @@
     package="me.francescotonini.univrorari">
 
     <application
+        android:usesCleartextTraffic="true"
+
         android:name=".UniVROrariApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,16 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".views.BootstrapActivity">
+        <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.MainActivity" />
         <activity android:name=".views.LessonDetailsActivity" />
         <activity android:name=".views.SelectCourseActivity" />
+        <activity android:name=".views.SelectOfficesActivity"
+            android:label="@string/activity_select_offices_title"/>
+        <activity android:name=".views.RoomsActivity" />
+        <activity android:name=".views.RoomDetailsActivity" />
     </application>
 
 </manifest>

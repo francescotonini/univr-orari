@@ -1,135 +1,163 @@
 package me.francescotonini.univrorari.views;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.alamkanak.weekview.EventClickListener;
+import com.alamkanak.weekview.MonthLoader;
+import com.alamkanak.weekview.WeekViewDisplayable;
+import com.alamkanak.weekview.WeekViewEvent;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import me.francescotonini.univrorari.Logger;
 import me.francescotonini.univrorari.R;
+import me.francescotonini.univrorari.UniVROrariApp;
 import me.francescotonini.univrorari.databinding.ActivityMainBinding;
+import me.francescotonini.univrorari.helpers.DateTimeInterpreter;
+import me.francescotonini.univrorari.helpers.DialogHelper;
 import me.francescotonini.univrorari.helpers.PreferenceHelper;
-import me.francescotonini.univrorari.viewmodels.BaseViewModel;
+import me.francescotonini.univrorari.helpers.SnackBarHelper;
+import me.francescotonini.univrorari.models.ApiResponse;
+import me.francescotonini.univrorari.models.Lesson;
+import me.francescotonini.univrorari.viewmodels.LessonsViewModel;
 
 /**
  * Code behind of R.layout.activity_main
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements Observer<ApiResponse<List<Lesson>>>, EventClickListener<Lesson>, MonthLoader.MonthChangeListener {
     @Override protected int getLayoutId() {
         return R.layout.activity_main;
     }
 
-    @Override protected void setToolbar() {
-        setSupportActionBar((Toolbar)binding.toolbar);
-    }
+    @Override protected LessonsViewModel getViewModel() {
+        if (viewModel == null) {
+            LessonsViewModel.Factory factory = new LessonsViewModel.Factory(getApplication(),
+                    ((UniVROrariApp)getApplication()).getDataRepository().getLessonsRepository());
+            viewModel = ViewModelProviders.of(this, factory).get(LessonsViewModel.class);
+        }
 
-    @Override protected BaseViewModel getViewModel() {
-        return null;
-    }
-
-    @Override protected void setBinding() {
-        binding = DataBindingUtil.setContentView(this, getLayoutId());
+        return viewModel;
     }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // By default, show TimetableFragment
-        visibleFragmentType = VisibleFragment.TIMETABLE;
+        // Setup binding
+        binding = DataBindingUtil.setContentView(this, getLayoutId());
 
-        // React to bottom bar tap
-        binding.activityMainBottomnavigationview.setOnNavigationItemSelectedListener((click) -> {
-            visibleFragmentType = click.getItemId() == R.id.menu_main_bottom_bar_timetable ? VisibleFragment.TIMETABLE : VisibleFragment.ROOMS;
-            loadFragment();
+        // Setup Toolbar
+        setSupportActionBar((Toolbar) binding.toolbar);
 
-            return true;
-        });
+        // If first boot, go to SelectCourseActivity
+        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.TIMETABLE_DID_FIRST_START)) {
+            startActivity(new Intent(this, SelectCourseActivity.class));
+        }
+
+        binding.activityMainWeekview.setNumberOfVisibleDays(PreferenceHelper.getInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 3));
+        binding.activityMainWeekview.setDateTimeInterpreter(new DateTimeInterpreter());
+        binding.activityMainWeekview.setMonthChangeListener(this);
+        binding.activityMainWeekview.setOnEventClickListener(this);
     }
 
     @Override protected void onResume() {
         super.onResume();
 
-        loadFragment();
+        binding.activityMainWeekview.notifyDataSetChanged();
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_top_bar, menu);
-
-        return true;
-    }
-
-    @Override public boolean onPrepareOptionsMenu(Menu menu) {
-        if (visibleFragmentType == VisibleFragment.ROOMS) {
-            menu.removeItem(R.id.menu_main_week_view);
-            menu.removeItem(R.id.menu_main_day_view);
-        }
-        else if (visibleFragmentType == VisibleFragment.TIMETABLE) {
-            int daysToShow = PreferenceHelper.getInt(PreferenceHelper.Keys.DAYS_TO_SHOW);
-            timetableFragment.setNumberOfVisibleDays(daysToShow);
-
-            if (daysToShow == 1) {
-                menu.removeItem(R.id.menu_main_day_view);
-            }
-            else {
-                menu.removeItem(R.id.menu_main_week_view);
-            }
-        }
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_main_week_view) {
-            PreferenceHelper.setInt(PreferenceHelper.Keys.DAYS_TO_SHOW, 3);
-            invalidateOptionsMenu();
-        }
-        else if (item.getItemId() == R.id.menu_main_day_view) {
-            PreferenceHelper.setInt(PreferenceHelper.Keys.DAYS_TO_SHOW, 1);
-            invalidateOptionsMenu();
-        }
-        else if (item.getItemId() == R.id.menu_main_change_course) {
-            Intent intent = new Intent(this, SelectCourseActivity.class);
-            intent.putExtra("showBackButton", true);
-            startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.menu_main_refresh) {
-            visibleFragment.refresh();
-        }
-        else if (item.getItemId() == R.id.menu_main_settings) {
+            PreferenceHelper.setInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 3);
+            binding.activityMainWeekview.setNumberOfVisibleDays(3);
+        } else if (item.getItemId() == R.id.menu_main_day_view) {
+            PreferenceHelper.setInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 1);
+            binding.activityMainWeekview.setNumberOfVisibleDays(1);
+        } else if (item.getItemId() == R.id.menu_main_refresh) {
+            getViewModel().clear();
+            binding.activityMainWeekview.notifyDataSetChanged();
+        } else if (item.getItemId() == R.id.menu_main_rooms) {
+            startActivity(new Intent(this, RoomsActivity.class));
+        } else if (item.getItemId() == R.id.menu_main_settings) {
             // TODO: settings
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
-    private void loadFragment() {
-        if (visibleFragmentType == VisibleFragment.TIMETABLE) {
-            if (timetableFragment == null) {
-                timetableFragment = new TimetableFragment();
+    @Override public void onChanged(@Nullable ApiResponse<List<Lesson>> lessons) {
+        if (!lessons.isSuccessful()) {
+            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+
+            return;
+        }
+        else if (lessons.getData().size() == 0) {
+            Logger.v(MainActivity.class.getSimpleName(), "Ignoring onChanged event because list is NULL or empty");
+
+            return;
+        }
+
+        binding.activityMainWeekview.notifyDataSetChanged();
+    }
+
+    @Override public List<WeekViewDisplayable<Lesson>> onMonthChange(Calendar startDate, Calendar endDate) {
+        List<WeekViewDisplayable<Lesson>> events = new ArrayList<>();
+
+        // Stop here if this is first boot
+        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.TIMETABLE_DID_FIRST_START)) {
+            return events;
+        }
+
+        // Load lessons
+        if (!getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).hasObservers()) {
+            SnackBarHelper.show(binding.activityMainWeekview, R.string.loading);
+
+            getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).observe(this, this);
+            return events;
+        }
+
+        List<Lesson> lessons = getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).getValue().getData();
+        if (lessons == null) {
+            return events;
+        }
+
+        for (Lesson lesson: lessons) {
+            if (lesson.getName() == null || lesson.getRoom() == null) {
+                Logger.e(MainActivity.class.getSimpleName(), "Ignoring lesson because name or room is NULL");
+                continue;
             }
 
-            visibleFragment = timetableFragment;
+            WeekViewDisplayable<Lesson> event = lesson.toWeekViewEvent();
+            ((WeekViewEvent) event).setColor(getViewModel().getLessonColor(lesson.getName()));
+            events.add(event);
         }
-        // else...
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_main_framelayout, visibleFragment)
-                .addToBackStack(null)
-                .commit();
-
-        // This will recreate the option menu so that we can remove icons not necessary
-        invalidateOptionsMenu();
+        return events;
     }
 
-    private enum VisibleFragment {
-        TIMETABLE,
-        ROOMS
+    @Override public void onEventClick(Lesson lesson, RectF eventRect) {
+        Intent intent = new Intent(this, LessonDetailsActivity.class);
+        intent.putExtra("lesson", (new Gson()).toJson(lesson));
+        startActivity(intent);
     }
 
     private ActivityMainBinding binding;
-    private TimetableFragment timetableFragment;
-    // roomsFragment...
-    private BaseFragment visibleFragment;
-    private VisibleFragment visibleFragmentType;
+    private LessonsViewModel viewModel;
+
 }
 

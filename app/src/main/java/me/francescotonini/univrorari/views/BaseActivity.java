@@ -16,20 +16,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayoutId();
 
     /**
-     * Sets the toolbar
-     */
-    protected abstract void setToolbar();
-
-    /**
      * Gets the view model
      * @return view model
      */
     protected abstract BaseViewModel getViewModel();
-
-    /**
-     * Sets the UI binding
-     */
-    protected abstract void setBinding();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +30,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             return;
         }
-
-        setBinding();
-        setToolbar();
     }
 }

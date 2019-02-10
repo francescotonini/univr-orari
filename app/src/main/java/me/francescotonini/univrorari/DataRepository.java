@@ -4,6 +4,8 @@ import android.content.Context;
 import me.francescotonini.univrorari.api.UniVRApi;
 import me.francescotonini.univrorari.repositories.CoursesRepository;
 import me.francescotonini.univrorari.repositories.LessonsRepository;
+import me.francescotonini.univrorari.repositories.OfficesRepository;
+import me.francescotonini.univrorari.repositories.RoomsRepository;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,6 +38,8 @@ public class DataRepository {
                 .create(UniVRApi.class);
         lessonsRepository = new LessonsRepository(appExecutors, uniVRApi);
         coursesRepository = new CoursesRepository(appExecutors, uniVRApi);
+        officesRepository = new OfficesRepository(appExecutors, uniVRApi);
+        roomsRepository = new RoomsRepository(appExecutors, uniVRApi);
     }
 
     /**
@@ -54,8 +58,26 @@ public class DataRepository {
         return coursesRepository;
     }
 
+    /**
+     * Gets an instance of {@link OfficesRepository}
+     * @return an instance of {@link OfficesRepository}
+     */
+    public OfficesRepository getOfficesRepository() {
+        return officesRepository;
+    }
+
+    /**
+     * Gets an instance of {@link RoomsRepository}
+     * @return an instance of {@link RoomsRepository}
+     */
+    public RoomsRepository getRoomsRepository() {
+        return roomsRepository;
+    }
+
     private static DataRepository instance;
     private final UniVRApi uniVRApi;
     private final LessonsRepository lessonsRepository;
     private final CoursesRepository coursesRepository;
+    private final OfficesRepository officesRepository;
+    private final RoomsRepository roomsRepository;
 }

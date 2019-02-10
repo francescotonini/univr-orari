@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import me.francescotonini.univrorari.Logger;
 import me.francescotonini.univrorari.R;
+import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Lesson;
 import me.francescotonini.univrorari.repositories.LessonsRepository;
 
@@ -33,45 +34,13 @@ public class LessonsViewModel extends BaseViewModel {
     }
 
     /**
-     * Gets an observable of a list of {@link Lesson}
+     * Gets an {@link ApiResponse} with a list of {@link Lesson}
      * @param month month of the timetable to retrieve
      * @param year year of the timetable to retrieve
-     * @return if the observed value is NULL then something went wrong, otherwise the value is a list
+     * @return if {@link ApiResponse} has the error property initialized, something went wrong; otherwise data contains the result of the request
      */
-    public LiveData<List<Lesson>> getLessons(final int month, final int year) {
+    public LiveData<ApiResponse<List<Lesson>>> getLessons(final int month, final int year) {
         return repository.getLessons(month, year);
-    }
-
-    /**
-     * Gets a lesson if it meets the above criteria
-     * @param startTime start time of the lesson
-     * @param endTime end time of the lesson
-     * @return if the criteria are met, returns an instance of {@link Lesson}; otherwise NULL
-     */
-    public Lesson getLesson(final Calendar startTime, final Calendar endTime) {
-        Lesson lesson = null;
-
-        int year = startTime.get(Calendar.YEAR);
-        int month = startTime.get(Calendar.MONTH) + 1;
-
-        List<Lesson> lessons = repository.getLessons(month, year).getValue();
-        if (lessons == null || lessons.size() == 0) {
-            Logger.e(LessonsViewModel.class.getSimpleName(), "No lessons found");
-            return lesson;
-        }
-
-        for (Lesson l: lessons) {
-            Calendar lessonStartTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-            lessonStartTime.setTimeInMillis(l.getStartTimestamp());
-            Calendar lessonEndTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-            lessonEndTime.setTimeInMillis(l.getStartTimestamp());
-
-            if (lessonStartTime.equals(startTime) && lessonEndTime.equals(lessonEndTime)) {
-                lesson = l;
-            }
-        }
-
-        return lesson;
     }
 
     /**

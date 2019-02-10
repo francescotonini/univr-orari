@@ -2,24 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_main_rooms"
+        android:title="AULE"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/menu_main_day_view"
-        android:icon="@drawable/menu_main_top_bar_day"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/menu_main_top_bar_day" />
     <item
         android:id="@+id/menu_main_week_view"
-        android:icon="@drawable/menu_main_top_bar_week"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/menu_main_top_bar_week" />
     <item
         android:id="@+id/menu_main_refresh"
-        android:icon="@drawable/menu_main_top_bar_refresh"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu_main_top_bar_refresh" />
-    <item
-        android:id="@+id/menu_main_change_course"
         app:showAsAction="never"
-        android:title="@string/menu_main_top_bar_change_course" />
+        android:title="@string/menu_main_top_bar_refresh" />
     <item
         android:id="@+id/menu_main_settings"
         app:showAsAction="never"
