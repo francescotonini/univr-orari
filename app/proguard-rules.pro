@@ -63,3 +63,7 @@
 # and replaces all potential values with null. Explicitly keeping the interfaces prevents this.
 -if interface * { @retrofit2.http.* <methods>; }
 -keep,allowobfuscation interface <1>
+
+# ScrollAwareFABBehavior
+-keep class it.francescotonini.univrorari.helpers.** { *; }
+-dontwarn it.francescotonini.univrorari.helpers.**
