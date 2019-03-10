@@ -1,3 +1,27 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.views;
 
 import android.arch.lifecycle.Observer;
@@ -15,7 +39,6 @@ import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekViewDisplayable;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,15 +81,15 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
         // Setup Toolbar
         setSupportActionBar((Toolbar) binding.toolbar);
 
-        // If first boot, go to SelectCourseActivity
-        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.TIMETABLE_DID_FIRST_START)) {
-            startActivity(new Intent(this, SelectCourseActivity.class));
-        }
-
-        binding.activityMainWeekview.setNumberOfVisibleDays(PreferenceHelper.getInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 3));
+        // Setup week view
+        binding.activityMainWeekview.setNumberOfVisibleDays(PreferenceHelper.getInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 3));
         binding.activityMainWeekview.setDateTimeInterpreter(new DateTimeInterpreter());
         binding.activityMainWeekview.setMonthChangeListener(this);
         binding.activityMainWeekview.setOnEventClickListener(this);
+        binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+
+        // Setup rooms click event
+        binding.activityMainRoomsButton.setOnClickListener((click) -> startActivity(new Intent(this, RoomsActivity.class)));
     }
 
     @Override protected void onResume() {
@@ -83,18 +106,16 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_main_week_view) {
-            PreferenceHelper.setInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 3);
+            PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 3);
             binding.activityMainWeekview.setNumberOfVisibleDays(3);
         } else if (item.getItemId() == R.id.menu_main_day_view) {
-            PreferenceHelper.setInt(PreferenceHelper.Keys.TIMETABLE_DAYS_TO_SHOW, 1);
+            PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 1);
             binding.activityMainWeekview.setNumberOfVisibleDays(1);
         } else if (item.getItemId() == R.id.menu_main_refresh) {
             getViewModel().clear();
             binding.activityMainWeekview.notifyDataSetChanged();
-        } else if (item.getItemId() == R.id.menu_main_rooms) {
-            startActivity(new Intent(this, RoomsActivity.class));
         } else if (item.getItemId() == R.id.menu_main_settings) {
-            // TODO: settings
+            startActivity(new Intent(this, SettingsActivity.class));
         }
 
         return true;
@@ -119,7 +140,7 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
         List<WeekViewDisplayable<Lesson>> events = new ArrayList<>();
 
         // Stop here if this is first boot
-        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.TIMETABLE_DID_FIRST_START)) {
+        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
             return events;
         }
 
@@ -128,6 +149,11 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
             SnackBarHelper.show(binding.activityMainWeekview, R.string.loading);
 
             getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).observe(this, this);
+            return events;
+        }
+
+        ApiResponse<List<Lesson>> response = getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).getValue();
+        if (response == null) {
             return events;
         }
 
@@ -158,6 +184,5 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
 
     private ActivityMainBinding binding;
     private LessonsViewModel viewModel;
-
 }
 

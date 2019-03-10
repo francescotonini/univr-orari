@@ -1,53 +1,89 @@
-<resources>
-    <string name="app_name">UniVR Orari</string>
+<!--
+  ~ The MIT License
+  ~
+  ~ Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
 
+<resources>
+    <!-- Generic -->
+    <string name="app_name">UniVR Orari</string>
     <string name="error_network_title">Errore di rete</string>
     <string name="error_network_message">"Qualcosa non ha funzionato mentre scaricavo i dati da internet. Assicurati di avere una connessione ad internet o riprova più tardi. "</string>
     <string name="error_network_button_message">Ok</string>
-
     <string name="error_generic_title">Ops! Qualcosa è andato storto</string>
     <string name="error_generic_message">Ops! Qualcosa è andato storto</string>
     <string name="error_generic_close_button">Ops! Qualcosa è andato storto</string>
     <string name="loading">Caricamento...</string>
 
+    <!-- Setup -->
+    <string name="activity_setup_select_course_title">Ciao!</string>
+    <string name="activity_setup_select_course_description">Per iniziare, seleziona il tuo corso di studi.</string>
+    <string name="activity_setup_select_years_title">Seleziona anno di corso</string>
+    <string name="activity_setup_select_years_description">Potrai modificare le materie più tardi.</string>
+    <string name="activity_setup_select_teachings_title">Personalizza calendario</string>
+    <string name="activity_setup_select_teachings_description">Se vuoi, rimuovi le materie che non segui</string>
+    <string name="activity_setup_select_offices_title">Ci siamo quasi...</string>
+    <string name="activity_setup_select_offices_description">Seleziona le sedi che vuoi monitorare.</string>
+    <string name="menu_setup_select_course_search">Cerca corso</string>
+
     <!-- Main menu -->
-    <string name="menu_main_bottom_bar_timetable">Orario</string>
-    <string name="menu_main_bottom_bar_rooms">Aule</string>
     <string name="menu_main_top_bar_day">Vista giornaliera</string>
     <string name="menu_main_top_bar_week">Vista settimanale</string>
     <string name="menu_main_top_bar_refresh">Ricarica orari</string>
-    <string name="menu_main_top_bar_change_course">Modifica orario</string>
     <string name="menu_main_top_bar_settings">Impostazioni</string>
 
-    <!-- Select course -->
-    <string name="activity_select_course_title">Seleziona il tuo corso</string>
+    <!-- Rooms -->
+    <string name="activity_rooms_title">Aule libere</string>
 
-    <!-- Select offices -->
-    <string name="activity_select_offices_title">Seleziona sedi</string>
-    <string name="activity_select_offices_loading">Sto caricando i dati, abbi qualche secondo di pazienza :)</string>
-    <string name="activity_select_offices_loading_error">Uhm, qualcosa non ha funzionato. Scusa :(</string>
+    <!-- Room details -->
+    <string name="activity_room_details_title">Calendario aula</string>
 
     <!-- Fragment rooms -->
-    <string name="fragment_rooms_sunday">Oggi è domenica ;)</string>
-
     <string name="item_room_available_for">libera per</string>
     <string name="item_room_busy_from">occupata dalle</string>
     <string name="item_room_busy_for">libera tra</string>
     <string name="item_room_available_from">libera dalle</string>
 
     <!-- Lesson details -->
-    <string name="activity_lesson_details">Dettagli lezione</string>
+    <string name="activity_lesson_details_title">Dettagli lezione</string>
     <string name="activity_lesson_details_lesson">Lezione</string>
     <string name="activity_lesson_details_teacher">Docente</string>
     <string name="activity_lesson_details_date">Data</string>
     <string name="activity_lesson_details_room">Stanza</string>
 
-    <!-- Menu lesson details -->
-    <string name="menu_lesson_details_share">Condividi</string>
-
     <!-- Menu rooms -->
-    <string name="menu_rooms_search">Cerca</string>
-    <string name="menu_rooms_change_offices">Modifica sede</string>
 
+    <!-- Settings -->
+    <string name="activity_settings_title">Impostazioni</string>
+    <string name="settings_change_teachings_title">Modifica insegnamenti</string>
+    <string name="settings_change_teachings_description">Aggiungi o rimuovi uno o più insegnamenti dal tuo calendario</string>
+    <string name="settings_change_offices_title">Modifica aule</string>
+    <string name="settings_change_offices_description">Aggiungi o rimuovi una o più aule da monitorare</string>
+    <string name="settings_clear_cache_title">Pulisci cache</string>
+    <string name="settings_clear_cache_description">Cancella tutti i dati in locale</string>
+    <string name="settings_info_title">Dubbi, domande, angosce...?</string>
+    <string name="settings_info_description">Contatta lo sviluppatore!</string>
+    <string name="settings_app_version_title">Versione app</string>
+    <string name="settings_app_version_description">UniVR Orari è stata sviluppata da Francesco Tonini. Tutti i dati provengono da logistica.univr.it</string>
+    <string name="settings_category_general">Generali</string>
+    <string name="settings_category_info">Informazioni</string>
 </resources>
 

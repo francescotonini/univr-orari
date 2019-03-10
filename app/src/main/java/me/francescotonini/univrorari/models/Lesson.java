@@ -1,3 +1,27 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.models;
 
 import com.alamkanak.weekview.WeekViewDisplayable;
@@ -9,6 +33,22 @@ import java.util.TimeZone;
  * Represents a lesson of a university course
  */
 public class Lesson implements WeekViewDisplayable<Lesson> {
+    /**
+     * Gets the id of this {@link Lesson}
+     * @return id of this {@link Lesson}
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the id of this {@link Lesson}
+     * @param id id of this {@link Lesson}
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
     /**
      * Gets the name of this {@link Lesson}
      * @return name of this {@link Lesson}
@@ -99,6 +139,8 @@ public class Lesson implements WeekViewDisplayable<Lesson> {
         return new WeekViewEvent<>(startTimestamp, name, startTime, endTime, room, 0, false, this);
     }
 
+    private String id;
+    private String yearId;
     private String name;
     private String teacher;
     private String room;

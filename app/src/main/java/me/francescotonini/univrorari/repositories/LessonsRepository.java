@@ -1,20 +1,53 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.repositories;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import me.francescotonini.univrorari.AppExecutors;
 import me.francescotonini.univrorari.Logger;
 import me.francescotonini.univrorari.api.ApiError;
 import me.francescotonini.univrorari.api.UniVRApi;
 import me.francescotonini.univrorari.helpers.PreferenceHelper;
 import me.francescotonini.univrorari.models.ApiResponse;
+import me.francescotonini.univrorari.models.Course;
 import me.francescotonini.univrorari.models.Lesson;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import me.francescotonini.univrorari.models.Teaching;
 
 /**
  * Handles data from API and DB about timetables
@@ -28,6 +61,8 @@ public class LessonsRepository extends BaseRepository {
      */
     public LessonsRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
+
+        getPreferences();
 
         lessonsMap = new ArrayMap<>();
     }
@@ -53,30 +88,61 @@ public class LessonsRepository extends BaseRepository {
     }
 
     private void loadLessons(final int month, final int year) {
+        if (selectedCourse == null || selectedTeachings == null) {
+            Logger.w(LessonsRepository.class.getSimpleName(), "Can't get lessons since course and teachings are null");
+            return;
+        }
+
         Logger.i(LessonsRepository.class.getSimpleName(), "Loading lessons for key " + calculateKey(month, year));
 
-        getAppExecutors().networkIO().execute(() -> getApi().getLessons(PreferenceHelper.getString(PreferenceHelper.Keys.TIMETABLE_ACADEMIC_YEAR),
-                PreferenceHelper.getString(PreferenceHelper.Keys.TIMETABLE_COURSE),
-                PreferenceHelper.getString(PreferenceHelper.Keys.TIMETABLE_COURSE_YEAR), month, year).enqueue(new Callback<List<Lesson>>() {
+        List<String> yearIds = new ArrayList<>();
+        for (Teaching teaching : selectedTeachings) {
+            if (!yearIds.contains(teaching.getYearId())) {
+                yearIds.add(teaching.getYearId());
+            }
+        }
+
+        Observable<String> observable = Observable.fromIterable(yearIds);
+        observable
+        .flatMap((Function<String, ObservableSource<List<Lesson>>>) s -> getApi().getLessons(selectedCourse.getAcademicYearId(), selectedCourse.getId(), s, month, year))
+        .retry(3)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<List<Lesson>>() {
+            List<Lesson> lessons = new ArrayList<>();
 
             @Override
-            public void onResponse(Call<List<Lesson>> call, Response<List<Lesson>> response) {
-                if (!response.isSuccessful()) {
-                    Logger.e(LessonsRepository.class.getSimpleName(), String.format("Unable to get lessons for key %s because error code is %s", calculateKey(month, year), response.code()));
-                    lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(ApiError.BAD_RESPONSE));
-                    return;
-                }
+            public void onSubscribe(Disposable d) {
 
-                Logger.i(LessonsRepository.class.getSimpleName(), "Got " + response.body().size() + " lessons for key " + calculateKey(month, year));
-                lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(response.body()));
             }
 
             @Override
-            public void onFailure(Call<List<Lesson>> call, Throwable t) {
-                Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get lessons: " + t.getMessage());
+            public void onNext(List<Lesson> l) {
+                Logger.i(LessonsRepository.class.getSimpleName(), "Got " + lessons.size() + " lessons for key " + calculateKey(month, year));
+
+                lessons.addAll(l);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get lessons: " + e.getMessage());
                 lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
             }
-        }));
+
+            @Override
+            public void onComplete() {
+                List<Lesson> finalLessons = new ArrayList<>();
+                for (Lesson lesson : lessons) {
+                    for (Teaching teaching : selectedTeachings) {
+                        if (lesson.getId().hashCode() == teaching.getId().hashCode()) {
+                            finalLessons.add(lesson);
+                        }
+                    }
+                }
+
+                lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(finalLessons));
+            }
+        });
     }
 
     /**
@@ -90,5 +156,12 @@ public class LessonsRepository extends BaseRepository {
         return year + "-" + month;
     }
 
+    private void getPreferences() {
+        selectedCourse = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
+        selectedTeachings = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.TEACHINGS), new TypeToken<List<Teaching>>(){}.getType());
+    }
+
+    private Course selectedCourse;
+    private List<Teaching> selectedTeachings;
     private Map<String, MutableLiveData<ApiResponse<List<Lesson>>>> lessonsMap;
 }

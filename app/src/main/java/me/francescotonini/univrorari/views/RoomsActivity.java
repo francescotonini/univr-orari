@@ -1,3 +1,27 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.views;
 
 import android.arch.lifecycle.Observer;
@@ -8,7 +32,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import com.google.gson.Gson;
 import java.util.List;
@@ -17,7 +40,6 @@ import me.francescotonini.univrorari.UniVROrariApp;
 import me.francescotonini.univrorari.adapters.RoomsAdapter;
 import me.francescotonini.univrorari.databinding.ActivityRoomsBinding;
 import me.francescotonini.univrorari.helpers.DialogHelper;
-import me.francescotonini.univrorari.helpers.PreferenceHelper;
 import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Room;
 import me.francescotonini.univrorari.viewmodels.RoomsViewModel;
@@ -53,28 +75,15 @@ public class RoomsActivity extends BaseActivity implements RoomsAdapter.OnItemCl
         // Setup livedata
         getViewModel().getRooms().observe(this, this);
 
-        // If first boot, go to SelectOfficesActivity
-        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.ROOMS_DID_FIRST_START)) {
-            startActivity(new Intent(this, SelectOfficesActivity.class));
-        }
-
         // Start animation
         binding.activityRoomsRefreshlayout.setRefreshing(true);
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_rooms, menu);
-
-        MenuItem search = menu.findItem(R.id.menu_rooms_search);
-        SearchView searchView = (SearchView)search.getActionView();
-        searchView.setOnQueryTextListener(this);
-
-        return true;
-    }
-
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_rooms_change_offices) {
-            startActivity(new Intent(this, SelectOfficesActivity.class));
+        // Handles toolbar's back button
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -87,8 +96,6 @@ public class RoomsActivity extends BaseActivity implements RoomsAdapter.OnItemCl
     }
 
     @Override public void onChanged(@Nullable ApiResponse<List<Room>> rooms) {
-        // if rooms is null; it means something went wrong while I was trying to download the list of offices from the API
-        // could be missing network, offline APIs or wrong deserialization.
         if (!rooms.isSuccessful()) {
             // Show error messages and stop activity
             DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);

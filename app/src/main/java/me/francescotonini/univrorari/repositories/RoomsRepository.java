@@ -1,12 +1,42 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.repositories;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.support.annotation.Nullable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
-
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import me.francescotonini.univrorari.AppExecutors;
 import me.francescotonini.univrorari.Logger;
 import me.francescotonini.univrorari.api.ApiError;
@@ -15,9 +45,6 @@ import me.francescotonini.univrorari.helpers.PreferenceHelper;
 import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Office;
 import me.francescotonini.univrorari.models.Room;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Handles communication between data and view model
@@ -54,40 +81,40 @@ public class RoomsRepository extends BaseRepository {
     private void loadRooms() {
         Logger.i(RoomsRepository.class.getSimpleName(), "Loading rooms");
 
-        String[] offices = PreferenceHelper.getString(PreferenceHelper.Keys.ROOMS_OFFICES, "").split("-");
+        List<Office> offices = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.OFFICES), new TypeToken<List<Office>>(){}.getType());
 
-        // Stop if first item is empty
-        if (offices[0] == "") return;
+        Observable<Office> observable = Observable.fromIterable(offices);
+        observable
+        .flatMap((Function<Office, ObservableSource<List<Room>>>) s -> getApi().getRooms(s.getId()))
+        .retry(3)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<List<Room>>() {
+            List<Room> result = new ArrayList<>();
 
-        for (String officeId: offices) {
-            getAppExecutors().networkIO().execute(() -> getApi()
-            .getRooms(officeId)
-            .enqueue(new Callback<List<Room>>() {
-                @Override public void onResponse(Call<List<Room>> call, Response<List<Room>> response) {
-                    if (!response.isSuccessful()) {
-                        Logger.e(RoomsRepository.class.getSimpleName(), String.format("Unable to get rooms because error code is %s ", response.code()));
-                        rooms.setValue(new ApiResponse<>(ApiError.BAD_RESPONSE));
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                        return;
-                    }
+            }
 
-                    Logger.i(RoomsRepository.class.getSimpleName(), String.format("Got %s rooms", response.body().size()));
+            @Override
+            public void onNext(List<Room> r) {
+                Logger.i(RoomsRepository.class.getSimpleName(), "Got " + r.size());
 
-                    if (rooms.getValue() != null && rooms.getValue().isSuccessful()) {
-                        rooms.getValue().getData().addAll(response.body());
-                        rooms.setValue(new ApiResponse<>(rooms.getValue().getData()));
-                    }
-                    else {
-                        rooms.setValue(new ApiResponse<>(response.body()));
-                    }
-                }
+                result.addAll(r);
+            }
 
-                @Override public void onFailure(Call<List<Room>> call, Throwable t) {
-                    Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get rooms: " + t.getMessage());
-                    rooms.setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
-                }
-            }));
-        }
+            @Override
+            public void onError(Throwable e) {
+                Logger.e(RoomsRepository.class.getSimpleName(), "Unable to get lessons: " + e.getMessage());
+                rooms.setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
+            }
+
+            @Override
+            public void onComplete() {
+                rooms.setValue(new ApiResponse<>(result));
+            }
+        });
     }
 
     private MutableLiveData<ApiResponse<List<Room>>> rooms;

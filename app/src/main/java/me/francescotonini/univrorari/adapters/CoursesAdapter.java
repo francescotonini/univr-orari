@@ -1,78 +1,110 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package me.francescotonini.univrorari.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.RotateAnimation;
-
-import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
-import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
-
+import android.widget.Filter;
 import java.util.ArrayList;
 import java.util.List;
-
 import me.francescotonini.univrorari.R;
 import me.francescotonini.univrorari.databinding.ItemCourseBinding;
-import me.francescotonini.univrorari.databinding.ItemYearBinding;
 import me.francescotonini.univrorari.models.Course;
-import me.francescotonini.univrorari.models.Year;
-
-import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 /**
- * {@link ExpandableRecyclerViewAdapter} that can display a list of {@link Course} and nested {@link Year}
+ * Adapter that can display a list of {@link Course}
  */
-public class CoursesAdapter extends ExpandableRecyclerViewAdapter<CoursesAdapter.CourseViewHolder, CoursesAdapter.YearViewHolder> {
+public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHolder> {
+    /**
+     * Click listener interface
+     */
+    public interface OnItemClickListener {
+        void onItemClick(Course course);
+    }
+
     /**
      * Initializes a new instance of {@link CoursesAdapter}
      * @param courses a list of courses
      */
     public CoursesAdapter(List<Course> courses, OnItemClickListener listener) {
-        super(toListExpandable(courses));
-
         this.listener = listener;
+        this.courses = courses;
     }
 
-    @Override public CourseViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         ItemCourseBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()),
+                LayoutInflater.from(viewGroup.getContext()),
                 R.layout.item_course,
-                parent, false
+                viewGroup, false
         );
 
-        return new CourseViewHolder(binding.getRoot());
+        return new ViewHolder(binding.getRoot());
     }
 
-    @Override public YearViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType) {
-        ItemYearBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()),
-                R.layout.item_year,
-                parent, false
-        );
-
-        return new YearViewHolder(binding.getRoot());
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.bind(getCourses().get(position));
     }
 
-    @Override public void onBindChildViewHolder(YearViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
-        holder.bind(((Expandable)group).getCourse(), ((Expandable)group).getCourse().getYears().get(childIndex));
+    @Override
+    public int getItemCount() {
+        return getCourses().size();
     }
 
-    @Override public void onBindGroupViewHolder(CourseViewHolder holder, int flatPosition, ExpandableGroup group) {
-        holder.bind(((Expandable)group).getCourse());
+    /**
+     * Gets the filter of this list
+     * @return filter
+     */
+    public Filter getFilter() {
+        return new Filter() {
+            @Override protected FilterResults performFiltering(CharSequence constraint) {
+                queryValue = constraint.toString();
+                return null;
+            }
+
+            @Override protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
+            }
+        };
     }
 
     /**
      * Group ViewHolder for {@link CoursesAdapter}
      */
-    public class CourseViewHolder extends GroupViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * Initializes a new instance of this view holder
          * @param view view
          */
-        public CourseViewHolder(View view) {
+        public ViewHolder(View view) {
             super(view);
             binding = DataBindingUtil.bind(view);
         }
@@ -83,90 +115,29 @@ public class CoursesAdapter extends ExpandableRecyclerViewAdapter<CoursesAdapter
          */
         public void bind(Course course) {
             binding.itemCourseText.setText(course.getName());
+            binding.getRoot().setOnClickListener(view -> listener.onItemClick(course));
         }
 
-        @Override public void expand() {
-            RotateAnimation rotate =
-                    new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-            rotate.setDuration(300);
-            rotate.setFillAfter(true);
-            binding.itemCourseArrow.setAnimation(rotate);
-        }
-
-        @Override public void collapse() {
-            RotateAnimation rotate =
-                    new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-            rotate.setDuration(300);
-            rotate.setFillAfter(true);
-            binding.itemCourseArrow.setAnimation(rotate);
-        }
-
-        private ItemCourseBinding binding;
+        private final ItemCourseBinding binding;
     }
 
-    /**
-     * Child ViewHolder of {@link CourseViewHolder} for {@link CoursesAdapter}
-     */
-    public class YearViewHolder extends ChildViewHolder {
-        /**
-         * Initializes a new instance of this view holder
-         * @param view view
-         */
-        public YearViewHolder(View view) {
-            super(view);
-            this.view = view;
-
-            binding = DataBindingUtil.bind(view);
+    private List<Course> getCourses() {
+        if (queryValue == null || queryValue.isEmpty()) {
+            return courses;
         }
 
-        /**
-         * Binds a year to this view
-         * @param course course
-         * @param year year
-         */
-        public void bind(Course course, Year year) {
-            binding.itemYearText.setText(year.getName());
-
-            view.setOnClickListener(view -> listener.onItemClick(course, year));
+        List<Course> filteredCourses = new ArrayList<>();
+        for (Course room : courses) {
+            if (room.getName().toLowerCase().contains(queryValue.toLowerCase())) {
+                filteredCourses.add(room);
+            }
         }
 
-        private View view;
-        private ItemYearBinding binding;
+        return filteredCourses;
     }
 
-    /**
-     * Click listener interface
-     */
-    public interface OnItemClickListener {
-        void onItemClick(Course course, Year year);
-    }
-
-    private OnItemClickListener listener;
-
-    // Converts a Course in a "expandable" Course
-    private static List<Expandable> toListExpandable(List<Course> courses) {
-        List<Expandable> result = new ArrayList<>();
-        for (Course c: courses) {
-            result.add(new Expandable(c));
-        }
-
-        return result;
-    }
-
-    // This class "converts" a Course in a "expandable" Course. In other words
-    // it's just an helper class for this adapter
-    private static class Expandable extends ExpandableGroup<Year> {
-        public Expandable(Course c) {
-            super(c.getName(), c.getYears());
-
-            course = c;
-        }
-
-        public Course getCourse() {
-            return course;
-        }
-
-        private Course course;
-    }
+    private String queryValue;
+    private final OnItemClickListener listener;
+    private final List<Course> courses;
 }
 

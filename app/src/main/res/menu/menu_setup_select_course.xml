@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ The MIT License (MIT)
+  ~ The MIT License
   ~
-  ~ Copyright (c) 2017-2018 Francesco Tonini <francescoantoniotonini@gmail.com>
+  ~ Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -11,27 +11,25 @@
   ~ copies of the Software, and to permit persons to whom the Software is
   ~ furnished to do so, subject to the following conditions:
   ~
-  ~ The above copyright notice and this permission notice shall be included in all
-  ~ copies or substantial portions of the Software.
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
   ~
   ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
   ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
   ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  ~ SOFTWARE.
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="24dp"
-    android:viewportHeight="24"
-    android:viewportWidth="24"
-    android:width="24dp">
-
-    <path
-        android:fillColor="#000000"
-        android:pathData="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-    <path
-        android:pathData="M0-0.75h24v24H0z" />
-</vector>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_setup_select_course_search"
+        android:icon="@drawable/search"
+        app:showAsAction="collapseActionView|always"
+        android:actionLayout="@layout/toolbar"
+        android:title="@string/menu_setup_select_course_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+</menu>
