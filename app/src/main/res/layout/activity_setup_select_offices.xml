@@ -56,7 +56,7 @@
                 android:src="@drawable/save"
                 app:layout_anchor="@id/activity_select_offices_recycler_view"
                 app:layout_anchorGravity="bottom|right|end"
-                app:layout_behavior="me.francescotonini.univrorari.helpers.ScrollAwareFABBehavior"/>
+                app:layout_behavior="it.francescotonini.univrorari.helpers.ScrollAwareFABBehavior"/>
         </android.support.design.widget.CoordinatorLayout>
 
         <!-- Text message when something goes wrong -->

@@ -85,7 +85,3 @@
 -libraryjars  <java.home>/lib/rt.jar
 -libraryjars  <java.home>/lib/jce.jar
 -dontwarn
-
--keep class it.francescotonini.univrorari.helpers.** { *; }
--keep interface it.francescotonini.univrorari.helpers.** { *; }
--dontwarn it.francescotonini.univrorari.**

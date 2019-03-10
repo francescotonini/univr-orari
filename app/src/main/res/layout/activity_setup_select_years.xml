@@ -51,7 +51,7 @@
                 android:src="@drawable/arrow_left"
                 app:layout_anchor="@id/activity_setup_select_years_recyclerview"
                 app:layout_anchorGravity="bottom|right|end"
-                app:layout_behavior="me.francescotonini.univrorari.helpers.ScrollAwareFABBehavior"/>
+                app:layout_behavior="it.francescotonini.univrorari.helpers.ScrollAwareFABBehavior"/>
         </android.support.design.widget.CoordinatorLayout>
     </RelativeLayout>
 </layout>
