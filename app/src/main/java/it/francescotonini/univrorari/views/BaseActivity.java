@@ -22,33 +22,37 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.views;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import it.francescotonini.univrorari.Logger;
+import it.francescotonini.univrorari.viewmodels.BaseViewModel;
 
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Standard Activity skeleton
+ */
+public abstract class BaseActivity extends AppCompatActivity {
+    /**
+     * Gets the layout id
+     * @return The layout id
+     */
+    protected abstract int getLayoutId();
+
+    /**
+     * Gets the view model
+     * @return view model
+     */
+    protected abstract BaseViewModel getViewModel();
+
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Why? An Activity may not have a layout. If that is the case, layoutId is zero
+        if (getLayoutId() == 0) {
+            Logger.w(BaseActivity.class.getSimpleName(), "Layout id is zero");
+
+            return;
+        }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

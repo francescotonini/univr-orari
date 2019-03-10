@@ -24,17 +24,17 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.francescotonini.univrorari">
+    package="it.francescotonini.univrorari">
 
     <application
-        android:name=".UniVROrariApp"
+        android:name="it.francescotonini.univrorari.UniVROrariApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".views.BootstrapActivity"
+        <activity android:name="it.francescotonini.univrorari.views.BootstrapActivity"
             android:theme="@style/app_theme_bootstrap"
             android:noHistory="true">
             <intent-filter>
@@ -51,31 +51,31 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.MainActivity"
+        <activity android:name="it.francescotonini.univrorari.views.MainActivity"
             android:label="@string/app_name" />
 
-        <activity android:name=".views.LessonDetailsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.LessonDetailsActivity"
             android:label="@string/activity_lesson_details_title" />
 
-        <activity android:name=".views.RoomsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.RoomsActivity"
             android:label="@string/activity_rooms_title" />
 
-        <activity android:name=".views.RoomDetailsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.RoomDetailsActivity"
             android:label="@string/activity_room_details_title" />
 
-        <activity android:name=".views.SetupSelectCourseActivity"
+        <activity android:name="it.francescotonini.univrorari.views.SetupSelectCourseActivity"
             android:label="@string/activity_setup_select_course_title" />
 
-        <activity android:name=".views.SetupSelectYearsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.SetupSelectYearsActivity"
             android:label="@string/activity_setup_select_years_title" />
 
-        <activity android:name=".views.SetupSelectTeachingsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.SetupSelectTeachingsActivity"
             android:label="@string/activity_setup_select_teachings_title" />
 
-        <activity android:name=".views.SetupSelectOfficesActivity"
+        <activity android:name="it.francescotonini.univrorari.views.SetupSelectOfficesActivity"
             android:label="@string/activity_setup_select_offices_title" />
 
-        <activity android:name=".views.SettingsActivity"
+        <activity android:name="it.francescotonini.univrorari.views.SettingsActivity"
             android:label="@string/activity_settings_title" />
     </application>
 </manifest>

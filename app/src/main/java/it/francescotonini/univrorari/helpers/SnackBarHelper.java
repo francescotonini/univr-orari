@@ -22,33 +22,22 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.helpers;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Handles SnackBar boilerplate
+ */
+public class SnackBarHelper {
+    /**
+     * Shows a snackbar
+     * @param view view
+     * @param textId textId
+     */
+    public static void show(View view, int textId) {
+        Snackbar snackBar = Snackbar.make(view, textId, Snackbar.LENGTH_LONG);
+        snackBar.show();
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

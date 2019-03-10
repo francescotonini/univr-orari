@@ -22,33 +22,29 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.viewmodels;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import android.app.Application;
+import android.support.annotation.NonNull;
+import com.google.gson.Gson;
+import it.francescotonini.univrorari.helpers.PreferenceHelper;
+import it.francescotonini.univrorari.models.Course;
 
-        maven { url 'https://maven.fabric.io/public' }
+public class SettingsViewModel extends BaseViewModel {
+    /**
+     * Initializes a new instance of this class
+     *
+     * @param application
+     */
+    public SettingsViewModel(@NonNull Application application) {
+        super(application);
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    /**
+     * Get the {@link Course} saved
+     * @return {@link Course} saved
+     */
+    public Course getCourse() {
+        return new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
     }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

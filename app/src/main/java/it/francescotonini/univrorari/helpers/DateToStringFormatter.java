@@ -22,33 +22,33 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.helpers;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-        maven { url 'https://maven.fabric.io/public' }
+public class DateToStringFormatter {
+    public static String getETAString(long endTimestamp) {
+        Date now = new Date();
+        Date end = new Date(endTimestamp);
+
+        long secs = (end.getTime() - now.getTime()) / 1000;
+        long hours = secs / 3600;
+        secs = secs % 3600;
+        long mins = (secs / 60) + 1; // +1 --> approx.
+
+        String output = "";
+        if (hours > 0) {
+            output = hours + "h ";
+        }
+        output += mins + "m";
+
+        return output;
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    public static String getTimeString(long endTimestamp) {
+        Date end = new Date(endTimestamp);
+
+        return new SimpleDateFormat("HH:mm").format(end);
     }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

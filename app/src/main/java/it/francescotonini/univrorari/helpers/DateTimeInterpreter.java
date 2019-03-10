@@ -22,33 +22,42 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.helpers;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import java.util.Calendar;
 
-        maven { url 'https://maven.fabric.io/public' }
+public class DateTimeInterpreter implements com.alamkanak.weekview.DateTimeInterpreter {
+    @Override public String interpretDate(Calendar date) {
+        String dayOfWeek = "";
+        switch (date.get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                dayOfWeek = "DOM";
+                break;
+            case 2:
+                dayOfWeek = "LUN";
+                break;
+            case 3:
+                dayOfWeek = "MAR";
+                break;
+            case 4:
+                dayOfWeek = "MER";
+                break;
+            case 5:
+                dayOfWeek = "GIO";
+                break;
+            case 6:
+                dayOfWeek = "VEN";
+                break;
+            case 7:
+                dayOfWeek = "SAB";
+                break;
+        }
+
+        return String.format("%s %s/%s", dayOfWeek.toUpperCase(), date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.MONTH) + 1);
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    @Override public String interpretTime(int hour) {
+        return String.format("%s:00", hour);
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

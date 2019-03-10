@@ -22,33 +22,47 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import android.app.Application;
+import android.content.ContextWrapper;
+import com.pixplicity.easyprefs.library.Prefs;
 
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Main class. Let's you access to singletons
+ */
+public class UniVROrariApp extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // This is a class with different thread pools
+        appExecutors = new AppExecutors();
+
+        // Build preferences
+        new Prefs.Builder()
+            .setContext(this)
+            .setMode(ContextWrapper.MODE_PRIVATE)
+            .setPrefsName(BuildConfig.APPLICATION_ID)
+            .setUseDefaultSharedPreference(true)
+            .build();
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    /**
+     * Gets an instance of {@link DataRepository}
+     * @return an instance of {@link DataRepository}
+     */
+    public DataRepository getDataRepository() {
+        return DataRepository.getInstance(getApplicationContext(), appExecutors);
     }
-}
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
+    /**
+     * Gets an instance of {@link AppExecutors}
+     * @return an instance of {@link AppExecutors}
+     */
+    public AppExecutors getAppExecutors() {
+        return appExecutors;
     }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    private AppExecutors appExecutors;
 }

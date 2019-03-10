@@ -22,33 +22,34 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.views;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import android.content.Intent;
+import android.os.Bundle;
+import it.francescotonini.univrorari.helpers.PreferenceHelper;
+import it.francescotonini.univrorari.viewmodels.BaseViewModel;
 
-        maven { url 'https://maven.fabric.io/public' }
+public class BootstrapActivity extends BaseActivity {
+    @Override
+    protected int getLayoutId() {
+        return 0;
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    @Override
+    protected BaseViewModel getViewModel() {
+        return null;
     }
-}
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
+        // Route to setup if first boot
+        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
+            startActivity(new Intent(this, SetupSelectCourseActivity.class));
+        }
+        else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

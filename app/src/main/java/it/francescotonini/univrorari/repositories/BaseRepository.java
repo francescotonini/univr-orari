@@ -22,33 +22,43 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.repositories;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
+import it.francescotonini.univrorari.AppExecutors;
+import it.francescotonini.univrorari.api.UniVRApi;
 
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Base repository
+ */
+public abstract class BaseRepository {
+    /**
+     * Initializes a new instance of this class
+     *
+     * @param appExecutors thread pool
+     * @param api instance of {@link UniVRApi}
+     */
+    public BaseRepository(AppExecutors appExecutors, UniVRApi api) {
+        this.appExecutors = appExecutors;
+        this.api = api;
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    /**
+     * Gets an instance of {@link AppExecutors}
+     * @return an instance of {@link AppExecutors}
+     */
+    public AppExecutors getAppExecutors() {
+        return appExecutors;
     }
+
+    /**
+     * Gets an instance of {@link UniVRApi}
+     * @return an instance of {@link UniVRApi}
+     */
+    public UniVRApi getApi() {
+        return api;
+    }
+
+    private final UniVRApi api;
+    private final AppExecutors appExecutors;
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

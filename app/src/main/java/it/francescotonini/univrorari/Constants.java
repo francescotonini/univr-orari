@@ -22,33 +22,11 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://maven.fabric.io/public' }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+/**
+ * App's constants
+ */
+public class Constants {
+    public static final String API_BASE_URL = "YOUR_BASE_URL";
 }

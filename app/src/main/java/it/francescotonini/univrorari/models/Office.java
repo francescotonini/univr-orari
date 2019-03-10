@@ -22,33 +22,44 @@
  * THE SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.francescotonini.univrorari.models;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Represents an office (every office has one or more rooms - e.g. Ca' Vignal 2)
+ */
+public class Office {
+    /**
+     * Gets the name of the office
+     * @return gets name of the office
+     */
+    public String getName() {
+        return name;
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.26.1'
+
+    /**
+     * Gets the id of the office
+     * @return the id of the office
+     */
+    public String getId() {
+        return id;
     }
-}
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com/' }
+    /**
+     * Sets the name
+     * @param name name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    /**
+     * Sets the id
+     * @param id id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String name;
+    private String id;
 }
