@@ -41,6 +41,7 @@ import me.francescotonini.univrorari.adapters.OfficesAdapter;
 import me.francescotonini.univrorari.adapters.TeachingsAdapter;
 import me.francescotonini.univrorari.databinding.ActivitySetupSelectOfficesBinding;
 import me.francescotonini.univrorari.helpers.DialogHelper;
+import me.francescotonini.univrorari.helpers.PreferenceHelper;
 import me.francescotonini.univrorari.helpers.SimpleDividerItemDecoration;
 import me.francescotonini.univrorari.models.ApiResponse;
 import me.francescotonini.univrorari.models.Office;
@@ -109,8 +110,21 @@ public class SetupSelectOfficesActivity extends BaseActivity {
 
     private View.OnClickListener saveButtonClickListener = click -> {
         List<Office> selectedOffices = ((OfficesAdapter)binding.activitySelectOfficesRecyclerView.getAdapter()).getSelectedOffices();
-        getViewModel().savePreferences(selectedOffices);
 
+        // If DID_FIRST_BOOT is true, then you are here from SettingsActivity
+        if (PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
+            getViewModel().savePreferences(selectedOffices);
+
+            Intent goToMain = new Intent(this, MainActivity.class);
+            goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            goToMain.putExtra("clear", true);
+            startActivity(goToMain);
+
+            return;
+        }
+
+        getViewModel().savePreferences(selectedOffices);
         Intent goToMain = new Intent(this, MainActivity.class);
         startActivity(goToMain);
     };

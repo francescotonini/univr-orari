@@ -30,7 +30,7 @@
     <string name="error_network_button_message">Ok</string>
     <string name="error_generic_title">Ops! Qualcosa è andato storto</string>
     <string name="error_generic_message">Ops! Qualcosa è andato storto</string>
-    <string name="error_generic_close_button">Ops! Qualcosa è andato storto</string>
+    <string name="error_generic_close_button">Ok</string>
     <string name="loading">Caricamento...</string>
 
     <!-- Setup -->

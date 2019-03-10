@@ -90,6 +90,7 @@ public class LessonsRepository extends BaseRepository {
     private void loadLessons(final int month, final int year) {
         if (selectedCourse == null || selectedTeachings == null) {
             Logger.w(LessonsRepository.class.getSimpleName(), "Can't get lessons since course and teachings are null");
+
             return;
         }
 
@@ -150,6 +151,7 @@ public class LessonsRepository extends BaseRepository {
      */
     public void clear() {
         lessonsMap.clear();
+        getPreferences();
     }
 
     private String calculateKey(int month, int year) {

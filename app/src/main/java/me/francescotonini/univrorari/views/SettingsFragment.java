@@ -25,10 +25,14 @@
 package me.francescotonini.univrorari.views;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
+import com.google.gson.Gson;
+
 import me.francescotonini.univrorari.R;
 import me.francescotonini.univrorari.viewmodels.SettingsViewModel;
 
@@ -54,8 +58,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        changeTeachings.setOnPreferenceClickListener(this);
+        changeOffices.setOnPreferenceClickListener(this);
+        clearCache.setOnPreferenceClickListener(this);
+    }
+
+    @Override
     public boolean onPreferenceClick(Preference preference) {
-        return false;
+        if (preference.getKey() == changeTeachings.getKey()) {
+            Intent goToSetupSelectYears = new Intent(getActivity(), SetupSelectYearsActivity.class);
+            goToSetupSelectYears.putExtra("course", new Gson().toJson(viewModel.getCourse()));
+
+            startActivity(goToSetupSelectYears);
+        }
+        else if (preference.getKey() == changeOffices.getKey()) {
+            startActivity(new Intent(getActivity(), SetupSelectOfficesActivity.class));
+        }
+
+        return true;
     }
 
     @Override

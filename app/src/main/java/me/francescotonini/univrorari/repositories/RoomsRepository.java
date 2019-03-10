@@ -85,7 +85,14 @@ public class RoomsRepository extends BaseRepository {
 
         Observable<Office> observable = Observable.fromIterable(offices);
         observable
-        .flatMap((Function<Office, ObservableSource<List<Room>>>) s -> getApi().getRooms(s.getId()))
+        .flatMap((Function<Office, ObservableSource<List<Room>>>) s -> getApi().getRooms(s.getId())
+            .map(t -> {
+                for (Room r : t) {
+                    r.setOfficeName(s.getName());
+                }
+
+                return t;
+            }))
         .retry(3)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

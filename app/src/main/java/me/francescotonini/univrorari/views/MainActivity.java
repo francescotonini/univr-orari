@@ -90,6 +90,11 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
 
         // Setup rooms click event
         binding.activityMainRoomsButton.setOnClickListener((click) -> startActivity(new Intent(this, RoomsActivity.class)));
+
+        if (getIntent().hasExtra("clear")) {
+            getViewModel().clear();
+            binding.activityMainWeekview.notifyDataSetChanged();
+        }
     }
 
     @Override protected void onResume() {

@@ -26,6 +26,9 @@ package me.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
+import com.google.gson.Gson;
+import me.francescotonini.univrorari.helpers.PreferenceHelper;
+import me.francescotonini.univrorari.models.Course;
 
 public class SettingsViewModel extends BaseViewModel {
     /**
@@ -35,5 +38,13 @@ public class SettingsViewModel extends BaseViewModel {
      */
     public SettingsViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    /**
+     * Get the {@link Course} saved
+     * @return {@link Course} saved
+     */
+    public Course getCourse() {
+        return new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
     }
 }
