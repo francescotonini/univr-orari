@@ -64,6 +64,27 @@
 -if interface * { @retrofit2.http.* <methods>; }
 -keep,allowobfuscation interface <1>
 
-# ScrollAwareFABBehavior
--keep class it.francescotonini.univrorari.helpers.** { *; }
--dontwarn it.francescotonini.univrorari.helpers.**
+# Okhttp3 + okio
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+# Search view
+-keep class android.support.v7.widget.SearchView { *; }
+
+# Data binding
+-keep class android.databinding.** { *; }
+-dontobfuscate
+-libraryjars  <java.home>/lib/rt.jar
+-libraryjars  <java.home>/lib/jce.jar
+-dontwarn
+
+-keep class it.francescotonini.univrorari.** { *; }
+-dontwarn it.francescotonini.univrorari.**
