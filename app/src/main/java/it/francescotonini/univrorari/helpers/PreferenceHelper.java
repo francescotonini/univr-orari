@@ -38,7 +38,8 @@ public class PreferenceHelper {
         TEACHINGS,
         OFFICES,
         DID_FIRST_BOOT,
-        WEEKVIEW_DAYS_TO_SHOW
+        WEEKVIEW_DAYS_TO_SHOW,
+        DARK_THEME
     }
 
     /**

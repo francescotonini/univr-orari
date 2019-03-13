@@ -27,6 +27,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/primary</item>
     </style>
 
     <style name="app_theme" parent="app_theme_base">
@@ -34,7 +35,8 @@
     </style>
 
     <style name="app_theme_bootstrap" parent="app_theme">
-        <item name="android:windowBackground">@color/primary</item>
+        <item name="colorPrimaryDark">@color/accent</item>
+        <item name="android:windowBackground">@color/accent</item>
     </style>
 
     <style name="app_theme_toolbar" parent="app_theme">
@@ -81,5 +83,4 @@
         <item name="android:textSize">@dimen/cell_tertiary_text_size</item>
         <item name="android:textStyle">normal</item>
     </style>
-
 </resources>

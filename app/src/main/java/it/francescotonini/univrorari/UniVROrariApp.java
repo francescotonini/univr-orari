@@ -28,6 +28,9 @@ import android.app.Application;
 import android.content.ContextWrapper;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import it.francescotonini.univrorari.helpers.PreferenceHelper;
+
 /**
  * Main class. Let's you access to singletons
  */
@@ -46,6 +49,10 @@ public class UniVROrariApp extends Application {
             .setPrefsName(BuildConfig.APPLICATION_ID)
             .setUseDefaultSharedPreference(true)
             .build();
+
+        if (PreferenceHelper.getBoolean(PreferenceHelper.Keys.DARK_THEME)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
     }
 
     /**

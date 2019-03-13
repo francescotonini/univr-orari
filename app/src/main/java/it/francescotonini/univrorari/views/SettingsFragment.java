@@ -28,16 +28,20 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.gson.Gson;
 
+import androidx.preference.SwitchPreference;
 import it.francescotonini.univrorari.R;
+import it.francescotonini.univrorari.helpers.DialogHelper;
 import it.francescotonini.univrorari.viewmodels.SettingsViewModel;
 
 @SuppressLint("ValidFragment")
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     public SettingsFragment(SettingsViewModel viewModel) {
         this.viewModel = viewModel;
     }
@@ -50,6 +54,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         changeOffices = findPreference("change_offices");
         clearCache = findPreference("clear_cache");
         appVersion = findPreference("app_version");
+        darkTheme = (SwitchPreference)findPreference("dark_theme");
 
         try {
             String version = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
@@ -64,6 +69,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         changeTeachings.setOnPreferenceClickListener(this);
         changeOffices.setOnPreferenceClickListener(this);
         clearCache.setOnPreferenceClickListener(this);
+        darkTheme.setOnPreferenceChangeListener(this);
+
+        darkTheme.setDefaultValue(viewModel.getDarkTheme());
     }
 
     @Override
@@ -82,6 +90,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference.getKey() == darkTheme.getKey()) {
+            viewModel.setDarkTheme((Boolean)newValue);
+
+            if ((Boolean) newValue) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            // Show popup
+            DialogHelper.show(getContext(), R.string.info, R.string.settings_enable_dark_theme_message, R.string.ok);
+        }
+
+        return true;
+    }
+
+    @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings);
     }
@@ -91,4 +118,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private Preference changeOffices;
     private Preference clearCache;
     private Preference appVersion;
+    private SwitchPreference darkTheme;
 }

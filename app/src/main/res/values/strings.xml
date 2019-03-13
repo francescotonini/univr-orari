@@ -28,9 +28,14 @@
     <string name="error_network_title">Errore di rete</string>
     <string name="error_network_message">"Qualcosa non ha funzionato mentre scaricavo i dati da internet. Assicurati di avere una connessione ad internet o riprova più tardi. "</string>
     <string name="error_network_button_message">Ok</string>
-    <string name="error_generic_title">Ops! Qualcosa è andato storto</string>
-    <string name="error_generic_message">Ops! Qualcosa è andato storto</string>
+
+    <string name="error_generic_title">Ops...</string>
+    <string name="error_generic_message">Qualcosa è andato storto. Riprova più tardi e se il problema persiste contatta lo sviluppatore!</string>
     <string name="error_generic_close_button">Ok</string>
+
+    <string name="ok">Ok</string>
+    <string name="info">Info</string>
+
     <string name="loading">Caricamento...</string>
 
     <!-- Setup -->
@@ -78,6 +83,8 @@
     <string name="settings_change_offices_title">Modifica aule</string>
     <string name="settings_change_offices_description">Aggiungi o rimuovi una o più aule da monitorare</string>
     <string name="settings_clear_cache_title">Pulisci cache</string>
+    <string name="settings_enable_dark_theme">Tema scuro</string>
+    <string name="settings_enable_dark_theme_message">Il tema di attiverà dalla prossima schermata ;)</string>
     <string name="settings_clear_cache_description">Cancella tutti i dati in locale</string>
     <string name="settings_info_title">Dubbi, domande, angosce...?</string>
     <string name="settings_info_description">Contatta lo sviluppatore!</string>

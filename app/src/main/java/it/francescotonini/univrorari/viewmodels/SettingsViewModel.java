@@ -47,4 +47,20 @@ public class SettingsViewModel extends BaseViewModel {
     public Course getCourse() {
         return new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
     }
+
+    /**
+     * Sets the dark theme
+     * @param value TRUE enables dark theme; FALSE disables dark theme
+     */
+    public void setDarkTheme(boolean value) {
+        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DARK_THEME, value);
+    }
+
+    /**
+     * Gets a boolean indicating whether or not dark theme is active
+     * @return TRUE if dark mode is active; otherwise FALSE
+     */
+    public boolean getDarkTheme() {
+        return PreferenceHelper.getBoolean(PreferenceHelper.Keys.DARK_THEME);
+    }
 }
