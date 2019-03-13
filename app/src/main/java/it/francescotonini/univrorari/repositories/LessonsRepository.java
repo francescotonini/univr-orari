@@ -24,8 +24,8 @@
 
 package it.francescotonini.univrorari.repositories;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

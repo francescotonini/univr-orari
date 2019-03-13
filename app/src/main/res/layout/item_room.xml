@@ -28,7 +28,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
     <data>
     </data>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/item_room_cardview"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -143,5 +143,5 @@
 
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -31,5 +31,5 @@
         app:showAsAction="collapseActionView|always"
         android:actionLayout="@layout/toolbar"
         android:title="@string/menu_setup_select_course_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

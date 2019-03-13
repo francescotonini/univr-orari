@@ -25,10 +25,10 @@
 package it.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 import java.util.List;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.ApiResponse;

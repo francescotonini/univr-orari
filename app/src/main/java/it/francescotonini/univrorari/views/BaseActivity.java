@@ -25,7 +25,7 @@
 package it.francescotonini.univrorari.views;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.viewmodels.BaseViewModel;
 

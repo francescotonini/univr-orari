@@ -25,7 +25,7 @@
 package it.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.Course;

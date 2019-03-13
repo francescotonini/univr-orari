@@ -24,10 +24,10 @@
 
 package it.francescotonini.univrorari.views;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.databinding.ActivitySettingsBinding;
