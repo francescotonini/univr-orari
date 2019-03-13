@@ -44,6 +44,7 @@
                 android:layout_below="@id/toolbar"
                 android:background="@color/background"
                 app:todayHeaderTextColor="@color/accent"
+                app:todayBackgroundColor="@color/accent_light"
                 app:timeColumnTextColor="@color/primary_text"
                 app:headerRowTextColor="@color/primary_text"
                 app:headerRowPadding="@dimen/spacing_twelve"
