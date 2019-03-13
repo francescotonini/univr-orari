@@ -24,9 +24,12 @@
 
 package it.francescotonini.univrorari.views;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekViewEvent;
@@ -93,7 +96,7 @@ public class RoomDetailsActivity extends BaseActivity implements MonthLoader.Mon
             return true;
         }
 
-        return super.onContextItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private Room room;

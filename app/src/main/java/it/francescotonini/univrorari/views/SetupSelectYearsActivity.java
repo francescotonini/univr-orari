@@ -80,14 +80,14 @@ public class SetupSelectYearsActivity extends BaseActivity {
         binding.activitySetupSelectYearsRecyclerview.setAdapter(new YearsAdapter(selectedCourse.getYears()));
     }
 
-    @Override public boolean onContextItemSelected(MenuItem item) {
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
         // Handles toolbar's back button
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
 
-        return super.onContextItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private Course selectedCourse;

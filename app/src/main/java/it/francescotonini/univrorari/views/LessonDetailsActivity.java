@@ -49,16 +49,6 @@ public class LessonDetailsActivity extends BaseActivity {
         return null;
     }
 
-    @Override public boolean onContextItemSelected(MenuItem item) {
-        // Handles toolbar's back button
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onContextItemSelected(item);
-    }
-
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -76,6 +66,16 @@ public class LessonDetailsActivity extends BaseActivity {
         binding.viewLessonActivityLessonTxt.setText(lesson.getName());
         binding.viewLessonActivityRoomTxt.setText(lesson.getRoom());
         binding.viewLessonActivityTeacherTxt.setText(lesson.getTeacher());
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        // Handles toolbar's back button
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private ActivityLessonDetailsBinding binding;
