@@ -24,29 +24,12 @@
   -->
 
 <resources>
-    <color name="primary">#FFFFFF</color>
-    <color name="primary_dark">#FFFFFF</color>
+    <color name="primary">#000000</color>
+    <color name="primary_dark">#000000</color>
     <color name="accent">#0336FF</color>
     <color name="accent_light">#100336FF</color>
-    <color name="background">#FFFFFF</color>
-    <color name="primary_text">#de000000</color>
-    <color name="secondary_text">#99000000</color>
+    <color name="background">#000000</color>
+    <color name="primary_text">#DEFFFFFF</color>
+    <color name="secondary_text">#99FFFFFF</color>
     <color name="divider">#E6E6E6</color>
-
-    <color name="white_70">#B3FFFFFF</color>
-    <color name="green">#67AF83</color>
-    <color name="dark_green">#62A67D</color>
-    <color name="red">#DE7572</color>
-    <color name="dark_red">#DB635F</color>
-
-    <array name="cell_colors">
-        <item>#4CAF50</item>
-        <item>#F4511E</item>
-        <item>#FB8C00</item>
-        <item>#03A9F4</item>
-        <item>#43A047</item>
-        <item>#F44336</item>
-        <item>#FFB300</item>
-        <item>#00BCD4</item>
-    </array>
 </resources>
