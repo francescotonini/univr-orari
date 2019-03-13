@@ -124,6 +124,9 @@ public class SetupSelectOfficesActivity extends BaseActivity {
 
         getViewModel().savePreferences(selectedOffices);
         Intent goToMain = new Intent(this, MainActivity.class);
+        goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        goToMain.putExtra("clear", true);
         startActivity(goToMain);
     };
 
