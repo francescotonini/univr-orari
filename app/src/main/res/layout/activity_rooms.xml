@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/spacing_extra_extra_medium"
+                android:paddingBottom="@dimen/spacing_twelve"
                 app:layoutManager="LinearLayoutManager"/>
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>

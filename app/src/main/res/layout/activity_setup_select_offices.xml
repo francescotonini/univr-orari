@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="@dimen/spacing_extra_large"
+            android:layout_margin="@dimen/spacing_fortyeight"
             android:textAlignment="center"
             style="@style/primary_text_view"/>
     </RelativeLayout>

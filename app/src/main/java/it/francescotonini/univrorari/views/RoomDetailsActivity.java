@@ -59,12 +59,13 @@ public class RoomDetailsActivity extends BaseActivity implements MonthLoader.Mon
         // Setup binding
         binding = DataBindingUtil.setContentView(this, getLayoutId());
 
-        // Setup Toolbar
-        setSupportActionBar((Toolbar) binding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         // Get room from intent
         room = (new Gson()).fromJson(getIntent().getStringExtra("room"), Room.class);
+
+        // Setup Toolbar
+        setSupportActionBar((Toolbar) binding.toolbar);
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle() + " " + room.getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Bind listener for month changes
         binding.activityRoomDetailsWeekview.setMonthChangeListener(this);

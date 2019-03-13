@@ -29,19 +29,18 @@
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/spacing_medium"
-        android:paddingBottom="@dimen/spacing_medium"
-        android:paddingLeft="@dimen/spacing_large"
-        android:paddingRight="@dimen/spacing_large"
+        android:layout_height="@dimen/spacing_fortyeight"
         android:background="?attr/selectableItemBackground"
         android:clickable="true">
         <TextView
             android:id="@+id/item_course_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_large"
-            android:layout_marginRight="@dimen/spacing_large"
+            android:paddingTop="@dimen/spacing_eight"
+            android:paddingBottom="@dimen/spacing_eight"
+            android:paddingLeft="@dimen/spacing_sixteen"
+            android:paddingRight="@dimen/spacing_sixteen"
+            android:lines="1"
             android:layout_centerVertical="true"
             tools:text="Course"
             style="@style/primary_text_view" />

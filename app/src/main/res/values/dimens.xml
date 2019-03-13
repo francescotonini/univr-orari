@@ -34,15 +34,14 @@
 
     <dimen name="toolbar_elevation">4dp</dimen>
 
-    <dimen name="spacing_xsmall">2dp</dimen>
-    <dimen name="spacing_small">4dp</dimen>
-    <dimen name="spacing_medium">8dp</dimen>
-    <dimen name="spacing_extra_medium">10dp</dimen>
-    <dimen name="spacing_extra_extra_medium">12dp</dimen>
-    <dimen name="spacing_extra_extra_extra_medium">24dp</dimen>
-    <dimen name="spacing_large">16dp</dimen>
-    <dimen name="spacing_extra_large">48dp</dimen>
-    <dimen name="spacing_bit_more_huge">56dp</dimen>
-    <dimen name="spacing_extra_huge">64dp</dimen>
-    <dimen name="spacing_extra_extra_bit_extra_huge">72dp</dimen>
+    <dimen name="spacing_four">4dp</dimen>
+    <dimen name="spacing_eight">8dp</dimen>
+    <dimen name="spacing_ten">10dp</dimen>
+    <dimen name="spacing_twelve">12dp</dimen>
+    <dimen name="spacing_sixteen">16dp</dimen>
+    <dimen name="spacing_twentyfour">24dp</dimen>
+    <dimen name="spacing_fortyeight">48dp</dimen>
+    <dimen name="spacing_fiftysix">56dp</dimen>
+    <dimen name="spacing_sixtyfour">64dp</dimen>
+    <dimen name="spacing_seventytwo">72dp</dimen>
 </resources>

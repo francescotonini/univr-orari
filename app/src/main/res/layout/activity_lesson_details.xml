@@ -36,26 +36,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/spacing_eight"
             android:layout_below="@id/toolbar"
             android:orientation="vertical">
 
             <!-- Lesson -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_extra_extra_bit_extra_huge"
-                android:layout_marginLeft="@dimen/spacing_large"
-                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_sixteen"
+                android:layout_marginRight="@dimen/spacing_sixteen"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="@dimen/spacing_extra_extra_extra_medium"
-                    android:layout_height="@dimen/spacing_extra_extra_extra_medium"
+                    android:layout_width="@dimen/spacing_twentyfour"
+                    android:layout_height="@dimen/spacing_twentyfour"
                     android:layout_centerVertical="true"
                     android:src="@drawable/lesson" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/spacing_bit_more_huge"
+                    android:layout_marginLeft="@dimen/spacing_fiftysix"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
@@ -74,20 +75,20 @@
             <!-- Teacher -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_extra_extra_bit_extra_huge"
-                android:layout_marginLeft="@dimen/spacing_large"
-                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_height="@dimen/spacing_seventytwo"
+                android:layout_marginLeft="@dimen/spacing_sixteen"
+                android:layout_marginRight="@dimen/spacing_sixteen"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="@dimen/spacing_extra_extra_extra_medium"
-                    android:layout_height="@dimen/spacing_extra_extra_extra_medium"
+                    android:layout_width="@dimen/spacing_twentyfour"
+                    android:layout_height="@dimen/spacing_twentyfour"
                     android:layout_centerVertical="true"
                     android:src="@drawable/person" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/spacing_bit_more_huge"
+                    android:layout_marginLeft="@dimen/spacing_fiftysix"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
@@ -106,20 +107,20 @@
             <!-- Date -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_extra_extra_bit_extra_huge"
-                android:layout_marginLeft="@dimen/spacing_large"
-                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_height="@dimen/spacing_seventytwo"
+                android:layout_marginLeft="@dimen/spacing_sixteen"
+                android:layout_marginRight="@dimen/spacing_sixteen"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="@dimen/spacing_extra_extra_extra_medium"
-                    android:layout_height="@dimen/spacing_extra_extra_extra_medium"
+                    android:layout_width="@dimen/spacing_twentyfour"
+                    android:layout_height="@dimen/spacing_twentyfour"
                     android:layout_centerVertical="true"
                     android:src="@drawable/calendar_date" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/spacing_bit_more_huge"
+                    android:layout_marginLeft="@dimen/spacing_fiftysix"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
@@ -138,20 +139,20 @@
             <!-- Room -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_extra_extra_bit_extra_huge"
-                android:layout_marginLeft="@dimen/spacing_large"
-                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_height="@dimen/spacing_seventytwo"
+                android:layout_marginLeft="@dimen/spacing_sixteen"
+                android:layout_marginRight="@dimen/spacing_sixteen"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="@dimen/spacing_extra_extra_extra_medium"
-                    android:layout_height="@dimen/spacing_extra_extra_extra_medium"
+                    android:layout_width="@dimen/spacing_twentyfour"
+                    android:layout_height="@dimen/spacing_twentyfour"
                     android:layout_centerVertical="true"
                     android:src="@drawable/room" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/spacing_bit_more_huge"
+                    android:layout_marginLeft="@dimen/spacing_fiftysix"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"

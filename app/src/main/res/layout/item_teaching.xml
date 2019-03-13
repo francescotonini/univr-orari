@@ -30,23 +30,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/spacing_extra_large"
-        android:paddingTop="@dimen/spacing_medium"
-        android:paddingBottom="@dimen/spacing_medium"
-        android:paddingLeft="@dimen/spacing_large"
-        android:paddingRight="@dimen/spacing_large"
+        android:minHeight="@dimen/spacing_sixtyfour"
+        android:maxHeight="@dimen/spacing_sixtyfour"
         android:background="?attr/selectableItemBackground"
         android:clickable="true">
 
-        <TextView
-            android:id="@+id/item_teaching_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_large"
-            android:layout_marginRight="@dimen/spacing_extra_huge"
+            android:paddingTop="@dimen/spacing_eight"
+            android:paddingBottom="@dimen/spacing_eight"
+            android:paddingLeft="@dimen/spacing_sixteen"
+            android:paddingRight="@dimen/spacing_sixtyfour"
             android:layout_centerVertical="true"
-            tools:text="Year"
-            style="@style/primary_text_view" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/item_teaching_teaching_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Teaching"
+                android:lines="1"
+                style="@style/primary_text_view" />
+            <TextView
+                android:id="@+id/item_teaching_year_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Year"
+                android:lines="1"
+                style="@style/secondary_text_view" />
+        </LinearLayout>
 
         <CheckBox
             android:id="@+id/item_teaching_check"
@@ -54,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/spacing_large" />
+            android:paddingRight="@dimen/spacing_sixteen" />
 
     </RelativeLayout>
 </layout>

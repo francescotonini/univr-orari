@@ -47,10 +47,12 @@ public class TeachingsAdapter extends RecyclerView.Adapter<TeachingsAdapter.View
      * Initializes a new instance of this adapter
      * @param teachings list of {@link Teaching}
      * @param selectedYears list of {@link Year} already selected
+     * @param allYears list of all {@link Year} available
      */
-    public TeachingsAdapter(List<Teaching> teachings, List<Year> selectedYears) {
+    public TeachingsAdapter(List<Teaching> teachings, List<Year> selectedYears, List<Year> allYears) {
         this.teachings = teachings;
         this.selectedTeachings = new ArrayList<>();
+        this.allYears = allYears;
 
         // TODO: find better solution
         for (Year year : selectedYears) {
@@ -127,7 +129,8 @@ public class TeachingsAdapter extends RecyclerView.Adapter<TeachingsAdapter.View
         public void set(Teaching teaching) {
             this.teaching = teaching;
 
-            binding.itemTeachingText.setText(this.teaching.getName());
+            binding.itemTeachingTeachingText.setText(this.teaching.getName());
+            binding.itemTeachingYearText.setText(getYearName(this.teaching));
             binding.itemTeachingCheck.setChecked(selectedTeachings.contains(this.teaching));
         }
 
@@ -144,10 +147,21 @@ public class TeachingsAdapter extends RecyclerView.Adapter<TeachingsAdapter.View
             }
         }
 
+        private String getYearName(Teaching teaching) {
+            for (Year year : allYears) {
+                if (teaching.getYearId().equals(year.getId())) {
+                    return year.getName();
+                }
+            }
+
+            return "";
+        }
+
         private Teaching teaching;
         private ItemTeachingBinding binding;
     }
 
     private List<Teaching> selectedTeachings;
     private List<Teaching> teachings;
+    private List<Year> allYears;
 }

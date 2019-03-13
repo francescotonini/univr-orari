@@ -46,12 +46,12 @@
                 app:todayHeaderTextColor="@color/accent"
                 app:timeColumnTextColor="@color/primary_text"
                 app:headerRowTextColor="@color/primary_text"
-                app:headerRowPadding="@dimen/spacing_extra_extra_medium"
+                app:headerRowPadding="@dimen/spacing_twelve"
                 app:headerRowBackgroundColor="@android:color/white"
                 app:eventTextColor="@android:color/white"
-                app:eventCornerRadius="@dimen/spacing_xsmall"
+                app:eventCornerRadius="@dimen/spacing_four"
                 app:eventTextSize="@dimen/tertiary_text_size"
-                app:hourHeight="@dimen/spacing_bit_more_huge"
+                app:hourHeight="@dimen/spacing_fiftysix"
                 app:numberOfVisibleDays="3" />
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/activity_main_rooms_button"

@@ -37,14 +37,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
-            android:layout_marginRight="@dimen/spacing_medium"
+            android:layout_marginRight="@dimen/spacing_eight"
             app:todayHeaderTextColor="@color/accent"
-            app:headerRowPadding="@dimen/spacing_extra_extra_medium"
+            app:headerRowPadding="@dimen/spacing_twelve"
             app:headerRowBackgroundColor="@android:color/white"
             app:eventTextColor="@android:color/white"
-            app:eventCornerRadius="@dimen/spacing_xsmall"
+            app:eventCornerRadius="@dimen/spacing_four"
             app:eventTextSize="@dimen/tertiary_text_size"
-            app:hourHeight="@dimen/spacing_bit_more_huge"
+            app:hourHeight="@dimen/spacing_fiftysix"
             app:numberOfVisibleDays="1"
             app:xScrollingSpeed="0.0" />
     </RelativeLayout>

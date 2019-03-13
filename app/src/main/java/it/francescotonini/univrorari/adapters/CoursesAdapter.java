@@ -114,7 +114,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHold
          * @param course course
          */
         public void bind(Course course) {
-            binding.itemCourseText.setText(course.getName());
+            binding.itemCourseText.setText(course.getName().replace("Laurea", "L."));
             binding.getRoot().setOnClickListener(view -> listener.onItemClick(course));
         }
 

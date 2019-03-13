@@ -146,7 +146,7 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
             return;
         }
 
-        binding.activitySetupSelectTeachingsRecyclerview.setAdapter(new TeachingsAdapter(teachings.getData(), selectedYears));
+        binding.activitySetupSelectTeachingsRecyclerview.setAdapter(new TeachingsAdapter(teachings.getData(), selectedYears, course.getYears()));
 
         // Update UI accordingly
         binding.activitySetupSelectTeachingsSaveButton.setEnabled(true);

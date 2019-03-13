@@ -54,7 +54,7 @@
     <string name="activity_rooms_title">Aule libere</string>
 
     <!-- Room details -->
-    <string name="activity_room_details_title">Calendario aula</string>
+    <string name="activity_room_details_title">Aula</string>
 
     <!-- Fragment rooms -->
     <string name="item_room_available_for">libera per</string>

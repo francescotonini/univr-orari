@@ -96,10 +96,11 @@ public class Room {
             end.setTimeInMillis(getEndTimestamp());
             end.set(Calendar.MINUTE, end.get(Calendar.MINUTE) - 1);
 
-            return new WeekViewEvent<>(getStartTimestamp(), getName(), start, end, getOfficeName(), R.color.accent, false, null);
+            return new WeekViewEvent<>(getStartTimestamp(), getName(), start, end, "", R.color.accent, false, null);
         }
 
         private String name;
+        private String officeName;
         private long startTimestamp;
         private long endTimestamp;
     }
