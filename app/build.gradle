@@ -23,6 +23,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
 
 android {
@@ -60,8 +61,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.google.firebase:firebase-perf:16.2.4'
     
     // Week view
     implementation 'com.github.thellmund:Android-Week-View:3.1.3'
