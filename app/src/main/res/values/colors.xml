@@ -26,8 +26,8 @@
 <resources>
     <color name="primary">#FFFFFF</color>
     <color name="primary_dark">#FFFFFF</color>
-    <color name="accent">#0336FF</color>
-    <color name="accent_light">#100336FF</color>
+    <color name="accent">#039be5</color>
+    <color name="accent_light">#10039be5</color>
     <color name="background">#FFFFFF</color>
     <color name="primary_text">#de000000</color>
     <color name="secondary_text">#99000000</color>

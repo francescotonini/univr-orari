@@ -24,11 +24,11 @@
   -->
 
 <resources>
-    <color name="primary">#000000</color>
-    <color name="primary_dark">#000000</color>
-    <color name="accent">#0336FF</color>
-    <color name="accent_light">#100336FF</color>
-    <color name="background">#000000</color>
+    <color name="primary">#202125</color>
+    <color name="primary_dark">#202125</color>
+    <color name="accent">#29b6f6</color>
+    <color name="accent_light">#1029b6f6</color>
+    <color name="background">#202125</color>
     <color name="primary_text">#DEFFFFFF</color>
     <color name="secondary_text">#99FFFFFF</color>
     <color name="divider">#E6E6E6</color>

@@ -27,6 +27,7 @@ package it.francescotonini.univrorari.views;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -71,7 +72,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         clearCache.setOnPreferenceClickListener(this);
         darkTheme.setOnPreferenceChangeListener(this);
 
-        darkTheme.setDefaultValue(viewModel.getDarkTheme());
+        darkTheme.setDefaultValue(viewModel.getUITheme() == Configuration.UI_MODE_NIGHT_YES);
     }
 
     @Override
@@ -92,12 +93,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference.getKey() == darkTheme.getKey()) {
-            viewModel.setDarkTheme((Boolean)newValue);
 
             if ((Boolean) newValue) {
+                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_YES);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
             else {
+                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_NO);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
 

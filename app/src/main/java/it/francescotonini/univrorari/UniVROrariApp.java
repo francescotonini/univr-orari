@@ -26,6 +26,8 @@ package it.francescotonini.univrorari;
 
 import android.app.Application;
 import android.content.ContextWrapper;
+import android.content.res.Configuration;
+
 import com.pixplicity.easyprefs.library.Prefs;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -50,9 +52,7 @@ public class UniVROrariApp extends Application {
             .setUseDefaultSharedPreference(true)
             .build();
 
-        if (PreferenceHelper.getBoolean(PreferenceHelper.Keys.DARK_THEME)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getInt(PreferenceHelper.Keys.UI_THEME, getResources().getConfiguration().uiMode));
     }
 
     /**

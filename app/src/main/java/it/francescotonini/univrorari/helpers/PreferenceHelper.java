@@ -39,7 +39,7 @@ public class PreferenceHelper {
         OFFICES,
         DID_FIRST_BOOT,
         WEEKVIEW_DAYS_TO_SHOW,
-        DARK_THEME
+        UI_THEME
     }
 
     /**

@@ -49,18 +49,18 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     /**
-     * Sets the dark theme
-     * @param value TRUE enables dark theme; FALSE disables dark theme
+     * Sets the ui theme for this app
+     * @param value
      */
-    public void setDarkTheme(boolean value) {
-        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DARK_THEME, value);
+    public void setUITheme(int value) {
+        PreferenceHelper.setInt(PreferenceHelper.Keys.UI_THEME, value);
     }
 
     /**
      * Gets a boolean indicating whether or not dark theme is active
      * @return TRUE if dark mode is active; otherwise FALSE
      */
-    public boolean getDarkTheme() {
-        return PreferenceHelper.getBoolean(PreferenceHelper.Keys.DARK_THEME);
+    public int getUITheme() {
+        return PreferenceHelper.getInt(PreferenceHelper.Keys.UI_THEME, getApplication().getResources().getConfiguration().uiMode);
     }
 }
