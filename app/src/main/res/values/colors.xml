@@ -33,11 +33,8 @@
     <color name="secondary_text">#99000000</color>
     <color name="divider">#E6E6E6</color>
 
-    <color name="white_70">#B3FFFFFF</color>
-    <color name="green">#67AF83</color>
-    <color name="dark_green">#62A67D</color>
-    <color name="red">#DE7572</color>
-    <color name="dark_red">#DB635F</color>
+    <color name="green">#43A047</color>
+    <color name="red">#F44336</color>
 
     <array name="cell_colors">
         <item>#4CAF50</item>

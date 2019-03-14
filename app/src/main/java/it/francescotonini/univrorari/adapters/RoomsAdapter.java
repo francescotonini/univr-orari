@@ -151,22 +151,12 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
             Room.Event nextEvent = this.room.getNextEvent();
 
             if (nowEvent != null) {
-                binding.itemRoomTimeDescriptionText.setText(R.string.item_room_available_from);
-                binding.itemRoomEtaDescriptionText.setText(R.string.item_room_busy_for);
                 binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(nowEvent.getEndTimestamp()));
-                binding.itemRoomEtaText.setText(DateToStringFormatter.getETAString(nowEvent.getEndTimestamp()));
-
-                binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.dark_red);
-                binding.itemRoomBottomLinearlayout.setBackgroundResource(R.color.red);
+                binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.red);
             }
             else if (nextEvent != null) {
-                binding.itemRoomTimeDescriptionText.setText(R.string.item_room_busy_from);
-                binding.itemRoomEtaDescriptionText.setText(R.string.item_room_available_for);
                 binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(nextEvent.getStartTimestamp()));
-                binding.itemRoomEtaText.setText(DateToStringFormatter.getETAString(nextEvent.getStartTimestamp()));
-
-                binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.dark_green);
-                binding.itemRoomBottomLinearlayout.setBackgroundResource(R.color.green);
+                binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.green);
             }
             else {
                 Logger.e(RoomsAdapter.class.getSimpleName(), "Both nextEvent and nowEvent are null.");

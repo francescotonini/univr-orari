@@ -79,7 +79,7 @@
     </style>
 
     <style name="cell_tertiary_text_view" parent="android:Widget.TextView">
-        <item name="android:textColor">@color/white_70</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/cell_tertiary_text_size</item>
         <item name="android:textStyle">normal</item>
     </style>
