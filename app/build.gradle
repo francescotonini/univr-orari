@@ -32,8 +32,8 @@ android {
         applicationId "it.francescotonini.univrorari"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 19
-        versionName "2.0.2"
+        versionCode 20
+        versionName "2.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
