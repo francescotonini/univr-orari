@@ -137,81 +137,6 @@ public class Room {
     }
 
     /**
-     * Gets the current {@link Room.Event}
-     * @return the current {@link Room.Event}
-     */
-    public Room.Event getCurrentEvent() {
-        Date now = new Date();
-
-        // Are you using the app after the uni closed?
-        if (now.after(getClosingCalendar().getTime())) {
-            return getCloseEvent();
-        }
-
-        // Are you here before opening time?
-        if (now.before(getOpeningCalendar().getTime())) {
-            Event e = new Room.Event();
-            e.setStartTimestamp(now.getTime() / 1000L);
-            e.setEndTimestamp(getOpeningCalendar().getTime().getTime() / 1000L);
-
-            return e;
-        }
-
-        // Check for events
-        for (Room.Event e : getEvents()) {
-            Date startTime = new Date(e.getStartTimestamp());
-            Date endTime = new Date(e.getEndTimestamp());
-
-            if (startTime.before(now) && endTime.after(now)) {
-                return e;
-            }
-        }
-
-        return null;
-    }
-
-    private Calendar getClosingCalendar() {
-        Calendar closingCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-        closingCalendar.set(Calendar.HOUR_OF_DAY, 19);
-        closingCalendar.set(Calendar.MINUTE, 30);
-
-        return closingCalendar;
-    }
-
-    private Calendar getOpeningCalendar() {
-        Calendar openingCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-        openingCalendar.set(Calendar.HOUR_OF_DAY, 7);
-        openingCalendar.set(Calendar.MINUTE, 30);
-
-        return openingCalendar;
-    }
-
-    /**
-     * Gets the next {@link Room.Event}
-     * @return the next {@link Room.Event}
-     */
-    public Room.Event getNextEvent() {
-        Date now = new Date();
-        for (Room.Event e : getEvents()) {
-            Date startTime = new Date(e.getStartTimestamp());
-
-            if (startTime.after(now)) {
-                return e;
-            }
-        }
-
-        Calendar closingCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-        closingCalendar.set(Calendar.HOUR_OF_DAY, 19);
-        closingCalendar.set(Calendar.MINUTE, 30);
-
-        if (now.before(closingCalendar.getTime())) {
-            return getCloseEvent();
-        }
-
-        return null;
-    }
-
-    /**
      * Gets the name of the {@link Office} associated with this room
      * @return name of the {@link Office}
      */
@@ -244,30 +169,41 @@ public class Room {
     }
 
     /**
-     * Gets the event between closing time and opening time of this room
-     * @return "room close" event
+     * Gets a boolean indicating whether or not this room is available or not
+     * @return if TRUE this room is available; otherwise not
      */
-    public Room.Event getCloseEvent() {
-        Event event = new Event();
-        event.name = "Aula chiusa."; // TODO: replace
+    public boolean isFree() {
+        return isFree;
+    }
 
-        Calendar closingCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-        closingCalendar.set(Calendar.HOUR_OF_DAY, 19);
-        closingCalendar.set(Calendar.MINUTE, 30);
+    /**
+     * Sets a boolean indicating whether or not this room is available or not
+     * @param free if TRUE this room is available; otherwise not
+     */
+    public void setFree(boolean free) {
+        isFree = free;
+    }
 
-        Calendar openingCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
-        openingCalendar.set(Calendar.HOUR_OF_DAY, 7);
-        openingCalendar.set(Calendar.MINUTE, 30);
-        openingCalendar.set(Calendar.DAY_OF_MONTH, openingCalendar.get(Calendar.DAY_OF_MONTH) + 1);
+    /**
+     * Gets the timestamp when the room gets available or not
+     * @return the timestamp when the room gets available or not
+     */
+    public long getUntil() {
+        return until;
+    }
 
-        event.setStartTimestamp(closingCalendar.getTimeInMillis() / 1000L);
-        event.setEndTimestamp(openingCalendar.getTimeInMillis() / 1000L);
-
-        return event;
+    /**
+     * Sets the timestamp when the room gets available or not
+     * @param until the timestamp when the room gets available or not
+     */
+    public void setUntil(long until) {
+        this.until = until;
     }
 
     private int id;
     private String officeName;
     private String name;
     private List<Event> events;
+    private boolean isFree;
+    private long until;
 }

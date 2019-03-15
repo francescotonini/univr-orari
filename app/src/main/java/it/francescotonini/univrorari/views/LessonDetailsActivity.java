@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.databinding.ActivityLessonDetailsBinding;
@@ -62,7 +63,7 @@ public class LessonDetailsActivity extends BaseActivity {
         Lesson lesson = (new Gson()).fromJson(getIntent().getStringExtra("lesson"), Lesson.class);
         Calendar startTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
         startTime.setTimeInMillis(lesson.getStartTimestamp());
-        binding.viewLessonActivityDateTxt.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(startTime.getTime()));
+        binding.viewLessonActivityDateTxt.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALIAN).format(startTime.getTime()));
         binding.viewLessonActivityLessonTxt.setText(lesson.getName());
         binding.viewLessonActivityRoomTxt.setText(lesson.getRoom());
         binding.viewLessonActivityTeacherTxt.setText(lesson.getTeacher());

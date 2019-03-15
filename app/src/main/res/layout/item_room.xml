@@ -57,8 +57,8 @@
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
-                android:layout_marginRight="@dimen/spacing_four"
-                android:layout_toLeftOf="@id/item_room_time_text"
+                android:layout_marginEnd="@dimen/spacing_eight"
+                android:layout_toStartOf="@id/item_room_time_text"
                 style="@style/cell_primary_text_view" />
 
             <!-- Second row -->
@@ -68,13 +68,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/item_room_text"
                 android:layout_marginTop="@dimen/spacing_four"
-                android:layout_marginRight="@dimen/spacing_four"
+                android:layout_marginEnd="@dimen/spacing_eight"
                 android:orientation="horizontal"
                 tools:text="Room"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
-                android:layout_toLeftOf="@id/item_room_time_text"
+                android:layout_toStartOf="@id/item_room_time_text"
                 style="@style/cell_secondary_text_view" />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 tools:text="--"
                 style="@style/cell_big_text_view" />

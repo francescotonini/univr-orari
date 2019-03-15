@@ -35,6 +35,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import com.google.gson.Gson;
 import java.util.List;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.UniVROrariApp;
 import it.francescotonini.univrorari.adapters.RoomsAdapter;
@@ -72,11 +74,22 @@ public class RoomsActivity extends BaseActivity implements RoomsAdapter.OnItemCl
         adapter = new RoomsAdapter(this);
         binding.activityRoomsRecyclerView.setAdapter(adapter);
 
-        // Setup livedata
-        getViewModel().getRooms().observe(this, this);
+        // Setup refresh event
+        binding.activityRoomsRefreshlayout.setOnRefreshListener(() -> {
+            getViewModel().refresh();
+        });
 
         // Start animation
         binding.activityRoomsRefreshlayout.setRefreshing(true);
+
+        // Connect livedata
+        getViewModel().getRooms().observe(this, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {

@@ -27,7 +27,6 @@ package it.francescotonini.univrorari.views;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
-
 import android.view.MenuItem;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekViewDisplayable;
@@ -36,15 +35,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.databinding.ActivityRoomDetailsBinding;
 import it.francescotonini.univrorari.helpers.DateTimeInterpreter;
-import it.francescotonini.univrorari.helpers.PreferenceHelper;
-import it.francescotonini.univrorari.helpers.SnackBarHelper;
-import it.francescotonini.univrorari.models.ApiResponse;
-import it.francescotonini.univrorari.models.Lesson;
 import it.francescotonini.univrorari.models.Room;
 import it.francescotonini.univrorari.viewmodels.BaseViewModel;
 
@@ -75,6 +68,13 @@ public class RoomDetailsActivity extends BaseActivity implements MonthLoader.Mon
         // Bind listener for month changes
         binding.activityRoomDetailsWeekview.setMonthChangeListener(this);
         binding.activityRoomDetailsWeekview.setDateTimeInterpreter(new DateTimeInterpreter());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        binding.activityRoomDetailsWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     @Override public List<WeekViewDisplayable<Room.Event>> onMonthChange(Calendar startDate, Calendar endDate) {

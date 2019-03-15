@@ -26,6 +26,7 @@ package it.francescotonini.univrorari.helpers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateToStringFormatter {
     public static String getETAString(long endTimestamp) {
@@ -49,6 +50,6 @@ public class DateToStringFormatter {
     public static String getTimeString(long endTimestamp) {
         Date end = new Date(endTimestamp);
 
-        return new SimpleDateFormat("HH:mm").format(end);
+        return new SimpleDateFormat("HH:mm", Locale.ITALIAN).format(end);
     }
 }

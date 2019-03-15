@@ -75,6 +75,9 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Clear data (fixes theme change)
+        getViewModel().clear();
+
         // Setup binding
         binding = DataBindingUtil.setContentView(this, getLayoutId());
 
@@ -86,7 +89,6 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
         binding.activityMainWeekview.setDateTimeInterpreter(new DateTimeInterpreter());
         binding.activityMainWeekview.setMonthChangeListener(this);
         binding.activityMainWeekview.setOnEventClickListener(this);
-        binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
         // Setup rooms click event
         binding.activityMainRoomsButton.setOnClickListener((click) -> startActivity(new Intent(this, RoomsActivity.class)));
@@ -95,12 +97,8 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
             getViewModel().clear();
             binding.activityMainWeekview.notifyDataSetChanged();
         }
-    }
 
-    @Override protected void onResume() {
-        super.onResume();
-
-        binding.activityMainWeekview.notifyDataSetChanged();
+        binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

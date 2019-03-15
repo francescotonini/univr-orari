@@ -128,6 +128,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * Initializes a new instance of this View holder
+         *
          * @param itemView view
          */
         public ViewHolder(View itemView) {
@@ -138,6 +139,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
 
         /**
          * Sets the room to show
+         *
          * @param room room
          */
         public void set(Room room) {
@@ -147,19 +149,12 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
             binding.itemRoomText.setText(this.room.getName());
             binding.itemRoomOfficeText.setText(this.room.getOfficeName());
 
-            Room.Event nowEvent = this.room.getCurrentEvent();
-            Room.Event nextEvent = this.room.getNextEvent();
-
-            if (nowEvent != null) {
-                binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(nowEvent.getEndTimestamp()));
+            if (!room.isFree()) {
+                binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(room.getUntil()));
                 binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.red);
-            }
-            else if (nextEvent != null) {
-                binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(nextEvent.getStartTimestamp()));
+            } else {
+                binding.itemRoomTimeText.setText(DateToStringFormatter.getTimeString(room.getUntil()));
                 binding.itemRoomTopRelativelayout.setBackgroundResource(R.color.green);
-            }
-            else {
-                Logger.e(RoomsAdapter.class.getSimpleName(), "Both nextEvent and nowEvent are null.");
             }
         }
 
