@@ -71,6 +71,7 @@ public class OfficesRepository extends BaseRepository {
      */
     public void savePreferences(List<Office> offices) {
         PreferenceHelper.setString(PreferenceHelper.Keys.OFFICES, new Gson().toJson(offices));
+        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DID_SELECT_OFFICES, true);
     }
 
     private void loadOffices() {

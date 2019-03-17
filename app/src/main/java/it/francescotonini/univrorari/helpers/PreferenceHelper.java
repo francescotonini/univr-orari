@@ -37,7 +37,8 @@ public class PreferenceHelper {
         COURSE,
         TEACHINGS,
         OFFICES,
-        DID_FIRST_BOOT,
+        DID_SELECT_COURSE,
+        DID_SELECT_OFFICES,
         WEEKVIEW_DAYS_TO_SHOW,
         UI_THEME
     }

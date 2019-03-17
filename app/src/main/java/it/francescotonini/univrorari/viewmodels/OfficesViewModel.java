@@ -63,7 +63,7 @@ public class OfficesViewModel extends BaseViewModel {
         repository.savePreferences(offices);
 
         // TODO: this is not a good place to place the next line of code
-        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT, true);
+        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DID_SELECT_COURSE, true);
     }
 
     /**

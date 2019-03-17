@@ -26,10 +26,10 @@
 <resources>
     <color name="primary">#202125</color>
     <color name="primary_dark">#202125</color>
-    <color name="accent">#29b6f6</color>
-    <color name="accent_light">#1029b6f6</color>
+    <color name="accent">#29B6F6</color>
+    <color name="accent_light">#1029B6F6</color>
     <color name="background">#202125</color>
-    <color name="primary_text">#DEFFFFFF</color>
-    <color name="secondary_text">#99FFFFFF</color>
-    <color name="divider">#E6E6E6</color>
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B3FFFFFF</color>
+    <color name="divider">#1FFFFFFF</color>
 </resources>

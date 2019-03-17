@@ -60,7 +60,6 @@ public class SetupSelectYearsActivity extends BaseActivity {
         // Add toolbar + subtitle
         setSupportActionBar((Toolbar)binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((Toolbar)binding.toolbar).setSubtitle(R.string.activity_setup_select_years_description);
 
         // Set layout manager and divider
         binding.activitySetupSelectYearsRecyclerview.setLayoutManager(new LinearLayoutManager(this));

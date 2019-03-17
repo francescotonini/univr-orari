@@ -26,29 +26,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_refresh"
-        app:showAsAction="always"
-        android:icon="@drawable/refresh"
-        android:title="@string/menu_main_top_bar_refresh" />
-    <item
-        android:id="@+id/menu_main_rooms"
-        app:showAsAction="never"
-        android:icon="@drawable/refresh"
-        android:title="@string/menu_main_top_bar_rooms" />
-    <item
-        android:id="@+id/menu_main_day_view"
-        app:showAsAction="never"
-        android:title="@string/menu_main_top_bar_day" />
-    <item
-        android:id="@+id/menu_main_three_day_view"
-        app:showAsAction="never"
-        android:title="@string/menu_main_top_bar_three_day" />
-    <item
-        android:id="@+id/menu_main_week_view"
-        app:showAsAction="never"
-        android:title="@string/menu_main_top_bar_week" />
-    <item
-        android:id="@+id/menu_main_settings"
-        app:showAsAction="never"
-        android:title="@string/menu_main_top_bar_settings" />
+        android:id="@+id/menu_setup_select_teachings_search"
+        android:icon="@drawable/search"
+        app:showAsAction="collapseActionView|always"
+        android:actionLayout="@layout/toolbar"
+        android:title="@string/menu_setup_select_course_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

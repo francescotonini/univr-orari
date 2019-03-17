@@ -45,7 +45,7 @@ public class BootstrapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         // Route to setup if first boot
-        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
+        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_SELECT_COURSE)) {
             startActivity(new Intent(this, SetupSelectCourseActivity.class));
         }
         else {

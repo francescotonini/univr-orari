@@ -70,7 +70,6 @@ public class SetupSelectCourseActivity extends BaseActivity implements CoursesAd
 
         // Add toolbar + subtitle
         setSupportActionBar((Toolbar)binding.toolbar);
-        ((Toolbar)binding.toolbar).setSubtitle(R.string.activity_setup_select_course_description);
 
         // Set layout manager and divider
         binding.activitySetupSelectCoursesRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -111,20 +110,6 @@ public class SetupSelectCourseActivity extends BaseActivity implements CoursesAd
         return true;
     }
 
-    private SearchView.OnQueryTextListener searchTextListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(query);
-            return true;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(newText);
-            return true;
-        }
-    };
-
     private CoursesViewModel viewModel;
     private ActivitySetupSelectCourseBinding binding;
 
@@ -146,4 +131,18 @@ public class SetupSelectCourseActivity extends BaseActivity implements CoursesAd
             binding.activitySetupSelectCoursesRecyclerview.setAdapter(new CoursesAdapter(response.getData(), this));
         }
     });
+
+    private SearchView.OnQueryTextListener searchTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(query);
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(newText);
+            return true;
+        }
+    };
 }

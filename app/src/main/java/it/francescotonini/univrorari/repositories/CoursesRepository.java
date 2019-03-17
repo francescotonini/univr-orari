@@ -66,6 +66,7 @@ public class CoursesRepository extends BaseRepository {
     public void savePreferences(Course selectedCourse, List<Teaching> teachings) {
         PreferenceHelper.setString(PreferenceHelper.Keys.COURSE, new Gson().toJson(selectedCourse));
         PreferenceHelper.setString(PreferenceHelper.Keys.TEACHINGS, new Gson().toJson(teachings));
+        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DID_SELECT_COURSE, true);
     }
 
     /**

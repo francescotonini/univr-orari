@@ -88,7 +88,17 @@ public class MainActivity extends BaseActivity implements EventClickListener<Les
         binding.activityMainWeekview.setOnEventClickListener(this);
 
         // Setup rooms click event
-        binding.activityMainRoomsButton.setOnClickListener((click) -> startActivity(new Intent(this, RoomsActivity.class)));
+        binding.activityMainRoomsButton.setOnClickListener((click) -> {
+            if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_SELECT_OFFICES)) {
+                Intent selectOfficesIntent = new Intent(this, SetupSelectOfficesActivity.class);
+                selectOfficesIntent.putExtra("isFirstBoot", true);
+
+                startActivity(selectOfficesIntent);
+                return;
+            }
+
+            startActivity(new Intent(this, RoomsActivity.class));
+        });
 
         if (getIntent().hasExtra("clear")) {
             getViewModel().clear();
@@ -105,11 +115,19 @@ public class MainActivity extends BaseActivity implements EventClickListener<Les
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_main_week_view) {
+        if (item.getItemId() == R.id.menu_main_rooms) {
+            startActivity(new Intent(this, RoomsActivity.class));
+        } else if (item.getItemId() == R.id.menu_main_three_day_view) {
             PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 3);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             binding.activityMainWeekview.setNumberOfVisibleDays(3);
+        } else if (item.getItemId() == R.id.menu_main_week_view) {
+            PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 5);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            binding.activityMainWeekview.setNumberOfVisibleDays(5);
         } else if (item.getItemId() == R.id.menu_main_day_view) {
             PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 1);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             binding.activityMainWeekview.setNumberOfVisibleDays(1);
         } else if (item.getItemId() == R.id.menu_main_refresh) {
             getViewModel().clear();
