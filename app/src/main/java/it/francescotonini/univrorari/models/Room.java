@@ -27,10 +27,9 @@ package it.francescotonini.univrorari.models;
 import com.alamkanak.weekview.WeekViewDisplayable;
 import com.alamkanak.weekview.WeekViewEvent;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import it.francescotonini.univrorari.R;
+import androidx.annotation.NonNull;
 
 /**
  * Represent a room inside an office

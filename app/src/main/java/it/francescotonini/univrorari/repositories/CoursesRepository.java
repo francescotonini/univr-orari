@@ -53,6 +53,9 @@ public class CoursesRepository extends BaseRepository {
      */
     public CoursesRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
+
+        this.teachings = new MutableLiveData<>();
+        this.courses = new MutableLiveData<>();
     }
 
     /**
@@ -70,10 +73,6 @@ public class CoursesRepository extends BaseRepository {
      * @return if {@link ApiResponse} has the error property initialized, something went wrong; otherwise data contains the result of the request
      */
     public LiveData<ApiResponse<List<Course>>> getCourses() {
-        if (courses == null) {
-            courses = new MutableLiveData<>();
-        }
-
         getApi().getCourses()
         .retry(3)
         .subscribeOn(Schedulers.io())
@@ -110,10 +109,6 @@ public class CoursesRepository extends BaseRepository {
      * @return if {@link ApiResponse} has the error property initialized, something went wrong; otherwise data contains the result of the request
      */
     public LiveData<ApiResponse<List<Teaching>>> getTeachings(String academicYearId, String courseId) {
-        if (teachings == null) {
-            teachings = new MutableLiveData<>();
-        }
-
         getApi().getTeachings(academicYearId, courseId)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -144,6 +139,6 @@ public class CoursesRepository extends BaseRepository {
         return teachings;
     }
 
-    private MutableLiveData<ApiResponse<List<Course>>> courses;
-    private MutableLiveData<ApiResponse<List<Teaching>>> teachings;
+    private final MutableLiveData<ApiResponse<List<Course>>> courses;
+    private final MutableLiveData<ApiResponse<List<Teaching>>> teachings;
 }

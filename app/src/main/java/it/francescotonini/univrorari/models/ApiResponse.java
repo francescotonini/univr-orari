@@ -33,6 +33,14 @@ import it.francescotonini.univrorari.api.ApiError;
  */
 public class ApiResponse<T> {
     /**
+     * Listener for api response
+     */
+    public interface ApiResponseListener {
+        void onResponse();
+        void onError(ApiError error);
+    }
+
+    /**
      * Initializes a new instance of this class with the body of the successful response
      * @param data body of the successful response
      */

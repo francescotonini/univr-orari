@@ -24,12 +24,12 @@
 
 package it.francescotonini.univrorari.repositories;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
+import android.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import io.reactivex.Observable;
@@ -43,6 +43,7 @@ import it.francescotonini.univrorari.AppExecutors;
 import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.api.UniVRApi;
+import it.francescotonini.univrorari.helpers.CacheHelper;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Course;
@@ -57,44 +58,58 @@ public class LessonsRepository extends BaseRepository {
      * Initializes a new instance of this class
      *
      * @param appExecutors thread pool
-     * @param api instance of {@link UniVRApi}
+     * @param api          instance of {@link UniVRApi}
      */
     public LessonsRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
 
-        getPreferences();
-
-        lessonsMap = new ArrayMap<>();
+        this.lessons = new ArrayMap<>();
     }
 
     /**
-     * Gets an {@link ApiResponse} with a list of {@link Lesson}
-     * @param month month of the timetable to retrieve
-     * @param year year of the timetable to retrieve
-     * @return if {@link ApiResponse} has the error property initialized, something went wrong; otherwise data contains the result of the request
+     * Sets the listener for this repository
+     * @param listener listener for this repository
      */
-    public LiveData<ApiResponse<List<Lesson>>> getLessons(final int month, final int year) {
-        if (!lessonsMap.containsKey(calculateKey(month, year))) {
-            lessonsMap.put(calculateKey(month, year), new MutableLiveData<>());
-
-            Logger.i(LessonsRepository.class.getSimpleName(), "Cache NOT found for key " + calculateKey(month, year));
-            loadLessons(month, year);
-        }
-        else {
-            Logger.i(LessonsRepository.class.getSimpleName(), "Cache found for key " + calculateKey(month, year));
-        }
-
-        return lessonsMap.get(calculateKey(month, year));
+    public void setListener(ApiResponse.ApiResponseListener listener) {
+        this.listener = listener;
     }
 
-    private void loadLessons(final int month, final int year) {
-        if (selectedCourse == null || selectedTeachings == null) {
-            Logger.w(LessonsRepository.class.getSimpleName(), "Can't get lessons since course and teachings are null");
+    /**
+     * Gets a list of {@link Lesson} from the start date to the end date
+     * @param startDate start date
+     * @param endDate   end date
+     * @return a list of {@link Lesson}
+     */
+    public List<Lesson> getLessons(final Calendar startDate, final Calendar endDate) {
+        // Get cache if available
+        if (!lessons.containsKey(new Pair<>(startDate, endDate))) {
+            lessons.put(new Pair<>(startDate, endDate), new Gson().fromJson(CacheHelper.get(calculateKey(startDate, endDate), "[ ]"), new TypeToken<List<Lesson>>() { }.getType()));
+            loadLessons(startDate, endDate);
+        }
 
+        return lessons.get(new Pair<>(startDate, endDate));
+    }
+
+    private Course getCourse() {
+        return new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
+    }
+
+    private List<Teaching> getSelectedTeachings() {
+        return new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.TEACHINGS), new TypeToken<List<Teaching>>() { }.getType());
+    }
+
+    private void loadLessons(Calendar startDate, Calendar endDate) {
+        final int month = startDate.get(Calendar.MONTH);
+        final int year = startDate.get(Calendar.YEAR);
+
+        final List<Teaching> selectedTeachings = getSelectedTeachings();
+        final Course course = getCourse();
+        if (course == null || selectedTeachings == null) {
+            Logger.w(LessonsRepository.class.getSimpleName(), "Can't get lessons since course and teachings are null");
             return;
         }
 
-        Logger.i(LessonsRepository.class.getSimpleName(), "Loading lessons for key " + calculateKey(month, year));
+        Logger.i(LessonsRepository.class.getSimpleName(), "Loading lessons for month " + month + " and year " + year);
 
         List<String> yearIds = new ArrayList<>();
         for (Teaching teaching : selectedTeachings) {
@@ -105,35 +120,34 @@ public class LessonsRepository extends BaseRepository {
 
         Observable<String> observable = Observable.fromIterable(yearIds);
         observable
-        .flatMap((Function<String, ObservableSource<List<Lesson>>>) s -> getApi().getLessons(selectedCourse.getAcademicYearId(), selectedCourse.getId(), s, month, year))
+        .flatMap((Function<String, ObservableSource<List<Lesson>>>) s -> getApi().getLessons(course.getAcademicYearId(), course.getId(), s, month, year))
         .retry(3)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Observer<List<Lesson>>() {
-            List<Lesson> lessons = new ArrayList<>();
+            List<Lesson> totalLessons = new ArrayList<>();
 
             @Override
-            public void onSubscribe(Disposable d) {
-
-            }
+            public void onSubscribe(Disposable d) {  }
 
             @Override
-            public void onNext(List<Lesson> l) {
-                Logger.i(LessonsRepository.class.getSimpleName(), "Got " + lessons.size() + " lessons for key " + calculateKey(month, year));
-
-                lessons.addAll(l);
+            public void onNext(List<Lesson> lessons) {
+                totalLessons.addAll(lessons);
             }
 
             @Override
             public void onError(Throwable e) {
-                Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get lessons: " + e.getMessage());
-                lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
+                Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get totalLessons: " + e.getMessage());
+
+                if (listener != null) {
+                    listener.onError(ApiError.BAD_RESPONSE);
+                }
             }
 
             @Override
             public void onComplete() {
                 List<Lesson> finalLessons = new ArrayList<>();
-                for (Lesson lesson : lessons) {
+                for (Lesson lesson : totalLessons) {
                     for (Teaching teaching : selectedTeachings) {
                         if (lesson.getId().hashCode() == teaching.getId().hashCode()) {
                             finalLessons.add(lesson);
@@ -141,29 +155,27 @@ public class LessonsRepository extends BaseRepository {
                     }
                 }
 
-                lessonsMap.get(calculateKey(month, year)).setValue(new ApiResponse<>(finalLessons));
+                CacheHelper.set(calculateKey(startDate, endDate), new Gson().toJson(finalLessons));
+                lessons.put(new Pair<>(startDate, endDate), finalLessons);
+
+                if (listener != null) {
+                    listener.onResponse();
+                }
             }
         });
     }
 
     /**
-     * Removes every observable connected before
+     * Removes lessons
      */
     public void clear() {
-        lessonsMap.clear();
-        getPreferences();
+        lessons.clear();
     }
 
-    private String calculateKey(int month, int year) {
-        return year + "-" + month;
+    private String calculateKey(Calendar startDate, Calendar endDate) {
+        return startDate.get(Calendar.MONTH) + "-" + startDate.get(Calendar.MINUTE) + ":" + endDate.get(Calendar.MONTH) + "-" + endDate.get(Calendar.MINUTE);
     }
 
-    private void getPreferences() {
-        selectedCourse = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.COURSE), Course.class);
-        selectedTeachings = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.TEACHINGS), new TypeToken<List<Teaching>>(){}.getType());
-    }
-
-    private Course selectedCourse;
-    private List<Teaching> selectedTeachings;
-    private Map<String, MutableLiveData<ApiResponse<List<Lesson>>>> lessonsMap;
+    private ApiResponse.ApiResponseListener listener;
+    private final Map<Pair<Calendar, Calendar>, List<Lesson>> lessons;
 }

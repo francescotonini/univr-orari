@@ -53,7 +53,7 @@ public class OfficesRepository extends BaseRepository {
     public OfficesRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
 
-        offices = new MutableLiveData<>();
+        this.offices = new MutableLiveData<>();
     }
 
     /**
@@ -105,5 +105,5 @@ public class OfficesRepository extends BaseRepository {
         });
     }
 
-    private MutableLiveData<ApiResponse<List<Office>>> offices;
+    private final MutableLiveData<ApiResponse<List<Office>>> offices;
 }

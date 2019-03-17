@@ -55,7 +55,7 @@ public class RoomsRepository extends BaseRepository {
      */
     public RoomsRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
-        rooms = new MutableLiveData<>();
+        this.rooms = new MutableLiveData<>();
     }
 
     /**
@@ -64,6 +64,7 @@ public class RoomsRepository extends BaseRepository {
      */
     public LiveData<ApiResponse<List<Room>>> getRooms() {
         loadRooms();
+
         return rooms;
     }
 
@@ -124,5 +125,5 @@ public class RoomsRepository extends BaseRepository {
         });
     }
 
-    private MutableLiveData<ApiResponse<List<Room>>> rooms;
+    private final MutableLiveData<ApiResponse<List<Room>>> rooms;
 }
