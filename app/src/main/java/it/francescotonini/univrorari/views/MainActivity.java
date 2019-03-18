@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements EventClickListener<Les
             binding.activityMainWeekview.notifyDataSetChanged();
         }
 
-        binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+        binding.activityMainWeekview.goToHour(8);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
