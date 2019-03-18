@@ -26,15 +26,27 @@ package it.francescotonini.univrorari.viewmodels;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import android.util.ArrayMap;
+
+import com.alamkanak.weekview.WeekViewDisplayable;
+import com.alamkanak.weekview.WeekViewEvent;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.R;
+import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Lesson;
 import it.francescotonini.univrorari.repositories.LessonsRepository;
+import it.francescotonini.univrorari.views.MainActivity;
 
 /**
  * Represents the logic behind an activity that handles lessons
@@ -46,35 +58,38 @@ public class LessonsViewModel extends BaseViewModel {
      * @param application instance of this application
      * @param lessonsRepository an instance of {@link LessonsRepository}
      */
-    public LessonsViewModel(Application application, LessonsRepository lessonsRepository) {
+    public LessonsViewModel(Application application, LessonsRepository lessonsRepository, ApiResponse.ApiResponseListener listener) {
         super(application);
 
-        repository = lessonsRepository;
-        colors = new ArrayMap<>();
+        this.repository = lessonsRepository;
+        this.colors = new ArrayMap<>();
+        this.repository.setListener(listener);
     }
 
     /**
      * Gets an {@link ApiResponse} with a list of {@link Lesson}
-     * @param month month of the timetable to retrieve
-     * @param year year of the timetable to retrieve
-     * @return if {@link ApiResponse} has the error property initialized, something went wrong; otherwise data contains the result of the request
+     * @param startDate start date
+     * @param endDate endDate
+     * @return a list of {@link Lesson} ready to be shown
      */
-    public LiveData<ApiResponse<List<Lesson>>> getLessons(final int month, final int year) {
-        return repository.getLessons(month, year);
-    }
+    public List<WeekViewDisplayable<Lesson>> getLessons(final Calendar startDate, final Calendar endDate) {
+        List<Lesson> lessons = repository.getLessons(startDate, endDate);
+        List<WeekViewDisplayable<Lesson>> finalLessons = new ArrayList<>();
 
-    /**
-     * Gets a color that represents a lesson
-     * @param id lesson id
-     * @return an int representing a color
-     */
-    public int getLessonColor(String id)
-    {
-        if (!colors.containsKey(id)) {
-            colors.put(id, getApplication().getResources().getIntArray(R.array.cell_colors)[colors.size() % 8]);
+        if (lessons != null && lessons.size() != 0) {
+            for (Lesson lesson : lessons) {
+                if (lesson.getName() == null || lesson.getRoom() == null) {
+                    Logger.e(LessonsViewModel.class.getSimpleName(), "Ignoring lesson because name or room is NULL");
+                    continue;
+                }
+
+                WeekViewEvent<Lesson> event = lesson.toWeekViewEvent();
+                event.setColor(getLessonColor(lesson.getName()));
+                finalLessons.add(event);
+            }
         }
 
-        return colors.get(id);
+        return finalLessons;
     }
 
     /**
@@ -93,10 +108,12 @@ public class LessonsViewModel extends BaseViewModel {
          *
          * @param application instance of this application
          * @param lessonsRepository instance of {@link LessonsRepository}
+         * @param listener an instance of {@link it.francescotonini.univrorari.models.ApiResponse.ApiResponseListener}
          */
-        public Factory(Application application, LessonsRepository lessonsRepository) {
+        public Factory(Application application, LessonsRepository lessonsRepository, ApiResponse.ApiResponseListener listener) {
             this.application = application;
             this.lessonsRepository = lessonsRepository;
+            this.listener = listener;
         }
 
         /**
@@ -108,11 +125,21 @@ public class LessonsViewModel extends BaseViewModel {
          */
         @Override public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new LessonsViewModel(application, lessonsRepository);
+            return (T) new LessonsViewModel(application, lessonsRepository, listener);
         }
 
         private final Application application;
         private final LessonsRepository lessonsRepository;
+        private final ApiResponse.ApiResponseListener listener;
+    }
+
+    private int getLessonColor(String id)
+    {
+        if (!colors.containsKey(id)) {
+            colors.put(id, getApplication().getResources().getIntArray(R.array.cell_colors)[colors.size() % 8]);
+        }
+
+        return colors.get(id);
     }
 
     private final LessonsRepository repository;

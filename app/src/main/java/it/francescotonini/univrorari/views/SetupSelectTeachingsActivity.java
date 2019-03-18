@@ -24,6 +24,7 @@
 
 package it.francescotonini.univrorari.views;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -31,6 +32,8 @@ import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.google.gson.Gson;
@@ -73,7 +76,6 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
         // Add toolbar + subtitle
         setSupportActionBar((Toolbar)binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((Toolbar)binding.toolbar).setSubtitle(R.string.activity_setup_select_teachings_description);
 
         // Set layout manager and divider
         binding.activitySetupSelectTeachingsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -100,6 +102,16 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
         getViewModel().getTeachings(course.getAcademicYearId(), course.getId()).observe(this, teachingsObserver);
     }
 
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_setup_select_course, menu);
+
+        MenuItem search = menu.findItem(R.id.menu_setup_select_course_search);
+        SearchView searchView = (SearchView) search.getActionView();
+        searchView.setOnQueryTextListener(searchTextListener);
+
+        return true;
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         // Handles toolbar's back button
         if (item.getItemId() == android.R.id.home) {
@@ -119,19 +131,11 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
         List<Teaching> teachings = ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getSelectedTeachings();
         getViewModel().savePreferences(course, teachings);
 
-        // If DID_FIRST_BOOT is true, then you are here from SettingsActivity
-        if (PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
-            Intent goToMain = new Intent(this, MainActivity.class);
-            goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            goToMain.putExtra("clear", true);
-            startActivity(goToMain);
-
-            return;
-        }
-
-        Intent goToSetupSelectOffices = new Intent(this, SetupSelectOfficesActivity.class);
-        startActivity(goToSetupSelectOffices);
+        Intent goToMain = new Intent(this, MainActivity.class);
+        goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        goToMain.putExtra("clear", true);
+        startActivity(goToMain);
     };
 
     private Observer<ApiResponse<List<Teaching>>> teachingsObserver = teachings -> {
@@ -154,4 +158,17 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
         binding.activitySetupSelectTeachingsRefreshlayout.setEnabled(false);
     };
 
+    private SearchView.OnQueryTextListener searchTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getFilter().filter(query);
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getFilter().filter(newText);
+            return true;
+        }
+    };
 }

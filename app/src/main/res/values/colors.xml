@@ -26,12 +26,12 @@
 <resources>
     <color name="primary">#FFFFFF</color>
     <color name="primary_dark">#FFFFFF</color>
-    <color name="accent">#039be5</color>
+    <color name="accent">#039BE5</color>
     <color name="accent_light">#10039be5</color>
     <color name="background">#FFFFFF</color>
-    <color name="primary_text">#de000000</color>
-    <color name="secondary_text">#99000000</color>
-    <color name="divider">#E6E6E6</color>
+    <color name="primary_text">#DE000000</color>
+    <color name="secondary_text">#8A000000</color>
+    <color name="divider">#1F000000</color>
 
     <color name="green">#43A047</color>
     <color name="red">#F44336</color>

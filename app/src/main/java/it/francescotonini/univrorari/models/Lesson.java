@@ -140,7 +140,6 @@ public class Lesson implements WeekViewDisplayable<Lesson> {
     }
 
     private String id;
-    private String yearId;
     private String name;
     private String teacher;
     private String room;

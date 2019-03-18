@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import java.util.ArrayList;
 import java.util.List;
 import it.francescotonini.univrorari.R;
@@ -99,11 +100,28 @@ public class TeachingsAdapter extends RecyclerView.Adapter<TeachingsAdapter.View
     }
 
     @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.set(teachings.get(position));
+        holder.set(getTeachings().get(position));
     }
 
     @Override public int getItemCount() {
-        return teachings.size();
+        return getTeachings().size();
+    }
+
+    /**
+     * Gets the filter of this list
+     * @return filter
+     */
+    public Filter getFilter() {
+        return new Filter() {
+            @Override protected FilterResults performFiltering(CharSequence constraint) {
+                queryValue = constraint.toString();
+                return null;
+            }
+
+            @Override protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
+            }
+        };
     }
 
     /**
@@ -161,6 +179,22 @@ public class TeachingsAdapter extends RecyclerView.Adapter<TeachingsAdapter.View
         private ItemTeachingBinding binding;
     }
 
+    private List<Teaching> getTeachings() {
+        if (queryValue == null || queryValue.isEmpty()) {
+            return teachings;
+        }
+
+        List<Teaching> filteredTeachings = new ArrayList<>();
+        for (Teaching teaching : this.teachings) {
+            if (teaching.getName().toLowerCase().contains(queryValue.toLowerCase())) {
+                filteredTeachings.add(teaching);
+            }
+        }
+
+        return filteredTeachings;
+    }
+
+    private String queryValue;
     private List<Teaching> selectedTeachings;
     private List<Teaching> teachings;
     private List<Year> allYears;

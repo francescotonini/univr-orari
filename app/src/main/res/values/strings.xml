@@ -28,31 +28,27 @@
     <string name="error_network_title">Errore di rete</string>
     <string name="error_network_message">"Qualcosa non ha funzionato mentre scaricavo i dati da internet. Assicurati di avere una connessione ad internet o riprova più tardi. "</string>
     <string name="error_network_button_message">Ok</string>
-
     <string name="error_generic_title">Ops...</string>
     <string name="error_generic_message">Qualcosa è andato storto. Riprova più tardi e se il problema persiste contatta lo sviluppatore!</string>
     <string name="error_generic_close_button">Ok</string>
-
     <string name="ok">Ok</string>
     <string name="info">Info</string>
-
     <string name="loading">Caricamento...</string>
 
     <!-- Setup -->
-    <string name="activity_setup_select_course_title">Ciao!</string>
-    <string name="activity_setup_select_course_description">Per iniziare, seleziona il tuo corso di studi.</string>
+    <string name="activity_setup_select_course_title">Seleziona corso di studi</string>
     <string name="activity_setup_select_years_title">Seleziona anno di corso</string>
-    <string name="activity_setup_select_years_description">Potrai modificare le materie più tardi.</string>
     <string name="activity_setup_select_teachings_title">Personalizza calendario</string>
-    <string name="activity_setup_select_teachings_description">Se vuoi, rimuovi le materie che non segui</string>
-    <string name="activity_setup_select_offices_title">Ci siamo quasi...</string>
-    <string name="activity_setup_select_offices_description">Seleziona le sedi che vuoi monitorare.</string>
+    <string name="activity_setup_select_offices_title">Seleziona edifici</string>
     <string name="menu_setup_select_course_search">Cerca corso</string>
+    <string name="menu_setup_select_teachings_search">Cerca corso</string>
 
     <!-- Main menu -->
+    <string name="menu_main_top_bar_rooms">Aule libere</string>
     <string name="menu_main_top_bar_day">Vista giornaliera</string>
-    <string name="menu_main_top_bar_week">Vista settimanale</string>
-    <string name="menu_main_top_bar_refresh">Ricarica orari</string>
+    <string name="menu_main_top_bar_three_day">Vista 3 giorni</string>
+    <string name="menu_main_top_bar_week">Vista 5 giorni</string>
+    <string name="menu_main_top_bar_refresh">Aggiorna orari</string>
     <string name="menu_main_top_bar_settings">Impostazioni</string>
 
     <!-- Rooms -->
@@ -73,8 +69,6 @@
     <string name="activity_lesson_details_teacher">Docente</string>
     <string name="activity_lesson_details_date">Data</string>
     <string name="activity_lesson_details_room">Stanza</string>
-
-    <!-- Menu rooms -->
 
     <!-- Settings -->
     <string name="activity_settings_title">Impostazioni</string>

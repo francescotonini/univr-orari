@@ -73,6 +73,7 @@
             android:label="@string/activity_setup_select_teachings_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SetupSelectOfficesActivity"
+            android:noHistory="true"
             android:label="@string/activity_setup_select_offices_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SettingsActivity"

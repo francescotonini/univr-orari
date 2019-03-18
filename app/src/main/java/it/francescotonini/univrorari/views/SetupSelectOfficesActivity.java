@@ -73,7 +73,6 @@ public class SetupSelectOfficesActivity extends BaseActivity {
         // Setup Toolbar
         setSupportActionBar((Toolbar)binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(R.string.activity_setup_select_offices_description);
 
         binding.activitySelectOfficesSaveButton.setEnabled(false);
 
@@ -109,25 +108,13 @@ public class SetupSelectOfficesActivity extends BaseActivity {
     private View.OnClickListener saveButtonClickListener = click -> {
         List<Office> selectedOffices = ((OfficesAdapter)binding.activitySelectOfficesRecyclerView.getAdapter()).getSelectedOffices();
 
-        // If DID_FIRST_BOOT is true, then you are here from SettingsActivity
-        if (PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
-            getViewModel().savePreferences(selectedOffices);
-
-            Intent goToMain = new Intent(this, MainActivity.class);
-            goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            goToMain.putExtra("clear", true);
-            startActivity(goToMain);
-
+        getViewModel().savePreferences(selectedOffices);
+        if (getIntent().getBooleanExtra("isFirstBoot", false)) {
+            startActivity(new Intent(this, RoomsActivity.class));
             return;
         }
 
-        getViewModel().savePreferences(selectedOffices);
-        Intent goToMain = new Intent(this, MainActivity.class);
-        goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        goToMain.putExtra("clear", true);
-        startActivity(goToMain);
+        onBackPressed();
     };
 
     private Observer<ApiResponse<List<Office>>> officesObserver = offices -> {

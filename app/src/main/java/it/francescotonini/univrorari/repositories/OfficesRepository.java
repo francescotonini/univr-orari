@@ -53,7 +53,7 @@ public class OfficesRepository extends BaseRepository {
     public OfficesRepository(AppExecutors appExecutors, UniVRApi api) {
         super(appExecutors, api);
 
-        offices = new MutableLiveData<>();
+        this.offices = new MutableLiveData<>();
     }
 
     /**
@@ -71,6 +71,7 @@ public class OfficesRepository extends BaseRepository {
      */
     public void savePreferences(List<Office> offices) {
         PreferenceHelper.setString(PreferenceHelper.Keys.OFFICES, new Gson().toJson(offices));
+        PreferenceHelper.setBoolean(PreferenceHelper.Keys.DID_SELECT_OFFICES, true);
     }
 
     private void loadOffices() {
@@ -105,5 +106,5 @@ public class OfficesRepository extends BaseRepository {
         });
     }
 
-    private MutableLiveData<ApiResponse<List<Office>>> offices;
+    private final MutableLiveData<ApiResponse<List<Office>>> offices;
 }

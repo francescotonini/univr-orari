@@ -24,27 +24,24 @@
 
 package it.francescotonini.univrorari.views;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.graphics.RectF;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.alamkanak.weekview.EventClickListener;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekViewDisplayable;
-import com.alamkanak.weekview.WeekViewEvent;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.UniVROrariApp;
+import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.databinding.ActivityMainBinding;
 import it.francescotonini.univrorari.helpers.DateTimeInterpreter;
 import it.francescotonini.univrorari.helpers.DialogHelper;
@@ -57,7 +54,7 @@ import it.francescotonini.univrorari.viewmodels.LessonsViewModel;
 /**
  * Code behind of R.layout.activity_main
  */
-public class MainActivity extends BaseActivity implements Observer<ApiResponse<List<Lesson>>>, EventClickListener<Lesson>, MonthLoader.MonthChangeListener {
+public class MainActivity extends BaseActivity implements EventClickListener<Lesson>, MonthLoader.MonthChangeListener, ApiResponse.ApiResponseListener {
     @Override protected int getLayoutId() {
         return R.layout.activity_main;
     }
@@ -65,7 +62,7 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
     @Override protected LessonsViewModel getViewModel() {
         if (viewModel == null) {
             LessonsViewModel.Factory factory = new LessonsViewModel.Factory(getApplication(),
-                    ((UniVROrariApp)getApplication()).getDataRepository().getLessonsRepository());
+                    ((UniVROrariApp)getApplication()).getDataRepository().getLessonsRepository(), this);
             viewModel = ViewModelProviders.of(this, factory).get(LessonsViewModel.class);
         }
 
@@ -91,7 +88,17 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
         binding.activityMainWeekview.setOnEventClickListener(this);
 
         // Setup rooms click event
-        binding.activityMainRoomsButton.setOnClickListener((click) -> startActivity(new Intent(this, RoomsActivity.class)));
+        binding.activityMainRoomsButton.setOnClickListener((click) -> {
+            if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_SELECT_OFFICES)) {
+                Intent selectOfficesIntent = new Intent(this, SetupSelectOfficesActivity.class);
+                selectOfficesIntent.putExtra("isFirstBoot", true);
+
+                startActivity(selectOfficesIntent);
+                return;
+            }
+
+            startActivity(new Intent(this, RoomsActivity.class));
+        });
 
         if (getIntent().hasExtra("clear")) {
             getViewModel().clear();
@@ -108,11 +115,19 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_main_week_view) {
+        if (item.getItemId() == R.id.menu_main_rooms) {
+            startActivity(new Intent(this, RoomsActivity.class));
+        } else if (item.getItemId() == R.id.menu_main_three_day_view) {
             PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 3);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             binding.activityMainWeekview.setNumberOfVisibleDays(3);
+        } else if (item.getItemId() == R.id.menu_main_week_view) {
+            PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 5);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            binding.activityMainWeekview.setNumberOfVisibleDays(5);
         } else if (item.getItemId() == R.id.menu_main_day_view) {
             PreferenceHelper.setInt(PreferenceHelper.Keys.WEEKVIEW_DAYS_TO_SHOW, 1);
+            binding.activityMainWeekview.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             binding.activityMainWeekview.setNumberOfVisibleDays(1);
         } else if (item.getItemId() == R.id.menu_main_refresh) {
             getViewModel().clear();
@@ -124,59 +139,23 @@ public class MainActivity extends BaseActivity implements Observer<ApiResponse<L
         return true;
     }
 
-    @Override public void onChanged(@Nullable ApiResponse<List<Lesson>> lessons) {
-        if (!lessons.isSuccessful()) {
-            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
-
-            return;
-        }
-        else if (lessons.getData().size() == 0) {
-            Logger.v(MainActivity.class.getSimpleName(), "Ignoring onChanged event because list is NULL or empty");
-
-            return;
-        }
-
+    @Override public void onResponse() {
         binding.activityMainWeekview.notifyDataSetChanged();
     }
 
+    @Override public void onError(ApiError error) {
+        DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+    }
+
     @Override public List<WeekViewDisplayable<Lesson>> onMonthChange(Calendar startDate, Calendar endDate) {
-        List<WeekViewDisplayable<Lesson>> events = new ArrayList<>();
+        SnackBarHelper.show(binding.activityMainWeekview, R.string.loading);
 
-        // Stop here if this is first boot
-        if (!PreferenceHelper.getBoolean(PreferenceHelper.Keys.DID_FIRST_BOOT)) {
-            return events;
+        List<WeekViewDisplayable<Lesson>> events = getViewModel().getLessons(startDate, endDate);
+        if (events == null) {
+            return new ArrayList<>();
         }
 
-        // Load lessons
-        if (!getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).hasObservers()) {
-            SnackBarHelper.show(binding.activityMainWeekview, R.string.loading);
-
-            getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).observe(this, this);
-            return events;
-        }
-
-        ApiResponse<List<Lesson>> response = getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).getValue();
-        if (response == null) {
-            return events;
-        }
-
-        List<Lesson> lessons = getViewModel().getLessons(startDate.get(Calendar.MONTH), startDate.get(Calendar.YEAR)).getValue().getData();
-        if (lessons == null) {
-            return events;
-        }
-
-        for (Lesson lesson: lessons) {
-            if (lesson.getName() == null || lesson.getRoom() == null) {
-                Logger.e(MainActivity.class.getSimpleName(), "Ignoring lesson because name or room is NULL");
-                continue;
-            }
-
-            WeekViewDisplayable<Lesson> event = lesson.toWeekViewEvent();
-            ((WeekViewEvent) event).setColor(getViewModel().getLessonColor(lesson.getName()));
-            events.add(event);
-        }
-
-        return events;
+        return  events;
     }
 
     @Override public void onEventClick(Lesson lesson, RectF eventRect) {
