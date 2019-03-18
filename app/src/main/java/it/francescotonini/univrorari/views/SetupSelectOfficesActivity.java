@@ -40,7 +40,6 @@ import it.francescotonini.univrorari.UniVROrariApp;
 import it.francescotonini.univrorari.adapters.OfficesAdapter;
 import it.francescotonini.univrorari.databinding.ActivitySetupSelectOfficesBinding;
 import it.francescotonini.univrorari.helpers.DialogHelper;
-import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.helpers.SimpleDividerItemDecoration;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Office;
@@ -109,7 +108,7 @@ public class SetupSelectOfficesActivity extends BaseActivity {
         List<Office> selectedOffices = ((OfficesAdapter)binding.activitySelectOfficesRecyclerView.getAdapter()).getSelectedOffices();
 
         if (selectedOffices.size() == 0) {
-            DialogHelper.show(this, R.string.menu_setup_select_offices_no_selection_title, R.string.menu_setup_select_offices_no_selection_description, R.string.ok, null);
+            DialogHelper.show(this, R.string.activity_setup_select_offices_no_selection_title, R.string.activity_setup_select_offices_no_selection_description, R.string.ok, null);
 
             return;
         }

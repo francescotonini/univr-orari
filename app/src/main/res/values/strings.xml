@@ -44,6 +44,9 @@
     <string name="menu_setup_select_teachings_search">Cerca corso</string>
     <string name="activity_setup_select_offices_no_selection_title">Uhmmmmm... No</string>
     <string name="activity_setup_select_offices_no_selection_description">Seleziona almeno una sede per continuare</string>
+    <string name="activity_setup_select_teachings_no_selection_title">Un attimo...</string>
+    <string name="activity_setup_select_teachings_no_selection_description">Seleziona almeno un insegnamento. No insegnamento no party :P</string>
+
 
     <!-- Main menu -->
     <string name="menu_main_top_bar_rooms">Aule libere</string>

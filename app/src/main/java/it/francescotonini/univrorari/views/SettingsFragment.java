@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         try {
             String version = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
-            appVersion.setSummary(version + System.getProperty("line.separator") + appVersion.getSummary());
+            appVersion.setSummary(version + System.getProperty("line.separator") + System.getProperty("line.separator") + appVersion.getSummary());
         } catch(PackageManager.NameNotFoundException ex) { }
     }
 

@@ -44,7 +44,6 @@ import it.francescotonini.univrorari.UniVROrariApp;
 import it.francescotonini.univrorari.adapters.TeachingsAdapter;
 import it.francescotonini.univrorari.databinding.ActivitySetupSelectTeachingsBinding;
 import it.francescotonini.univrorari.helpers.DialogHelper;
-import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.helpers.SimpleDividerItemDecoration;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Course;
@@ -129,6 +128,13 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
 
     private View.OnClickListener saveButtonClickListener = click -> {
         List<Teaching> teachings = ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getSelectedTeachings();
+
+        if (teachings.size() == 0) {
+            DialogHelper.show(this, R.string.activity_setup_select_teachings_no_selection_title, R.string.activity_setup_select_teachings_no_selection_description, R.string.ok, null);
+
+            return;
+        }
+
         getViewModel().savePreferences(course, teachings);
 
         Intent goToMain = new Intent(this, MainActivity.class);
@@ -161,12 +167,20 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
     private SearchView.OnQueryTextListener searchTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
+            if (binding.activitySetupSelectTeachingsRecyclerview.getAdapter() == null) {
+                return false;
+            }
+
             ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getFilter().filter(query);
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String newText) {
+            if (binding.activitySetupSelectTeachingsRecyclerview.getAdapter() == null) {
+                return false;
+            }
+
             ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getFilter().filter(newText);
             return true;
         }

@@ -135,12 +135,20 @@ public class SetupSelectCourseActivity extends BaseActivity implements CoursesAd
     private SearchView.OnQueryTextListener searchTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
+            if (binding.activitySetupSelectCoursesRecyclerview.getAdapter() == null) {
+                return false;
+            }
+
             ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(query);
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String newText) {
+            if (binding.activitySetupSelectCoursesRecyclerview.getAdapter() == null) {
+                return false;
+            }
+
             ((CoursesAdapter)binding.activitySetupSelectCoursesRecyclerview.getAdapter()).getFilter().filter(newText);
             return true;
         }
