@@ -43,7 +43,7 @@
             <!-- Lesson -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/spacing_seventytwo"
                 android:layout_marginLeft="@dimen/spacing_sixteen"
                 android:layout_marginRight="@dimen/spacing_sixteen"
                 android:orientation="horizontal">
