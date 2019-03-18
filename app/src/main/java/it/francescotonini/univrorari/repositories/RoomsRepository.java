@@ -84,6 +84,11 @@ public class RoomsRepository extends BaseRepository {
 
         List<Office> offices = new Gson().fromJson(PreferenceHelper.getString(PreferenceHelper.Keys.OFFICES), new TypeToken<List<Office>>(){}.getType());
 
+        if (offices == null || offices.size() == 0) {
+            Logger.w(RoomsRepository.class.getSimpleName(), "Unable to load rooms since no offices are available");
+            return;
+        }
+
         Observable<Office> observable = Observable.fromIterable(offices);
         observable
         .flatMap((Function<Office, ObservableSource<List<Room>>>) s -> getApi().getRooms(s.getId())
