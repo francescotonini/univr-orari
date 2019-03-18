@@ -20,3 +20,5 @@ public class Constants {
 }
 ```
 *Example of Constants.java*
+
+App icon by [SimpleIcon](https://www.flaticon.com/authors/simpleicon) from [flaticon.com](https://www.flaticon.com/)
