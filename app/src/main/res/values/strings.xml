@@ -42,6 +42,8 @@
     <string name="activity_setup_select_offices_title">Seleziona edifici</string>
     <string name="menu_setup_select_course_search">Cerca corso</string>
     <string name="menu_setup_select_teachings_search">Cerca corso</string>
+    <string name="menu_setup_select_offices_no_selection_title">Uhmmmmm... No</string>
+    <string name="menu_setup_select_offices_no_selection_description">Seleziona almeno una sede per continuare</string>
 
     <!-- Main menu -->
     <string name="menu_main_top_bar_rooms">Aule libere</string>

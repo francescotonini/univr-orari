@@ -108,6 +108,12 @@ public class SetupSelectOfficesActivity extends BaseActivity {
     private View.OnClickListener saveButtonClickListener = click -> {
         List<Office> selectedOffices = ((OfficesAdapter)binding.activitySelectOfficesRecyclerView.getAdapter()).getSelectedOffices();
 
+        if (selectedOffices.size() == 0) {
+            DialogHelper.show(this, R.string.menu_setup_select_offices_no_selection_title, R.string.menu_setup_select_offices_no_selection_description, R.string.ok, null);
+
+            return;
+        }
+
         getViewModel().savePreferences(selectedOffices);
         if (getIntent().getBooleanExtra("isFirstBoot", false)) {
             startActivity(new Intent(this, RoomsActivity.class));
