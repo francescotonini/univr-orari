@@ -149,7 +149,8 @@ public class LessonsRepository extends BaseRepository {
                 List<Lesson> finalLessons = new ArrayList<>();
                 for (Lesson lesson : totalLessons) {
                     for (Teaching teaching : selectedTeachings) {
-                        if (lesson.getId().hashCode() == teaching.getId().hashCode()) {
+                        if (lesson.getId() != null && teaching.getId() != null &&
+                            lesson.getId().hashCode() == teaching.getId().hashCode()) {
                             finalLessons.add(lesson);
                         }
                     }
