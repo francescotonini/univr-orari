@@ -39,12 +39,15 @@
         <SwitchPreference
             android:key="dark_theme"
             android:title="@string/settings_enable_dark_theme"
+            android:summary="@string/settings_enable_dark_theme_false"
             android:defaultValue="false" />
 
+        <!--
         <Preference
             android:key="clear_cache"
             android:title="@string/settings_clear_cache_title"
             android:summary="@string/settings_clear_cache_description" />
+        -->
     </PreferenceCategory>
 
     <PreferenceCategory

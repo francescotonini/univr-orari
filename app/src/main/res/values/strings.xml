@@ -80,7 +80,7 @@
     <string name="settings_change_teachings_description">Aggiungi o rimuovi uno o più insegnamenti dal tuo calendario</string>
     <string name="settings_change_offices_title">Modifica aule</string>
     <string name="settings_change_offices_description">Aggiungi o rimuovi una o più aule da monitorare</string>
-    <string name="settings_clear_cache_title">Pulisci cache</string>
+    <!-- <string name="settings_clear_cache_title">Pulisci cache</string> -->
     <string name="settings_enable_dark_theme">Forza tema scuro</string>
     <string name="settings_enable_dark_theme_false">L\'applicazione si adatta automaticamente al tema impostato dal sistema operativo</string>
     <string name="settings_enable_dark_theme_true">L\'applicazione forza il tema scuro in ogni momento</string>

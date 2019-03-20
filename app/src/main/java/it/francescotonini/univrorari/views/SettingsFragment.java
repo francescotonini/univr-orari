@@ -53,14 +53,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         changeTeachings = findPreference("change_teachings");
         changeOffices = findPreference("change_offices");
-        clearCache = findPreference("clear_cache");
+        // clearCache = findPreference("clear_cache");
         appVersion = findPreference("app_version");
         darkTheme = (SwitchPreference)findPreference("dark_theme");
 
         try {
             String version = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
             appVersion.setSummary(version + System.getProperty("line.separator") + System.getProperty("line.separator") + appVersion.getSummary());
-        } catch(PackageManager.NameNotFoundException ex) { }
+        } catch(PackageManager.NameNotFoundException ignored) { }
     }
 
     @Override
@@ -69,10 +69,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         changeTeachings.setOnPreferenceClickListener(this);
         changeOffices.setOnPreferenceClickListener(this);
-        clearCache.setOnPreferenceClickListener(this);
+        // clearCache.setOnPreferenceClickListener(this);
         darkTheme.setOnPreferenceChangeListener(this);
 
-        darkTheme.setDefaultValue(viewModel.getUITheme() == Configuration.UI_MODE_NIGHT_YES);
+        int currentNightMode = viewModel.getUITheme();
+        darkTheme.setDefaultValue(currentNightMode == AppCompatDelegate.MODE_NIGHT_YES);
+
+        if (currentNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            darkTheme.setSummary(R.string.settings_enable_dark_theme_true);
+        }
     }
 
     @Override
