@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-
 import java.util.List;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.UniVROrariApp;
@@ -124,12 +123,13 @@ public class SetupSelectOfficesActivity extends BaseActivity {
 
     private Observer<ApiResponse<List<Office>>> officesObserver = offices -> {
         if (!offices.isSuccessful()) {
-            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message, (dialog, which) -> {
+                onBackPressed();
+            });
 
             binding.activitySelectOfficesRefreshlayout.setRefreshing(false);
             binding.activitySelectOfficesRefreshlayout.setEnabled(false);
 
-            onBackPressed();
             return;
         }
 
