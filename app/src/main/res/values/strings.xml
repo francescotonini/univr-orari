@@ -47,7 +47,6 @@
     <string name="activity_setup_select_teachings_no_selection_title">Un attimo...</string>
     <string name="activity_setup_select_teachings_no_selection_description">Seleziona almeno un insegnamento. No insegnamento no party :P</string>
 
-
     <!-- Main menu -->
     <string name="menu_main_top_bar_rooms">Aule libere</string>
     <string name="menu_main_top_bar_day">Vista giornaliera</string>
@@ -82,7 +81,9 @@
     <string name="settings_change_offices_title">Modifica aule</string>
     <string name="settings_change_offices_description">Aggiungi o rimuovi una o più aule da monitorare</string>
     <string name="settings_clear_cache_title">Pulisci cache</string>
-    <string name="settings_enable_dark_theme">Tema scuro</string>
+    <string name="settings_enable_dark_theme">Forza tema scuro</string>
+    <string name="settings_enable_dark_theme_false">L\'applicazione si adatta automaticamente al tema impostato dal sistema operativo</string>
+    <string name="settings_enable_dark_theme_true">L\'applicazione forza il tema scuro in ogni momento</string>
     <string name="settings_enable_dark_theme_message">Il tema di attiverà dalla prossima schermata ;)</string>
     <string name="settings_clear_cache_description">Cancella tutti i dati in locale</string>
     <string name="settings_info_title">Dubbi, domande, angosce...?</string>

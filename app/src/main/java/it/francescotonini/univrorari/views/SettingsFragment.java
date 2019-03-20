@@ -97,10 +97,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             if ((Boolean) newValue) {
                 viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_YES);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+                darkTheme.setSummary(R.string.settings_enable_dark_theme_true);
             }
             else {
-                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_NO);
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
+
+                darkTheme.setSummary(R.string.settings_enable_dark_theme_false);
             }
 
             // Show popup
@@ -118,7 +123,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private SettingsViewModel viewModel;
     private Preference changeTeachings;
     private Preference changeOffices;
-    private Preference clearCache;
+    // private Preference clearCache;
     private Preference appVersion;
     private SwitchPreference darkTheme;
 }

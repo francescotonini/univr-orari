@@ -52,7 +52,7 @@ public class UniVROrariApp extends Application {
             .setUseDefaultSharedPreference(true)
             .build();
 
-        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getInt(PreferenceHelper.Keys.UI_THEME, getResources().getConfiguration().uiMode));
+        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getInt(PreferenceHelper.Keys.UI_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM));
     }
 
     /**
