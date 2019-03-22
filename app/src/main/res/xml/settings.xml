@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ The MIT License
+  ~
+  ~ Copyright (c) 2017-2019 Francesco Tonini - francescotonini.me
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/settings_category_general">
+        <Preference
+            android:key="change_teachings"
+            android:title="@string/settings_change_teachings_title"
+            android:summary="@string/settings_change_teachings_description" />
+
+        <Preference
+            android:key="change_offices"
+            android:title="@string/settings_change_offices_title"
+            android:summary="@string/settings_change_offices_description" />
+
+        <SwitchPreference
+            android:key="dark_theme"
+            android:title="@string/settings_enable_dark_theme"
+            android:summary="@string/settings_enable_dark_theme_false"
+            android:defaultValue="false" />
+
+        <!--
+        <Preference
+            android:key="clear_cache"
+            android:title="@string/settings_clear_cache_title"
+            android:summary="@string/settings_clear_cache_description" />
+        -->
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_info">
+        <Preference
+            android:title="@string/settings_info_title"
+            android:summary="@string/settings_info_description">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:francescoantoniotonini@gmail.com?subject=UniVR Orari - Feedback" />
+        </Preference>
+
+        <Preference
+            android:key="app_version"
+            android:title="@string/settings_app_version_title"
+            android:summary="@string/settings_app_version_description" />
+    </PreferenceCategory>
+</PreferenceScreen>
