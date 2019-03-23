@@ -144,7 +144,9 @@ public class MainActivity extends BaseActivity implements EventClickListener<Les
     }
 
     @Override public void onError(ApiError error) {
-        DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+        if (!this.isFinishing()) {
+            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+        }
     }
 
     @Override public List<WeekViewDisplayable<Lesson>> onMonthChange(Calendar startDate, Calendar endDate) {
