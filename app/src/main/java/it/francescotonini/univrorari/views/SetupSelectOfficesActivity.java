@@ -107,7 +107,9 @@ public class SetupSelectOfficesActivity extends BaseActivity {
         List<Office> selectedOffices = ((OfficesAdapter)binding.activitySelectOfficesRecyclerView.getAdapter()).getSelectedOffices();
 
         if (selectedOffices.size() == 0) {
-            DialogHelper.show(this, R.string.activity_setup_select_offices_no_selection_title, R.string.activity_setup_select_offices_no_selection_description, R.string.ok, null);
+            if (!this.isFinishing()) {
+                DialogHelper.show(this, R.string.activity_setup_select_offices_no_selection_title, R.string.activity_setup_select_offices_no_selection_description, R.string.ok, null);
+            }
 
             return;
         }
@@ -123,9 +125,11 @@ public class SetupSelectOfficesActivity extends BaseActivity {
 
     private Observer<ApiResponse<List<Office>>> officesObserver = offices -> {
         if (!offices.isSuccessful()) {
-            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message, (dialog, which) -> {
-                onBackPressed();
-            });
+            if (!this.isFinishing()) {
+                DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message, (dialog, which) -> {
+                    onBackPressed();
+                });
+            }
 
             binding.activitySelectOfficesRefreshlayout.setRefreshing(false);
             binding.activitySelectOfficesRefreshlayout.setEnabled(false);

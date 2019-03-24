@@ -52,31 +52,40 @@
         </activity>
 
         <activity android:name="it.francescotonini.univrorari.views.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" />
 
         <activity android:name="it.francescotonini.univrorari.views.LessonDetailsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_lesson_details_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.RoomsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_rooms_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.RoomDetailsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_room_details_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SetupSelectCourseActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_setup_select_course_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SetupSelectYearsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_setup_select_years_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SetupSelectTeachingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_setup_select_teachings_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SetupSelectOfficesActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:noHistory="true"
             android:label="@string/activity_setup_select_offices_title" />
 
         <activity android:name="it.francescotonini.univrorari.views.SettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/activity_settings_title" />
     </application>
 </manifest>

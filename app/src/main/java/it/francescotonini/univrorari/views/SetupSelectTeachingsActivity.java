@@ -27,6 +27,8 @@ package it.francescotonini.univrorari.views;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -130,7 +132,9 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
         List<Teaching> teachings = ((TeachingsAdapter)binding.activitySetupSelectTeachingsRecyclerview.getAdapter()).getSelectedTeachings();
 
         if (teachings.size() == 0) {
-            DialogHelper.show(this, R.string.activity_setup_select_teachings_no_selection_title, R.string.activity_setup_select_teachings_no_selection_description, R.string.ok, null);
+            if (!this.isFinishing()) {
+                DialogHelper.show(this, R.string.activity_setup_select_teachings_no_selection_title, R.string.activity_setup_select_teachings_no_selection_description, R.string.ok, null);
+            }
 
             return;
         }
@@ -146,13 +150,16 @@ public class SetupSelectTeachingsActivity extends BaseActivity {
 
     private Observer<ApiResponse<List<Teaching>>> teachingsObserver = teachings -> {
         if (!teachings.isSuccessful()) {
-            DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message);
+            if (!this.isFinishing()) {
+                DialogHelper.show(this, R.string.error_network_title, R.string.error_network_message, R.string.error_network_button_message, (dialog, which) -> {
+                    onBackPressed();
+                });
+            }
 
             // Stop progress bar
             binding.activitySetupSelectTeachingsRefreshlayout.setRefreshing(false);
             binding.activitySetupSelectTeachingsRefreshlayout.setEnabled(false);
 
-            onBackPressed();
             return;
         }
 
