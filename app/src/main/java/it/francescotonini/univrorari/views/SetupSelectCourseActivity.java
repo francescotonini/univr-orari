@@ -120,9 +120,11 @@ public class SetupSelectCourseActivity extends BaseActivity implements CoursesAd
             binding.activitySetupSelectCourseRefreshlayout.setEnabled(false);
             binding.activitySetupSelectCourseRefreshlayout.setRefreshing(false);
 
-            DialogHelper.show(this, R.string.error_generic_title, R.string.error_generic_message, R.string.error_generic_close_button, (dialog, which) -> {
-                finishAffinity();
-            });
+            if (!this.isFinishing()) {
+                DialogHelper.show(this, R.string.error_generic_title, R.string.error_generic_message, R.string.error_generic_close_button, (dialog, which) -> {
+                    finishAffinity();
+                });
+            }
         }
         else {
             binding.activitySetupSelectCourseRefreshlayout.setRefreshing(false);
