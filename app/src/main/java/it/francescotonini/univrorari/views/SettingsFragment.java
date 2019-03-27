@@ -24,27 +24,28 @@
 
 package it.francescotonini.univrorari.views;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.gson.Gson;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import it.francescotonini.univrorari.R;
 import it.francescotonini.univrorari.helpers.DialogHelper;
 import it.francescotonini.univrorari.viewmodels.SettingsViewModel;
 
-@SuppressLint("ValidFragment")
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
-    public SettingsFragment(SettingsViewModel viewModel) {
-        this.viewModel = viewModel;
+    public SettingsViewModel getViewModel() {
+        if (viewModel == null) {
+            viewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        }
+
+        return viewModel;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         // clearCache.setOnPreferenceClickListener(this);
         darkTheme.setOnPreferenceChangeListener(this);
 
-        int currentNightMode = viewModel.getUITheme();
+        int currentNightMode = getViewModel().getUITheme();
         darkTheme.setDefaultValue(currentNightMode == AppCompatDelegate.MODE_NIGHT_YES);
 
         if (currentNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
@@ -84,7 +85,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey() == changeTeachings.getKey()) {
             Intent goToSetupSelectYears = new Intent(getActivity(), SetupSelectYearsActivity.class);
-            goToSetupSelectYears.putExtra("course", new Gson().toJson(viewModel.getCourse()));
+            goToSetupSelectYears.putExtra("course", new Gson().toJson(getViewModel().getCourse()));
 
             startActivity(goToSetupSelectYears);
         }
@@ -100,13 +101,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (preference.getKey() == darkTheme.getKey()) {
 
             if ((Boolean) newValue) {
-                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_YES);
+                getViewModel().setUITheme(AppCompatDelegate.MODE_NIGHT_YES);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
                 darkTheme.setSummary(R.string.settings_enable_dark_theme_true);
             }
             else {
-                viewModel.setUITheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                getViewModel().setUITheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
 

@@ -62,7 +62,7 @@ public class SettingsActivity extends BaseActivity {
 
         // Set settings fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_settings_frame,
-                new SettingsFragment(getViewModel())).commit();
+                new SettingsFragment()).commit();
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
