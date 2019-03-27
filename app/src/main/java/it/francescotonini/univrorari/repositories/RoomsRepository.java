@@ -27,6 +27,8 @@ package it.francescotonini.univrorari.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +43,12 @@ import it.francescotonini.univrorari.AppExecutors;
 import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.api.UniVRApi;
+import it.francescotonini.univrorari.helpers.LoggerHelper;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Office;
 import it.francescotonini.univrorari.models.Room;
+import retrofit2.HttpException;
 
 /**
  * Handles communication between data and view model
@@ -107,7 +111,7 @@ public class RoomsRepository extends BaseRepository {
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                Logger.v(RoomsRepository.class.getSimpleName(), "getRooms request subscribed");
             }
 
             @Override
@@ -119,6 +123,22 @@ public class RoomsRepository extends BaseRepository {
 
             @Override
             public void onError(Throwable e) {
+                if (e instanceof HttpException) {
+                    HttpException httpException = (HttpException)e;
+                    int statusCode = httpException.code();
+                    String url = httpException.response().raw().request().url().url().toString();
+                    String reason = httpException.message();
+                    String body = httpException.response().errorBody().toString();
+
+                    LoggerHelper.getInstance().logNetworkError(url, reason, statusCode, body);
+                }
+                else if (e instanceof JsonSyntaxException || e instanceof JsonParseException) {
+                    LoggerHelper.getInstance().logJsonParseError(RoomsRepository.class.getSimpleName(), e.getMessage());
+                }
+                else {
+                    LoggerHelper.getInstance().logUnknownError(RoomsRepository.class.getSimpleName(), e.getMessage());
+                }
+
                 Logger.e(RoomsRepository.class.getSimpleName(), "Unable to get lessons: " + e.getMessage());
                 rooms.setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
             }
@@ -126,6 +146,8 @@ public class RoomsRepository extends BaseRepository {
             @Override
             public void onComplete() {
                 rooms.setValue(new ApiResponse<>(result));
+
+                Logger.v(RoomsRepository.class.getSimpleName(), "getRooms request completed");
             }
         });
     }

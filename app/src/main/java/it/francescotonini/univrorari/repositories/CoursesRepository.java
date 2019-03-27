@@ -27,6 +27,9 @@ package it.francescotonini.univrorari.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+
 import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,10 +39,12 @@ import it.francescotonini.univrorari.AppExecutors;
 import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.api.UniVRApi;
+import it.francescotonini.univrorari.helpers.LoggerHelper;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Course;
 import it.francescotonini.univrorari.models.Teaching;
+import retrofit2.HttpException;
 
 /**
  * Handles data from API and DB about courses
@@ -81,7 +86,7 @@ public class CoursesRepository extends BaseRepository {
         .subscribe(new Observer<List<Course>>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                Logger.v(CoursesRepository.class.getSimpleName(), "getCourses request subscribed");
             }
 
             @Override
@@ -92,7 +97,24 @@ public class CoursesRepository extends BaseRepository {
 
             @Override
             public void onError(Throwable e) {
+                if (e instanceof HttpException) {
+                    HttpException httpException = (HttpException)e;
+                    int statusCode = httpException.code();
+                    String url = httpException.response().raw().request().url().url().toString();
+                    String reason = httpException.message();
+                    String body = httpException.response().errorBody().toString();
+
+                    LoggerHelper.getInstance().logNetworkError(url, reason, statusCode, body);
+                }
+                else if (e instanceof JsonSyntaxException || e instanceof JsonParseException) {
+                    LoggerHelper.getInstance().logJsonParseError(CoursesRepository.class.getSimpleName(), e.getMessage());
+                }
+                else {
+                    LoggerHelper.getInstance().logUnknownError(CoursesRepository.class.getSimpleName(), e.getMessage());
+                }
+
                 Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get lessons: " + e.getMessage());
+
                 courses.setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
             }
 
@@ -116,7 +138,7 @@ public class CoursesRepository extends BaseRepository {
         .subscribe(new Observer<List<Teaching>>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                Logger.v(CoursesRepository.class.getSimpleName(), "getTeachings request subscribed");
             }
 
             @Override
@@ -127,7 +149,16 @@ public class CoursesRepository extends BaseRepository {
 
             @Override
             public void onError(Throwable e) {
-                Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get teachings: " + e.getMessage());
+                if (e instanceof HttpException) {
+                    HttpException httpException = (HttpException)e;
+                    int statusCode = httpException.code();
+                    String url = httpException.response().raw().request().url().url().toString();
+                    String reason = httpException.message();
+                    String body = httpException.response().errorBody().toString();
+
+                    LoggerHelper.getInstance().logNetworkError(url, reason, statusCode, body);
+                }
+
                 teachings.setValue(new ApiResponse<>(ApiError.NO_CONNECTION));
             }
 
