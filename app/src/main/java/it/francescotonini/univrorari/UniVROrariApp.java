@@ -31,6 +31,7 @@ import android.content.res.Configuration;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import it.francescotonini.univrorari.helpers.LoggerHelper;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 
 /**
@@ -51,6 +52,9 @@ public class UniVROrariApp extends Application {
             .setPrefsName(BuildConfig.APPLICATION_ID)
             .setUseDefaultSharedPreference(true)
             .build();
+
+        // Build logger helper
+        LoggerHelper.build(this);
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getInt(PreferenceHelper.Keys.UI_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM));
     }
