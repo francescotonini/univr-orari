@@ -27,6 +27,8 @@ package it.francescotonini.univrorari.repositories;
 import android.util.ArrayMap;
 import android.util.Pair;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,11 +46,13 @@ import it.francescotonini.univrorari.Logger;
 import it.francescotonini.univrorari.api.ApiError;
 import it.francescotonini.univrorari.api.UniVRApi;
 import it.francescotonini.univrorari.helpers.CacheHelper;
+import it.francescotonini.univrorari.helpers.LoggerHelper;
 import it.francescotonini.univrorari.helpers.PreferenceHelper;
 import it.francescotonini.univrorari.models.ApiResponse;
 import it.francescotonini.univrorari.models.Course;
 import it.francescotonini.univrorari.models.Lesson;
 import it.francescotonini.univrorari.models.Teaching;
+import retrofit2.HttpException;
 
 /**
  * Handles data from API and DB about timetables
@@ -128,7 +132,9 @@ public class LessonsRepository extends BaseRepository {
             List<Lesson> totalLessons = new ArrayList<>();
 
             @Override
-            public void onSubscribe(Disposable d) {  }
+            public void onSubscribe(Disposable d) {
+                Logger.v(CoursesRepository.class.getSimpleName(), "getLessons request completed");
+            }
 
             @Override
             public void onNext(List<Lesson> lessons) {
@@ -137,6 +143,22 @@ public class LessonsRepository extends BaseRepository {
 
             @Override
             public void onError(Throwable e) {
+                if (e instanceof HttpException) {
+                    HttpException httpException = (HttpException)e;
+                    int statusCode = httpException.code();
+                    String url = httpException.response().raw().request().url().url().toString();
+                    String reason = httpException.message();
+                    String body = httpException.response().errorBody().toString();
+
+                    LoggerHelper.getInstance().logNetworkError(url, reason, statusCode, body);
+                }
+                else if (e instanceof JsonSyntaxException || e instanceof JsonParseException) {
+                    LoggerHelper.getInstance().logJsonParseError(LessonsRepository.class.getSimpleName(), e.getMessage());
+                }
+                else {
+                    LoggerHelper.getInstance().logUnknownError(LessonsRepository.class.getSimpleName(), e.getMessage());
+                }
+
                 Logger.e(LessonsRepository.class.getSimpleName(), "Unable to get totalLessons: " + e.getMessage());
 
                 if (listener != null) {
@@ -162,6 +184,8 @@ public class LessonsRepository extends BaseRepository {
                 if (listener != null) {
                     listener.onResponse();
                 }
+
+                Logger.v(CoursesRepository.class.getSimpleName(), "getLessons request completed");
             }
         });
     }
