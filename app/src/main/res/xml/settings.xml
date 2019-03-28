@@ -27,6 +27,11 @@
     <PreferenceCategory
         android:title="@string/settings_category_general">
         <Preference
+            android:key="change_course"
+            android:title="@string/settings_change_course_title"
+            android:summary="@string/settings_change_course_description" />
+
+        <Preference
             android:key="change_teachings"
             android:title="@string/settings_change_teachings_title"
             android:summary="@string/settings_change_teachings_description" />

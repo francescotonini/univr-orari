@@ -27,9 +27,7 @@ package it.francescotonini.univrorari.views;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import com.google.gson.Gson;
-
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
@@ -52,6 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        changeCourse = findPreference("change_course");
         changeTeachings = findPreference("change_teachings");
         changeOffices = findPreference("change_offices");
         // clearCache = findPreference("clear_cache");
@@ -68,6 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onResume() {
         super.onResume();
 
+        changeCourse.setOnPreferenceClickListener(this);
         changeTeachings.setOnPreferenceClickListener(this);
         changeOffices.setOnPreferenceClickListener(this);
         // clearCache.setOnPreferenceClickListener(this);
@@ -83,7 +83,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey() == changeTeachings.getKey()) {
+        if (preference.getKey() == changeCourse.getKey()) {
+            Intent goToSetupSelectCourse = new Intent(getActivity(), SetupSelectCourseActivity.class);
+
+            startActivity(goToSetupSelectCourse);
+        }
+        else if (preference.getKey() == changeTeachings.getKey()) {
             Intent goToSetupSelectYears = new Intent(getActivity(), SetupSelectYearsActivity.class);
             goToSetupSelectYears.putExtra("course", new Gson().toJson(getViewModel().getCourse()));
 
@@ -127,6 +132,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private SettingsViewModel viewModel;
+    private Preference changeCourse;
     private Preference changeTeachings;
     private Preference changeOffices;
     // private Preference clearCache;
