@@ -76,6 +76,8 @@
 
     <!-- Settings -->
     <string name="activity_settings_title">Impostazioni</string>
+    <string name="settings_change_course_title">Modifica corso</string>
+    <string name="settings_change_course_description">Cambia corso di studio</string>
     <string name="settings_change_teachings_title">Modifica insegnamenti</string>
     <string name="settings_change_teachings_description">Aggiungi o rimuovi uno o più insegnamenti dal tuo calendario</string>
     <string name="settings_change_offices_title">Modifica aule</string>

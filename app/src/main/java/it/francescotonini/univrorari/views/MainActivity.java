@@ -104,8 +104,17 @@ public class MainActivity extends BaseActivity implements EventClickListener<Les
             getViewModel().clear();
             binding.activityMainWeekview.notifyDataSetChanged();
         }
+    }
 
-        binding.activityMainWeekview.goToHour(8);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // -0.0 is midnight
+        // This fixes a bug where theme change sets the current hour to midnight
+        if (binding.activityMainWeekview.getFirstVisibleHour() == -0.0) {
+            binding.activityMainWeekview.goToHour(8);
+        }
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
